@@ -14,6 +14,60 @@ This is a simple nbody simulator made with OpenGL and C++ with the help of the I
 > **Note:**   
 > The tests are running at 144Hz with 10 000 000 particles on a Windows 11 machine with an Nvidia RTX 2070 6GB.
 
+## Architecture
+## v1
+```mermaid
+flowchart TB
+    client --> site-web --> |GET HTTP| redis
+    subgraph Kubernetes
+        HPA --> deployments-calculator --> pod1 & pod2
+    end
+    pod1 & pod2 --> |PUT HTTP| redis
+```
+
+## v2
+
+```mermaid
+flowchart TB
+    client --> site-web --> |GET HTTP|redis
+    admin --> |push| git --> |webhook| CRD
+    subgraph Kubernetes 
+        CRD --> |trigger| job-pod(job pod : download & build & push) --> |push| registry
+        job-pod --> |restart| deployments-calculator
+        HPA --> deployments-calculator --> pod1 & pod2
+    end
+    pod1 & pod2 --> |PUT HTTP| redis
+    job-pod --> |git clone| git
+```
+
+## v3
+
+```mermaid
+flowchart TB
+    client --> site-web --> |GET HTTP| ingress-video-generator
+    admin --> |push| git --> |webhook| CRD
+    subgraph Kubernetes 
+        subgraph build 
+            job-pod & registry
+        end
+        subgraph calculations 
+            deployments-calculator & HPA & pod1 & pod2
+        end
+        CRD --> |trigger| job-pod(job pod : download & build & push) --> |push| registry
+        job-pod --> |restart| deployments-calculator
+        HPA --> deployments-calculator --> pod1 & pod2
+
+        subgraph public
+            ingress-video-generator --> service-video-generator --> pod-video-generator 
+        end
+        
+    end
+    pod1 & pod2 --> |PUT HTTP| redis
+    pod-video-generator --> |GET HTTP| redis
+    job-pod --> |git clone| git
+    
+```
+
 ## Images
 
 ## Videos
