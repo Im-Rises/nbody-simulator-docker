@@ -11,9 +11,6 @@
 
 This is a simple nbody simulator made with OpenGL and C++ with the help of the ImGui library for the UI.
 
-> **Note:**   
-> The tests are running at 144Hz with 10 000 000 particles on a Windows 11 machine with an Nvidia RTX 2070 6GB.
-
 ## Architecture
 ## v1
 ```mermaid
@@ -67,6 +64,28 @@ flowchart TB
     job-pod --> |git clone| git
     
 ```
+
+## v4
+
+```mermaid
+flowchart TB
+    client --> site-web --> |UDP| FBOgenerator
+    subgraph Docker
+        Repartitor --> deployments-calculator --> docker1 & docker2 & docker...
+    end
+    docker1 & docker2 & docker... --> |UDP| FBOgenerator
+```
+
+## Tasks
+
+Fromiel:
+- Docker compose
+
+Quentin:
+- Créé image pour paritucle
+
+Alshor:
+- ffmpeg
 
 ## Images
 
@@ -127,11 +146,24 @@ learnopengl (OpenGL tutorial):
 OpenCL NBody example:  
 <https://github.com/KhronosGroup/OpenCL-SDK/tree/f510201a092363b66969888df49c68721ca2c4fb/samples/extensions/khr/nbody>
 
+The coding challenge:  
+<https://editor.p5js.org/codingtrain/sketches/joXNoi9WL>
+
 ## Contributors
 
 Quentin MOREL:
 
 - @Im-Rises
 - <https://github.com/Im-Rises>
+
+Axel COURMONT:
+
+- @Alshkor
+- <https://github.com/Alshkor>
+
+Alexis ROVILLE:
+
+- @Fromiel
+- <https://github.com/Fromiel>
 
 [![GitHub contributors](https://contrib.rocks/image?repo=Im-Rises/NBodySimulator)](https://github.com/Im-Rises/NBodySimulator/graphs/contributors)
