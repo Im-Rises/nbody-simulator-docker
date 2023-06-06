@@ -102,6 +102,18 @@ Alshor:
 - ImGui version: 1.89.4 WIP
 - GLM version: 0.9.8
 
+## CMake project compilation
+
+```bash
+cmake -B . -DCMAKE_BUILD_TYPE=Release
+```
+
+then
+
+```bash
+cmake --build . --config Release
+```
+
 ## Github-Actions
 
 [![CodeQL](https://github.com/Im-Rises/NBodySimulator/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/Im-Rises/NBodySimulator/actions/workflows/codeql.yml)
