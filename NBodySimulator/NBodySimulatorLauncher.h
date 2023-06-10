@@ -4,6 +4,7 @@
 #include <memory>
 #include <string_view>
 #include <glm/glm.hpp>
+#include "Recording/Recorder.h"
 
 class Scene;
 
@@ -18,6 +19,7 @@ public:
 
 private:
     GLFWwindow* window;
+    std::unique_ptr<Recorder> recorder;
 
     int windowWidth = 1280;
     int windowHeight = 720;
