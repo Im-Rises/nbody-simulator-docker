@@ -96,6 +96,7 @@ Alshor:
 ## Dependencies
 
 - OpenGL version: 4.6.0
+- OpenCV version: ???
 - GLSL version: 4.60
 - GLFW version: 3.3.8
 - Glad version: 0.1.36
