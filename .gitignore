@@ -11,8 +11,8 @@ web/*.js.mem
 web/*.wasm
 [Mm]akefile
 *.cbp
-opencv_world470d.dll
-opencv_world470.dll
+dependencies/OpenCV/
+*.dll
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,intellij+all,cmake
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,intellij+all,cmake

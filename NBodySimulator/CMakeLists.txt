@@ -11,8 +11,6 @@ file(GLOB_RECURSE HEADERS "${CMAKE_SOURCE_DIR}/${PROJECT_NAME}/*.h")
 set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL 4.3 REQUIRED)
 
-#find_package(OpenCL CONFIG REQUIRED)
-
 add_executable(${PROJECT_NAME} ${SRCS} ${HEADERS} ${SRCS_HEADERS_IMGUI} ${SRCS_HEADERS_GLAD})
 
 if (WIN32)
@@ -30,8 +28,6 @@ endif ()
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 
 target_link_libraries(${PROJECT_NAME} OpenGL::GL)
-
-#target_link_libraries(${PROJECT_NAME} PRIVATE OpenCL::OpenCL)
 
 if (WIN32)
     target_link_libraries(${PROJECT_NAME} winmm.lib)
