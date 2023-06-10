@@ -12,6 +12,7 @@
 This is a simple nbody simulator made with OpenGL and C++ with the help of the ImGui library for the UI.
 
 ## Architecture
+
 ## v1
 ```mermaid
 flowchart TB

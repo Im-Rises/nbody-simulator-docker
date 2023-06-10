@@ -14,13 +14,13 @@ find_package(OpenGL 4.3 REQUIRED)
 add_executable(${PROJECT_NAME} ${SRCS} ${HEADERS} ${SRCS_HEADERS_IMGUI} ${SRCS_HEADERS_GLAD})
 
 if (WIN32)
-    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/dependencies/OpenCV/build)
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/dependencies/OpenCV)
 endif ()
 
 find_package(OpenCV REQUIRED)
 
 if (WIN32)
-    include_directories(${CMAKE_SOURCE_DIR}/dependencies/OpenCV/build/include)
+    include_directories(${CMAKE_SOURCE_DIR}/dependencies/OpenCV/include)
 elseif (UNIX)
     include_directories(${OpenCV_INCLUDE_DIRS})
 endif ()
