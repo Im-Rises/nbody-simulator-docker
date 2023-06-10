@@ -37,8 +37,6 @@ public:
 public:
     void render(glm::mat4 cameraViewMatrix, glm::mat4 cameraProjectionMatrix) override;
 
-public:
-    [[nodiscard]] auto getParticlesCount() const -> size_t;
 };
 
 #endif // NBODY_SIMULATOR_H

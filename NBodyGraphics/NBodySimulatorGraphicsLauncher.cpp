@@ -162,6 +162,11 @@ void NBodySimulatorGraphicsLauncher::handleInputs() {
 
 void NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
     scene->update(deltaTime);
+
+    /*
+     * Fetch new particles position
+     */
+
 }
 
 void NBodySimulatorGraphicsLauncher::updateScreen() {

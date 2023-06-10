@@ -38,6 +38,15 @@ NBodySimulatorGraphic::NBodySimulatorGraphic(int particleCount) : shader(VertexS
     // Resize the particles vector
     particles.resize(particleCount);
 
+    for (auto& particle: particles){
+        // Set random position
+        particle.position = glm::vec3(
+            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
+            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
+            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F
+        );
+    }
+
     // Init the VAO
     glGenVertexArrays(1, &VAO);
 
@@ -95,8 +104,4 @@ void NBodySimulatorGraphic::render(glm::mat4 cameraViewMatrix, glm::mat4 cameraP
 
     // Unbind the VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-auto NBodySimulatorGraphic::getParticlesCount() const -> size_t {
-    return particles.size();
 }

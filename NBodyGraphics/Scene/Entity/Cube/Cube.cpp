@@ -149,6 +149,7 @@ const char* const Cube::FragmentShaderSource =
 )";
 
 Cube::Cube() : shader(VertexShaderSource, FragmentShaderSource, false) {
+    position = glm::vec3(5.0F, 0.0F, 0.0F);
     // Set initial position
     updateModelMatrix();
 
