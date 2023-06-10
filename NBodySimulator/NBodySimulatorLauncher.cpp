@@ -176,7 +176,7 @@ NBodySimulatorLauncher::~NBodySimulatorLauncher() {
 void NBodySimulatorLauncher::start() {
     // Create the scene
     scene = std::make_unique<Scene>(displayWidth, displayHeight);
-
+    recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
 #ifdef _WIN32
     timeBeginPeriod(1);
 #endif
@@ -209,6 +209,7 @@ void NBodySimulatorLauncher::start() {
         updateGame(fixedDeltaTime);
 
         updateScreen();
+
 
         auto endMs = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now());
         auto delayMs = fixedDeltaTime - std::chrono::duration_cast<std::chrono::duration<float>>(endMs - startMs).count();
@@ -544,8 +545,11 @@ void NBodySimulatorLauncher::updateScreen() {
     if (!isMinimized())
         updateViewport();
 
+    recorder->StartCapture();
     clearScreen();
+
     scene->render();
+    recorder->StopCapture();
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
