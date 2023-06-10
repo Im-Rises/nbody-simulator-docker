@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  #particuleCalculator:
+   # build:
+    #  context: #dossier de l'image
+     # dockerfile: Dockerfile
+  redis:
+    image: redis:6.2-alpine
+    restart: unless-stopped
+    network_mode: bridge
+    expose:
+      - 6379
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    network_mode: bridge
+    command: /bin/sh -c 'nodemon -e js,html index.js'
+    ports:
+      - 8080:9000
+    volumes:
+      - ./api:/src
+      - ./api/src/node_modules
+    links:
+      - redis
