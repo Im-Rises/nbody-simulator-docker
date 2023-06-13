@@ -145,27 +145,14 @@ glm:
 glad:  
 <https://glad.dav1d.de/>
 
-Dear ImGui:  
-<https://github.com/ocornut/imgui>
-
 OpenGL:  
 <https://www.opengl.org/>
 
-OpenCL:  
-<https://www.khronos.org/blog/your-opencl-developer-experience-just-got-upgraded>  
-<https://github.com/KhronosGroup/OpenCL-Guide>  
-<https://github.com/KhronosGroup/OpenCL-SDK>
+Json:  
+<https://github.com/nlohmann/json>
 
-## Documentation
-
-learnopengl (OpenGL tutorial):  
-<https://learnopengl.com/In-Practice/2D-Game/Particles>
-
-OpenCL NBody example:  
-<https://github.com/KhronosGroup/OpenCL-SDK/tree/f510201a092363b66969888df49c68721ca2c4fb/samples/extensions/khr/nbody>
-
-The coding challenge:  
-<https://editor.p5js.org/codingtrain/sketches/joXNoi9WL>
+libcurl:  
+<https://curl.se/libcurl/>
 
 ## Contributors
 

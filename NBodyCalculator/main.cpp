@@ -6,6 +6,8 @@
 #include <vector>
 #include <cstdlib>
 
+#include <nlohmann/json.hpp>
+
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -19,23 +21,13 @@ const float Softening = 0.1F;
 const float Friction = 0.99F;
 
 bool exitMainLoopFlag = false;
-#ifdef _WIN32
-auto CtrlHandler(DWORD ctrlType) -> BOOL {
-    if (ctrlType == CTRL_C_EVENT)
-    {
-        exitMainLoopFlag = true;
-        return TRUE;
-    }
-    return FALSE;
-}
-#else
+
 void signalHandler(int signum) {
     if (signum == SIGINT)
     {
         exitMainLoopFlag = true;
     }
 }
-#endif
 
 struct Particle {
     glm::vec3 position;
@@ -72,21 +64,23 @@ void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
     }
 }
 
-auto main(int argc, char* argv[]) -> int {
-#ifdef _WIN32
-    // Set the signal exit handler
-    if (SetConsoleCtrlHandler(static_cast<PHANDLER_ROUTINE>(CtrlHandler), TRUE) == 0)
+auto particlesToJson(const std::vector<Particle>& particles) -> nlohmann::json {
+    nlohmann::json json;
+    json["particles"] = nlohmann::json::array();
+    for (auto& particle : particles)
     {
-        std::cerr << "Unable to install CtrlHandler" << std::endl;
-        exit(1);
+        json["particles"].push_back({ { "position", { particle.position.x, particle.position.y, particle.position.z } },
+            { "velocity", { particle.velocity.x, particle.velocity.y, particle.velocity.z } } });
     }
+    return json;
+}
 
-    // Set the timer resolution to 1 ms
-    timeBeginPeriod(1);
-#else
-    // Set the signal exit handler
+auto main(int argc, char* argv[]) -> int {
+    // Init random
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    // Set exit signals
     signal(SIGINT, signalHandler);
-#endif
 
     /* Init */
     auto particles = std::vector<Particle>(100000);
@@ -98,7 +92,12 @@ auto main(int argc, char* argv[]) -> int {
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);
     }
 
-
+    auto json = particlesToJson(particles);
+    //    std::cout << json.dump() << std::endl;
+    // print json of first particle
+    //    std::cout << json["particles"][0] << std::endl;
+    //    std::cout << json["particles"][1] << std::endl;
+    //    std::cout << json["particles"][2]["position"] << std::endl;
 
     /* Loop*/
     auto previousTime = std::chrono::high_resolution_clock::now();
@@ -113,8 +112,8 @@ auto main(int argc, char* argv[]) -> int {
         while (accumulator >= FixedDeltaTime)
         {
             updatePhysics(particles, FixedDeltaTime);
-            // Send particles here
             accumulator -= FixedDeltaTime;
+            auto json = particlesToJson(particles);
         }
 
         previousTime = currentTime;
