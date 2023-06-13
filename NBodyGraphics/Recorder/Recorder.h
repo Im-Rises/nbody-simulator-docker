@@ -1,7 +1,6 @@
 #ifndef NBODYSIMULATOR_RECORDER_H
 #define NBODYSIMULATOR_RECORDER_H
 
-
 #include <glad/glad.h>
 #include <opencv2/opencv.hpp>
 
@@ -18,17 +17,15 @@ private:
     cv::VideoWriter videoWriter;
 
 public:
-    Recorder();
-    Recorder(int width, int height);
+//    Recorder();
+    explicit Recorder(int width, int height);
     Recorder(const Recorder&) = delete;
     auto operator=(const Recorder&) -> Recorder& = delete;
     Recorder(Recorder&&) = delete;
-
     ~Recorder();
 
     void InitializeFBO();
     void InitializeVideoWriter();
-
 
     void SetWidthHeight(int width, int height);
 

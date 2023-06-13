@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 class Scene;
+class Recorder;
 
 struct GLFWwindow;
 
@@ -26,6 +27,7 @@ private:
     int windowPosX, windowPosY;
 
     std::unique_ptr<Scene> scene;
+    std::unique_ptr<Recorder> recorder;
 
     struct {
         float x = 0.0F;

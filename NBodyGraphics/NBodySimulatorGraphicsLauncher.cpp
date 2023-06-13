@@ -13,6 +13,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 #include "Scene/Scene.h"
+#include "Recorder/Recorder.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -101,6 +102,7 @@ NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
 
 void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
     scene = std::make_unique<Scene>(displayWidth, displayHeight, particlesCount);
+    recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
 
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     float deltaTime = 0.0F;
@@ -166,15 +168,18 @@ void NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
     /*
      * Fetch new particles position
      */
-
 }
 
 void NBodySimulatorGraphicsLauncher::updateScreen() {
     if (!isMinimized())
         updateViewport();
 
+    recorder->StartCapture();
+
     clearScreen();
     scene->render();
+
+    recorder->StopCapture();
 
     glfwSwapBuffers(window);
 }

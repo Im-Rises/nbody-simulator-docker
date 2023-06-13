@@ -1,16 +1,15 @@
 #include "Recorder.h"
 #include <iostream>
 
-
 Recorder::Recorder(int width, int height) : width(width), height(height), framebuffer(new unsigned int[width * height * 3]) {
     InitializeFBO();
     InitializeVideoWriter();
 }
 
-Recorder::Recorder() {
-    InitializeFBO();
-    InitializeVideoWriter();
-}
+// Recorder::Recorder() {
+//     InitializeFBO();
+//     InitializeVideoWriter();
+// }
 
 Recorder::~Recorder() {
     std::cout << "Recorder destructor" << std::endl;
