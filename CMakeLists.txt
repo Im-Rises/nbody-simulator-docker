@@ -5,5 +5,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 project("NBodySimulator" VERSION 1.0.0)
+add_subdirectory(${PROJECT_NAME})
 
+project("NBodyCalculator")
+add_subdirectory(${PROJECT_NAME})
+
+project("NBodyGraphics")
 add_subdirectory(${PROJECT_NAME})

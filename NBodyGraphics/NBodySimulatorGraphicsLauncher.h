@@ -4,30 +4,26 @@
 #include <memory>
 #include <string_view>
 #include <glm/glm.hpp>
-#include "Recording/Recorder.h"
 
 class Scene;
 
 struct GLFWwindow;
 
-class NBodySimulatorLauncher {
+class NBodySimulatorGraphicsLauncher {
 public:
-    static constexpr std::string_view PROJECT_NAME = "Nbody Simulator 3D";
+    static constexpr std::string_view PROJECT_NAME = "Nbody Simulator Graphics";
     static constexpr std::string_view PROJECT_VERSION = "1.0.0";
-    static constexpr std::string_view PROJECT_LINK = "https://github.com/Im-Rises/NbodySimulator";
+    static constexpr std::string_view PROJECT_LINK = "https://github.com/Im-Rises/nbody-simulator-cloud";
     static constexpr std::string_view PROJECT_AUTHOR = "Im-Rises (Quentin Morel)";
 
 private:
     GLFWwindow* window;
-    std::unique_ptr<Recorder> recorder;
 
     int windowWidth = 1280;
     int windowHeight = 720;
 
     int displayWidth, displayHeight;
     int windowPosX, windowPosY;
-
-    float fixedDeltaTime = 1.0F / 60.0F;
 
     std::unique_ptr<Scene> scene;
 
@@ -38,47 +34,35 @@ private:
         float w = 1.0F;
     } clear_color;
 
-    float attractorDistance = 10.0F;
-    glm::vec3 mousePositionWorld;
-
-    static constexpr int MAX_PARTICLES_COUNT = 10000000;
-
     float pointSize = 1.0F;
 
-#ifndef __EMSCRIPTEN__
     bool isFullscreen = false;
-#endif
 
 public:
-    NBodySimulatorLauncher();
+    NBodySimulatorGraphicsLauncher();
 
-    NBodySimulatorLauncher(const NBodySimulatorLauncher&) = delete;
+    NBodySimulatorGraphicsLauncher(const NBodySimulatorGraphicsLauncher&) = delete;
 
-    auto operator=(const NBodySimulatorLauncher&) -> NBodySimulatorLauncher& = delete;
+    auto operator=(const NBodySimulatorGraphicsLauncher&) -> NBodySimulatorGraphicsLauncher& = delete;
 
-    NBodySimulatorLauncher(NBodySimulatorLauncher&&) = delete;
+    NBodySimulatorGraphicsLauncher(NBodySimulatorGraphicsLauncher&&) = delete;
 
-    auto operator=(NBodySimulatorLauncher&&) -> NBodySimulatorLauncher& = delete;
+    auto operator=(NBodySimulatorGraphicsLauncher&&) -> NBodySimulatorGraphicsLauncher& = delete;
 
-    ~NBodySimulatorLauncher();
+    ~NBodySimulatorGraphicsLauncher();
 
 public:
-    void start();
+    void start(int particlesCount);
 
 private:
     void handleInputs();
 
-    void handleUi(float deltaTime);
-
-    //    void fixedUpdateGame(float deltaTime);
     void updateGame(float deltaTime);
 
     void updateScreen();
 
 public:
     void resetScene();
-
-    void toggleScenePause();
 
     void updateViewport();
 
@@ -93,8 +77,6 @@ public:
 private:
     static void calculateMouseMovement(const double& xMouse, const double& yMouse, double& xMovement, double& yMovement);
 
-    auto projectMouse(const double& xMouse, const double& yMouse) -> glm::vec3;
-
 private:
     static auto getOpenGLVendor() -> std::string_view;
 
@@ -105,8 +87,6 @@ private:
     static auto getGLFWVersion() -> std::string;
 
     static auto getGladVersion() -> std::string_view;
-
-    static auto getImGuiVersion() -> std::string;
 
     static auto getGLMVersion() -> std::string;
 };

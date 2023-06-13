@@ -12,6 +12,7 @@
 This is a simple nbody simulator made with OpenGL and C++ with the help of the ImGui library for the UI.
 
 ## Architecture
+
 ## v1
 ```mermaid
 flowchart TB
@@ -96,6 +97,7 @@ Alshor:
 ## Dependencies
 
 - OpenGL version: 4.6.0
+- OpenCV version: ???
 - GLSL version: 4.60
 - GLFW version: 3.3.8
 - Glad version: 0.1.36
