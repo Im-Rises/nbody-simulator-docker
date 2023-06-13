@@ -15,7 +15,7 @@ public:
     static constexpr std::string_view PROJECT_NAME = "Nbody Simulator Graphics";
     static constexpr std::string_view PROJECT_VERSION = "1.0.0";
     static constexpr std::string_view PROJECT_LINK = "https://github.com/Im-Rises/nbody-simulator-cloud";
-    static constexpr std::string_view PROJECT_AUTHOR = "Im-Rises (Quentin Morel)";
+    static constexpr std::string_view PROJECT_AUTHOR = "Alshkor (Axel Courmont), Im-Rises (Quentin Morel), Fromiel (Alexis Roville)";
 
 private:
     GLFWwindow* window;
@@ -54,7 +54,7 @@ public:
     ~NBodySimulatorGraphicsLauncher();
 
 public:
-    void start(int particlesCount);
+    void start();
 
 private:
     void handleInputs();

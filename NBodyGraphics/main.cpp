@@ -9,6 +9,6 @@ auto main(int argc, char* argv[]) -> int {
               << NBodySimulatorGraphicsLauncher::PROJECT_AUTHOR << "\n"
               << std::endl;
     NBodySimulatorGraphicsLauncher nbodySimulatorLauncher;
-    nbodySimulatorLauncher.start(100000);
+    nbodySimulatorLauncher.start();
     return 0;
 }
