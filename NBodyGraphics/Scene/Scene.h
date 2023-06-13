@@ -9,7 +9,7 @@ class Scene {
 public:
     Camera camera;
 
-    Cube cube;
+    //    Cube cube;
 
     NBodySimulatorGraphic nbodySimulatorGraphic;
 
@@ -24,7 +24,6 @@ public:
     void updateProjectionMatrix(int display_w, int display_h);
 
     void reset();
-
 };
 
 #endif // SCENE_H
