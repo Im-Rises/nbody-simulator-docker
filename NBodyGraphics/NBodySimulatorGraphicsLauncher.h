@@ -54,7 +54,7 @@ public:
     ~NBodySimulatorGraphicsLauncher();
 
 public:
-    void start(int particlesCount);
+    void start();
 
 private:
     void handleInputs();

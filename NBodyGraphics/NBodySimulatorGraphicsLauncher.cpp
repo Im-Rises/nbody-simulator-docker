@@ -100,8 +100,8 @@ NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
     glfwTerminate();
 }
 
-void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
-    scene = std::make_unique<Scene>(displayWidth, displayHeight, particlesCount);
+void NBodySimulatorGraphicsLauncher::start() {
+    scene = std::make_unique<Scene>(displayWidth, displayHeight, 1000);
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
 
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
@@ -168,6 +168,8 @@ void NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
     /*
      * Fetch new particles position
      */
+
+
 }
 
 void NBodySimulatorGraphicsLauncher::updateScreen() {
