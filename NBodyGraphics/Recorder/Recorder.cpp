@@ -31,7 +31,7 @@ void Recorder::InitializeFBO() {
 }
 
 void Recorder::InitializeVideoWriter() {
-    int fourcc = cv::VideoWriter::fourcc('X', 'V', 'I', 'D');
+    int fourcc = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
     cv::Size size = cv::Size(width, height);
 
     videoWriter.open("output.avi", fourcc, fps, size, true);
