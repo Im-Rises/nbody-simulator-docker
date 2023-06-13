@@ -35,11 +35,15 @@ flowchart LR
         subgraph Docker-Calculator
         docker1 & docker2 & docker...
         end
-        docker1 & docker2 & docker... --> |UDP| api-redis
-        api-redis --> |UDP| api-video-generator
-        subgraph Docker-volume
-        api-video-generator
-        ffmpeg 
+        docker1 & docker2 & docker... <--> |GET/POST| api-redis
+        subgraph Redis
+        api-redis
+        end
+        api-redis --> |GET| api-video-generator
+        subgraph Video-Generator
+        docker-volume
+        api-video-generator --> |Save| docker-volume
+        ffmpeg --> |Read| docker-volume
         end
         ffmpeg --> |UDP| site-web
     end
