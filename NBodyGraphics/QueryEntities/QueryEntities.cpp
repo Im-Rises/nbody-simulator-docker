@@ -18,7 +18,7 @@ QueryEntities::QueryEntities() : curl(nullptr) {
          std::cout << "Error initializing curl" << std::endl;
      }
 
-     curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8080/all/");
+     curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8080/all/present");
 
      // Configuration de la fonction de rappel pour stocker la réponse
      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,

@@ -6,6 +6,10 @@
 #include <glm/glm.hpp>
 #include <string>
 
+// curl -X POST http://localhost:8080/api -d '{"particules":[{"index": 1, "x": 1}, {"index": 2, "x": 2}
+// ]}' -H "Content-Type: application/json"
+
+
 class QueryEntities {
     typedef void(*Callback)(std::vector<glm::vec3>);
 

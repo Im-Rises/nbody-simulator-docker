@@ -1,6 +1,7 @@
-const express = require('express')
-const redis = require('redis')
-const bodyParser = require('body-parser')
+import express from 'express'
+import redis from 'redis'
+import bodyParser from 'body-parser'
+
 const app = express()
 const PORT = process.env.PORT || 9000
 const REDIS_PORT = process.env.REDIS_PORT || 6379
@@ -144,5 +145,3 @@ app.post('/api/', (req, res) => {
 })
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
-
-module.exports = app

@@ -22,7 +22,6 @@ services:
       - 8080:9000
     volumes:
       - ./api:/src
-      - ./api/src/node_modules
     links:
       - redis
   #graphics:
@@ -32,11 +31,11 @@ services:
    # restart: unless-stopped
    # volumes:
    #   - video:/video
-  ffmpeg:
-    build:
-        context: ./ffmpeg
-        dockerfile: Dockerfile
-    volumes:
-      - video:/video
-volumes:
-    video:
+#  ffmpeg:
+#    build:
+#        context: ./ffmpeg
+#        dockerfile: Dockerfile
+#    volumes:
+#      - video:/video
+#volumes:
+#    video:
