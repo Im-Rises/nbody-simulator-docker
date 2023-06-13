@@ -25,3 +25,18 @@ services:
       - ./api/src/node_modules
     links:
       - redis
+  graphics:
+    build:
+        context: ./graphics
+        dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - video:/video
+  ffmpeg:
+    build:
+        context: ./ffmpeg
+        dockerfile: Dockerfile
+    volumes:
+      - video:/video
+volumes:
+    video:

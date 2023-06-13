@@ -1,4 +1,8 @@
 FROM ubuntu:latest
-LABEL authors="axelc"
+COPY ../../NBodyGraphics /code/NBodyGraphics
+COPY ../../dependencies /code/dependencies
+COPY ../../CMakeLists.txt /code/
+
+
 
 ENTRYPOINT ["top", "-b"]
