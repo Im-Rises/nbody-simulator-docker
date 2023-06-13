@@ -19,7 +19,6 @@ app.get('/api/:particuleIndex', (req, res) => {
     const particuleIndex = req.params.particuleIndex
     client.get(particuleIndex, async (err, data) => {
       if (data) {
-        console.log(data)
         return res.status(200).send({
           message: `Retrieved particule ${particuleIndex}'s data`,
           particule: JSON.parse(data)
@@ -33,7 +32,6 @@ app.get('/api/:particuleIndex', (req, res) => {
 
 app.get('/all/present/', (req, res) => {
   try {
-    console.log("test")
     client.keys('*', async (err, keys) => {
       if (err) {
         console.error(err);
@@ -61,8 +59,6 @@ app.get('/all/present/', (req, res) => {
       
           // Convertissez l'objet en JSON
           const jsonData = JSON.stringify(keyValuePairs);
-      
-          console.log(jsonData);
 
           return res.status(200).send({
             message: `Retrieved all particules' data`,
@@ -106,8 +102,6 @@ app.get('/all/future/', (req, res) => {
       
           // Convertissez l'objet en JSON
           const jsonData = JSON.stringify(keyValuePairs);
-      
-          console.log(jsonData);
 
           return res.status(200).send({
             message: `Retrieved all particules' data`,
@@ -136,13 +130,13 @@ app.post('/switch/', (req, res) => {
 app.post('/api/', (req, res) => {
   try {
     console.log(req.body)
-    const particuleBody = req.body
-    const particuleIndex = particuleBody.particuleIndex
-    const particule = JSON.stringify(particuleBody)
-    client.setex(particuleIndex, 1440, particule)
+    const particules = req.body.particules
+    particules.forEach(particule => {
+      client.setex(particule.index, 1440, JSON.stringify(particule))
+    })
+    const particuleLog = JSON.stringify(particules)
     return res.status(200).send({
-      message: `Create particule ${particuleIndex}'s data to the server`,
-      particule: particule
+      particule: particuleLog
     })
   } catch (error) {
     console.log(error)

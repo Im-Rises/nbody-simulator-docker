@@ -67,6 +67,9 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
     //    glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE); // Disable refresh rate
     //    glfwWindowHint(GLFW_REFRESH_RATE, 60);
 
+    // hide window
+        glfwHideWindow(window);
+
     // Callbacks
     glfwSetWindowUserPointer(window, this);
     glfwSetKeyCallback(window, InputManager::key_callback);

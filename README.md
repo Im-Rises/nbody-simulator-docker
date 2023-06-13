@@ -11,87 +11,6 @@
 
 This is a simple nbody simulator made with OpenGL and C++ with the help of the ImGui library for the UI.
 
-## Architecture
-
-## v1
-
-```mermaid
-flowchart TB
-    client --> site-web --> |GET HTTP| redis
-    subgraph Kubernetes
-        HPA --> deployments-calculator --> pod1 & pod2
-    end
-    pod1 & pod2 --> |PUT HTTP| redis
-```
-
-## v2
-
-```mermaid
-flowchart TB
-    client --> site-web --> |GET HTTP|redis
-    admin --> |push| git --> |webhook| CRD
-    subgraph Kubernetes 
-        CRD --> |trigger| job-pod(job pod : download & build & push) --> |push| registry
-        job-pod --> |restart| deployments-calculator
-        HPA --> deployments-calculator --> pod1 & pod2
-    end
-    pod1 & pod2 --> |PUT HTTP| redis
-    job-pod --> |git clone| git
-```
-
-## v3
-
-```mermaid
-flowchart TB
-    client --> site-web --> |GET HTTP| ingress-video-generator
-    admin --> |push| git --> |webhook| CRD
-    subgraph Kubernetes 
-        subgraph build 
-            job-pod & registry
-        end
-        subgraph calculations 
-            deployments-calculator & HPA & pod1 & pod2
-        end
-        CRD --> |trigger| job-pod(job pod : download & build & push) --> |push| registry
-        job-pod --> |restart| deployments-calculator
-        HPA --> deployments-calculator --> pod1 & pod2
-
-        subgraph public
-            ingress-video-generator --> service-video-generator --> pod-video-generator 
-        end
-        
-    end
-    pod1 & pod2 --> |PUT HTTP| redis
-    pod-video-generator --> |GET HTTP| redis
-    job-pod --> |git clone| git
-    
-```
-
-## v4
-
-```mermaid
-flowchart TB
-    client --> site-web --> |UDP| FBOgenerator
-    subgraph Docker
-        Repartitor --> deployments-calculator --> docker1 & docker2 & docker...
-    end
-    docker1 & docker2 & docker... --> |UDP| FBOgenerator
-```
-
-## Tasks
-
-Fromiel:
-
-- Docker compose
-
-Quentin:
-
-- Créé image pour paritucle
-
-Alshor:
-
-- ffmpeg
-
 ## Images
 
 ## Videos
@@ -108,16 +27,61 @@ Alshor:
 - ImGui version: 1.89.4 WIP
 - GLM version: 0.9.8
 
-## CMake project compilation
+## Architecture
 
-```bash
-cmake -B . -DCMAKE_BUILD_TYPE=Release
+```mermaid
+flowchart LR
+    subgraph Architecture
+        subgraph Docker-Calculator
+        docker1 & docker2 & docker...
+        end
+        docker1 & docker2 & docker... <--> |GET/POST| api-redis
+        subgraph Redis
+        api-redis
+        end
+        api-redis --> |GET| api-video-generator
+        subgraph Video-Generator
+        docker-volume
+        api-video-generator --> |Save| docker-volume
+        ffmpeg --> |Read| docker-volume
+        end
+        ffmpeg --> |UDP| site-web
+    end
 ```
 
-then
+## Json data transfer
 
-```bash
-cmake --build . --config Release
+```json
+{
+  "particles": [
+    {
+      "index": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "velocity": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "velocity": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}
 ```
 
 ## Github-Actions
@@ -145,27 +109,14 @@ glm:
 glad:  
 <https://glad.dav1d.de/>
 
-Dear ImGui:  
-<https://github.com/ocornut/imgui>
-
 OpenGL:  
 <https://www.opengl.org/>
 
-OpenCL:  
-<https://www.khronos.org/blog/your-opencl-developer-experience-just-got-upgraded>  
-<https://github.com/KhronosGroup/OpenCL-Guide>  
-<https://github.com/KhronosGroup/OpenCL-SDK>
+Json:  
+<https://github.com/nlohmann/json>
 
-## Documentation
-
-learnopengl (OpenGL tutorial):  
-<https://learnopengl.com/In-Practice/2D-Game/Particles>
-
-OpenCL NBody example:  
-<https://github.com/KhronosGroup/OpenCL-SDK/tree/f510201a092363b66969888df49c68721ca2c4fb/samples/extensions/khr/nbody>
-
-The coding challenge:  
-<https://editor.p5js.org/codingtrain/sketches/joXNoi9WL>
+libcurl:  
+<https://curl.se/libcurl/>
 
 ## Contributors
 

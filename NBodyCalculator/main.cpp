@@ -6,6 +6,10 @@
 #include <vector>
 #include <cstdlib>
 
+#include <nlohmann/json.hpp>
+
+#include <curl/curl.h>
+
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -19,23 +23,13 @@ const float Softening = 0.1F;
 const float Friction = 0.99F;
 
 bool exitMainLoopFlag = false;
-#ifdef _WIN32
-auto CtrlHandler(DWORD ctrlType) -> BOOL {
-    if (ctrlType == CTRL_C_EVENT)
-    {
-        exitMainLoopFlag = true;
-        return TRUE;
-    }
-    return FALSE;
-}
-#else
+
 void signalHandler(int signum) {
     if (signum == SIGINT)
     {
         exitMainLoopFlag = true;
     }
 }
-#endif
 
 struct Particle {
     glm::vec3 position;
@@ -72,24 +66,61 @@ void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
     }
 }
 
-auto main(int argc, char* argv[]) -> int {
-#ifdef _WIN32
-    // Set the signal exit handler
-    if (SetConsoleCtrlHandler(static_cast<PHANDLER_ROUTINE>(CtrlHandler), TRUE) == 0)
+auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> nlohmann::json {
+    nlohmann::json json;
+    json["particles"] = nlohmann::json::array();
+    for (int i = 0; i < particles.size(); i++)
     {
-        std::cerr << "Unable to install CtrlHandler" << std::endl;
-        exit(1);
+        json["particles"].push_back(
+            { { "index", i + baseIndex },
+                { "position", { particles[i].position.x, particles[i].position.y, particles[i].position.z } },
+                { "velocity", { particles[i].velocity.x, particles[i].velocity.y, particles[i].velocity.z } } });
+    }
+    return json;
+}
+
+void curlPostRequest(const std::string& url, const std::string& data) {
+    CURL* curl;
+    CURLcode res;
+
+    curl_global_init(CURL_GLOBAL_ALL);
+
+    curl = curl_easy_init();
+    if (curl)
+    {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+
+        res = curl_easy_perform(curl);
+
+        curl_easy_cleanup(curl);
     }
 
-    // Set the timer resolution to 1 ms
-    timeBeginPeriod(1);
-#else
-    // Set the signal exit handler
+    curl_global_cleanup();
+}
+
+auto main(int argc, char* argv[]) -> int {
+
+    // Check arguments
+    if (argc < 4)
+    {
+        std::cout << "Usage: " << argv[0] << " <baseIndex> <numParticles>" << std::endl;
+        return 1;
+    }
+
+    // Get arguments
+    auto baseIndex = std::atoi(argv[1]);
+    auto numParticles = std::atoi(argv[2]);
+    auto addressPost = std::string(argv[3]);
+
+    // Init random
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    // Set exit signals
     signal(SIGINT, signalHandler);
-#endif
 
     /* Init */
-    auto particles = std::vector<Particle>(100000);
+    auto particles = std::vector<Particle>(numParticles);
     for (auto& particle : particles)
     {
         particle.position = glm::vec3(
@@ -97,6 +128,9 @@ auto main(int argc, char* argv[]) -> int {
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);
     }
+
+    auto json = particlesToJson(particles, baseIndex);
+    curlPostRequest(addressPost, json.dump());
 
     /* Loop*/
     auto previousTime = std::chrono::high_resolution_clock::now();
@@ -112,6 +146,8 @@ auto main(int argc, char* argv[]) -> int {
         {
             updatePhysics(particles, FixedDeltaTime);
             accumulator -= FixedDeltaTime;
+            auto json = particlesToJson(particles, baseIndex);
+            curlPostRequest(addressPost, json.dump());
         }
 
         previousTime = currentTime;
