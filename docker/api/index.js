@@ -1,5 +1,4 @@
 const express = require('express')
-const axios = require('axios')
 const redis = require('redis')
 const bodyParser = require('body-parser')
 const app = express()
@@ -23,14 +22,14 @@ app.get('/api/:particuleIndex', (req, res) => {
           message: `Retrieved particule ${particuleIndex}'s data`,
           particule: JSON.parse(data)
         })
-      } else {
+      }/*else {
         const particule = `{"particuleIndex": ${particuleIndex}, "x": 0}`
         client.setex(particuleIndex, 1440, particule)
         return res.status(200).send({
           message: `Create particule ${particuleIndex}'s data to the server`,
           particule: particule
         })
-      }
+      }*/
     })
   } catch (error) {
     console.log(error)
@@ -40,12 +39,9 @@ app.get('/api/:particuleIndex', (req, res) => {
 app.post('/api/', (req, res) => {
   try {
     console.log(req.body)
-    const particuleIndex = req.body.particuleIndex
-    const x = req.body.x
-    const particule = `{
-      "particuleIndex": ${particuleIndex},
-      "x": ${x}
-    }`
+    const particuleBody = req.body
+    const particuleIndex = particuleBody.particuleIndex
+    const particule = JSON.stringify(particuleBody)
     client.setex(particuleIndex, 1440, particule)
     return res.status(200).send({
       message: `Create particule ${particuleIndex}'s data to the server`,
