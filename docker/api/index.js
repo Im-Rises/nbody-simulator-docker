@@ -6,6 +6,8 @@ const PORT = process.env.PORT || 9000
 const REDIS_PORT = process.env.REDIS_PORT || 6379
 const client = redis.createClient(REDIS_PORT)
 
+var valueFuture = 0
+
 client.on('connect', () => console.log(`Redis is connected on port ${REDIS_PORT}`))
 client.on("error", (error) => console.error(error))
 
@@ -22,21 +24,14 @@ app.get('/api/:particuleIndex', (req, res) => {
           message: `Retrieved particule ${particuleIndex}'s data`,
           particule: JSON.parse(data)
         })
-      }/*else {
-        const particule = `{"particuleIndex": ${particuleIndex}, "x": 0}`
-        client.setex(particuleIndex, 1440, particule)
-        return res.status(200).send({
-          message: `Create particule ${particuleIndex}'s data to the server`,
-          particule: particule
-        })
-      }*/
+      }
     })
   } catch (error) {
     console.log(error)
   }
 })
 
-app.get('/all', (req, res) => {
+app.get('/all/present/', (req, res) => {
   try {
     console.log("test")
     client.keys('*', async (err, keys) => {
@@ -47,7 +42,9 @@ app.get('/all', (req, res) => {
 
       if (keys) 
       {
-        client.mget(keys, (err, values) => {
+        const keysPresent = keys.filter(key => key % 2 == valueFuture)
+
+        client.mget(keysPresent, (err, values) => {
           if (err) {
             console.error(err);
             return;
@@ -57,7 +54,7 @@ app.get('/all', (req, res) => {
       
           // Parcourez les clés et les valeurs associées
           for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
+            const key = keysPresent[i];
             const value = values[i];
             keyValuePairs[key] = value; // Ajoutez la clé et la valeur à l'objet
           }
@@ -73,6 +70,62 @@ app.get('/all', (req, res) => {
           })
         })
       }
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+app.get('/all/future/', (req, res) => {
+  try {
+    console.log("test")
+    client.keys('*', async (err, keys) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      if (keys) 
+      {
+        const keysFuture = keys.filter(key => key % 2 == ((valueFuture + 1) % 2) )
+
+        client.mget(keysFuture, (err, values) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+
+          const keyValuePairs = {};
+      
+          // Parcourez les clés et les valeurs associées
+          for (let i = 0; i < keys.length; i++) {
+            const key = keysFuture[i];
+            const value = values[i];
+            keyValuePairs[key] = value; // Ajoutez la clé et la valeur à l'objet
+          }
+      
+          // Convertissez l'objet en JSON
+          const jsonData = JSON.stringify(keyValuePairs);
+      
+          console.log(jsonData);
+
+          return res.status(200).send({
+            message: `Retrieved all particules' data`,
+            particules: jsonData
+          })
+        })
+      }
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+app.post('/switch/', (req, res) => {
+  try {
+    valueFuture = (valueFuture + 1) % 2
+    return res.status(200).send({
+      message: `Switched present and future`,
     })
   } catch (error) {
     console.log(error)
