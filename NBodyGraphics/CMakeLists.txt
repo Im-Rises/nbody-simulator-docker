@@ -1,8 +1,6 @@
 include_directories("${CMAKE_SOURCE_DIR}/dependencies")
 include_directories("${CMAKE_SOURCE_DIR}/dependencies/glad/include")
 include_directories("${CMAKE_SOURCE_DIR}/dependencies/glfw/include")
-include_directories("${CMAKE_SOURCE_DIR}/dependencies/curlpp/include")
-
 
 if (WIN32)
     list(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/dependencies/OpenCV)
@@ -18,9 +16,7 @@ find_package(OpenGL 3.3 REQUIRED)
 
 find_package(OpenCV REQUIRED)
 
-#find_package(CURL REQUIRED)
-#
-#find_package(nlohmann_json 3.2.0 REQUIRED)
+find_package(CURL REQUIRED)
 
 add_executable(${PROJECT_NAME} main.cpp ${SRCS} ${HEADERS} ${SRCS_HEADERS_GLAD})
 
@@ -28,9 +24,7 @@ target_link_libraries(${PROJECT_NAME} OpenGL::GL)
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 
-#target_link_libraries(${PROJECT_NAME} ${CURL_LIBRARIES})
-#
-#target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} CURL::libcurl)
 
 if (WIN32)
     if (MSVC)
