@@ -78,19 +78,40 @@ flowchart TB
     docker1 & docker2 & docker... --> |UDP| FBOgenerator
 ```
 
-## Tasks
+## Json data transfer
 
-Fromiel:
-
-- Docker compose
-
-Quentin:
-
-- Créé image pour paritucle
-
-Alshor:
-
-- ffmpeg
+```json
+{
+  "particles": [
+    {
+      "index": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "velocity": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "velocity": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}
+```
 
 ## Images
 

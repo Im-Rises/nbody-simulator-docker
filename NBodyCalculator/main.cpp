@@ -64,18 +64,32 @@ void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
     }
 }
 
-auto particlesToJson(const std::vector<Particle>& particles) -> nlohmann::json {
+auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> nlohmann::json {
     nlohmann::json json;
     json["particles"] = nlohmann::json::array();
-    for (auto& particle : particles)
+    for (int i = 0; i < particles.size(); i++)
     {
-        json["particles"].push_back({ { "position", { particle.position.x, particle.position.y, particle.position.z } },
-            { "velocity", { particle.velocity.x, particle.velocity.y, particle.velocity.z } } });
+        json["particles"].push_back(
+            { { "index", i + baseIndex },
+                { "position", { particles[i].position.x, particles[i].position.y, particles[i].position.z } },
+                { "velocity", { particles[i].velocity.x, particles[i].velocity.y, particles[i].velocity.z } } });
     }
     return json;
 }
 
 auto main(int argc, char* argv[]) -> int {
+
+    // Check arguments
+    if (argc < 3)
+    {
+        std::cout << "Usage: " << argv[0] << " <baseIndex> <numParticles>" << std::endl;
+        return 1;
+    }
+
+    // Get arguments
+    auto baseIndex = std::atoi(argv[1]);
+    auto numParticles = std::atoi(argv[2]);
+
     // Init random
     srand(static_cast<unsigned int>(time(nullptr)));
 
@@ -83,7 +97,7 @@ auto main(int argc, char* argv[]) -> int {
     signal(SIGINT, signalHandler);
 
     /* Init */
-    auto particles = std::vector<Particle>(100000);
+    auto particles = std::vector<Particle>(numParticles);
     for (auto& particle : particles)
     {
         particle.position = glm::vec3(
@@ -92,12 +106,12 @@ auto main(int argc, char* argv[]) -> int {
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);
     }
 
-    auto json = particlesToJson(particles);
+    auto json = particlesToJson(particles, baseIndex);
     //    std::cout << json.dump() << std::endl;
     // print json of first particle
-    //    std::cout << json["particles"][0] << std::endl;
-    //    std::cout << json["particles"][1] << std::endl;
-    //    std::cout << json["particles"][2]["position"] << std::endl;
+    std::cout << json["particles"][0] << std::endl;
+    std::cout << json["particles"][1] << std::endl;
+    //        std::cout << json["particles"][2]["position"] << std::endl;
 
     /* Loop*/
     auto previousTime = std::chrono::high_resolution_clock::now();
@@ -113,7 +127,7 @@ auto main(int argc, char* argv[]) -> int {
         {
             updatePhysics(particles, FixedDeltaTime);
             accumulator -= FixedDeltaTime;
-            auto json = particlesToJson(particles);
+            auto json = particlesToJson(particles, baseIndex);
         }
 
         previousTime = currentTime;
