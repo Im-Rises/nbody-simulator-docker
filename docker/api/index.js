@@ -36,6 +36,50 @@ app.get('/api/:particuleIndex', (req, res) => {
   }
 })
 
+app.get('/all', (req, res) => {
+  try {
+    console.log("test")
+    client.keys('*', async (err, keys) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      if (keys) 
+      {
+        client.mget(keys, (err, values) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+
+          const keyValuePairs = {};
+      
+          // Parcourez les clés et les valeurs associées
+          for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            const value = values[i];
+            keyValuePairs[key] = value; // Ajoutez la clé et la valeur à l'objet
+          }
+      
+          // Convertissez l'objet en JSON
+          const jsonData = JSON.stringify(keyValuePairs);
+      
+          console.log(jsonData);
+
+          return res.status(200).send({
+            message: `Retrieved all particules' data`,
+            particules: jsonData
+          })
+        })
+      }
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+
 app.post('/api/', (req, res) => {
   try {
     console.log(req.body)
