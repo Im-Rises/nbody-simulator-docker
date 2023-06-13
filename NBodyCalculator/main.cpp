@@ -98,6 +98,8 @@ auto main(int argc, char* argv[]) -> int {
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);
     }
 
+
+
     /* Loop*/
     auto previousTime = std::chrono::high_resolution_clock::now();
     float deltaTime = 0.0F;
@@ -111,6 +113,7 @@ auto main(int argc, char* argv[]) -> int {
         while (accumulator >= FixedDeltaTime)
         {
             updatePhysics(particles, FixedDeltaTime);
+            // Send particles here
             accumulator -= FixedDeltaTime;
         }
 
