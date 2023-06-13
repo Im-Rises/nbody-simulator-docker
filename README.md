@@ -14,6 +14,7 @@ This is a simple nbody simulator made with OpenGL and C++ with the help of the I
 ## Architecture
 
 ## v1
+
 ```mermaid
 flowchart TB
     client --> site-web --> |GET HTTP| redis
@@ -80,12 +81,15 @@ flowchart TB
 ## Tasks
 
 Fromiel:
+
 - Docker compose
 
 Quentin:
+
 - Créé image pour paritucle
 
 Alshor:
+
 - ffmpeg
 
 ## Images
@@ -165,11 +169,6 @@ The coding challenge:
 
 ## Contributors
 
-Quentin MOREL:
-
-- @Im-Rises
-- <https://github.com/Im-Rises>
-
 Axel COURMONT:
 
 - @Alshkor
@@ -179,5 +178,10 @@ Alexis ROVILLE:
 
 - @Fromiel
 - <https://github.com/Fromiel>
+
+Quentin MOREL:
+
+- @Im-Rises
+- <https://github.com/Im-Rises>
 
 [![GitHub contributors](https://contrib.rocks/image?repo=Im-Rises/NBodySimulator)](https://github.com/Im-Rises/NBodySimulator/graphs/contributors)
