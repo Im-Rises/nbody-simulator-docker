@@ -11,71 +11,38 @@
 
 This is a simple nbody simulator made with OpenGL and C++ with the help of the ImGui library for the UI.
 
+## Images
+
+## Videos
+
+## Features
+
+## Dependencies
+
+- OpenGL version: 4.6.0
+- OpenCV version: ???
+- GLSL version: 4.60
+- GLFW version: 3.3.8
+- Glad version: 0.1.36
+- ImGui version: 1.89.4 WIP
+- GLM version: 0.9.8
+
 ## Architecture
 
-## v1
-
 ```mermaid
-flowchart TB
-    client --> site-web --> |GET HTTP| redis
-    subgraph Kubernetes
-        HPA --> deployments-calculator --> pod1 & pod2
-    end
-    pod1 & pod2 --> |PUT HTTP| redis
-```
-
-## v2
-
-```mermaid
-flowchart TB
-    client --> site-web --> |GET HTTP|redis
-    admin --> |push| git --> |webhook| CRD
-    subgraph Kubernetes 
-        CRD --> |trigger| job-pod(job pod : download & build & push) --> |push| registry
-        job-pod --> |restart| deployments-calculator
-        HPA --> deployments-calculator --> pod1 & pod2
-    end
-    pod1 & pod2 --> |PUT HTTP| redis
-    job-pod --> |git clone| git
-```
-
-## v3
-
-```mermaid
-flowchart TB
-    client --> site-web --> |GET HTTP| ingress-video-generator
-    admin --> |push| git --> |webhook| CRD
-    subgraph Kubernetes 
-        subgraph build 
-            job-pod & registry
+flowchart LR
+    subgraph Architecture
+        subgraph Docker-Calculator
+        docker1 & docker2 & docker...
         end
-        subgraph calculations 
-            deployments-calculator & HPA & pod1 & pod2
+        docker1 & docker2 & docker... --> |UDP| api-redis
+        api-redis --> |UDP| api-video-generator
+        subgraph Docker-volume
+        api-video-generator
+        ffmpeg 
         end
-        CRD --> |trigger| job-pod(job pod : download & build & push) --> |push| registry
-        job-pod --> |restart| deployments-calculator
-        HPA --> deployments-calculator --> pod1 & pod2
-
-        subgraph public
-            ingress-video-generator --> service-video-generator --> pod-video-generator 
-        end
-        
+        ffmpeg --> |UDP| site-web
     end
-    pod1 & pod2 --> |PUT HTTP| redis
-    pod-video-generator --> |GET HTTP| redis
-    job-pod --> |git clone| git
-    
-```
-
-## v4
-
-```mermaid
-flowchart TB
-    client --> site-web --> |UDP| FBOgenerator
-    subgraph Docker
-        Repartitor --> deployments-calculator --> docker1 & docker2 & docker...
-    end
-    docker1 & docker2 & docker... --> |UDP| FBOgenerator
 ```
 
 ## Json data transfer
@@ -111,34 +78,6 @@ flowchart TB
     }
   ]
 }
-```
-
-## Images
-
-## Videos
-
-## Features
-
-## Dependencies
-
-- OpenGL version: 4.6.0
-- OpenCV version: ???
-- GLSL version: 4.60
-- GLFW version: 3.3.8
-- Glad version: 0.1.36
-- ImGui version: 1.89.4 WIP
-- GLM version: 0.9.8
-
-## CMake project compilation
-
-```bash
-cmake -B . -DCMAKE_BUILD_TYPE=Release
-```
-
-then
-
-```bash
-cmake --build . --config Release
 ```
 
 ## Github-Actions

@@ -8,6 +8,8 @@
 
 #include <nlohmann/json.hpp>
 
+#include <curl/curl.h>
+
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -77,10 +79,30 @@ auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> n
     return json;
 }
 
+void curlPostRequest(const std::string& url, const std::string& data) {
+    CURL* curl;
+    CURLcode res;
+
+    curl_global_init(CURL_GLOBAL_ALL);
+
+    curl = curl_easy_init();
+    if (curl)
+    {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+
+        res = curl_easy_perform(curl);
+
+        curl_easy_cleanup(curl);
+    }
+
+    curl_global_cleanup();
+}
+
 auto main(int argc, char* argv[]) -> int {
 
     // Check arguments
-    if (argc < 3)
+    if (argc < 4)
     {
         std::cout << "Usage: " << argv[0] << " <baseIndex> <numParticles>" << std::endl;
         return 1;
@@ -89,6 +111,7 @@ auto main(int argc, char* argv[]) -> int {
     // Get arguments
     auto baseIndex = std::atoi(argv[1]);
     auto numParticles = std::atoi(argv[2]);
+    auto addressPost = std::string(argv[3]);
 
     // Init random
     srand(static_cast<unsigned int>(time(nullptr)));
@@ -107,11 +130,7 @@ auto main(int argc, char* argv[]) -> int {
     }
 
     auto json = particlesToJson(particles, baseIndex);
-    //    std::cout << json.dump() << std::endl;
-    // print json of first particle
-    std::cout << json["particles"][0] << std::endl;
-    std::cout << json["particles"][1] << std::endl;
-    //        std::cout << json["particles"][2]["position"] << std::endl;
+    curlPostRequest(addressPost, json.dump());
 
     /* Loop*/
     auto previousTime = std::chrono::high_resolution_clock::now();
@@ -128,6 +147,7 @@ auto main(int argc, char* argv[]) -> int {
             updatePhysics(particles, FixedDeltaTime);
             accumulator -= FixedDeltaTime;
             auto json = particlesToJson(particles, baseIndex);
+            curlPostRequest(addressPost, json.dump());
         }
 
         previousTime = currentTime;
