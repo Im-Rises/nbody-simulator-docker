@@ -1,20 +1,24 @@
 #ifndef NBODYGRAPHICS_QUERYENTITIES_H
 #define NBODYGRAPHICS_QUERYENTITIES_H
 
-//#include "curlpp/include/curlpp/cURLpp.hpp"
+#include <curl/curl.h>
 #include <vector>
 #include <glm/glm.hpp>
-//#include <curlpp/include/curlpp/Options.hpp>
-//#include <curlpp/include/curlpp/Easy.hpp>
+#include <string>
 
 class QueryEntities {
+    typedef void(*Callback)(std::vector<glm::vec3>);
+
+    Callback callbackfct;
     // Use to initialize and terminate cURLpp
-//    curlpp::Cleanup myCleanup;
-//
-//    cURLpp::Easy easyHandle;
+    CURL* curl;
+    CURLcode res;
 
-//    std::ostringstream os;
+    std::string response;
 
+    size_t GetAllParticlesCallback(void* contents, size_t size, size_t nmemb, std::string* response);
+
+    void Parse() const;
 public:
     QueryEntities();
 
@@ -25,7 +29,8 @@ public:
 
     ~QueryEntities() = default;
 
-    std::vector<glm::vec3> GetAllParticles();
+    inline void SetCallback(Callback callback) { callbackfct = callback; }
+    void AskGetAllParticles();
 };
 
 

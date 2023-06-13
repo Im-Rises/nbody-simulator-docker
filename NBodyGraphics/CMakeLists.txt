@@ -1,7 +1,7 @@
 include_directories("${CMAKE_SOURCE_DIR}/dependencies")
 include_directories("${CMAKE_SOURCE_DIR}/dependencies/glad/include")
 include_directories("${CMAKE_SOURCE_DIR}/dependencies/glfw/include")
-include_directories("${CMAKE_SOURCE_DIR}/dependencies/curlpp/include")
+#include_directories("${CMAKE_SOURCE_DIR}/dependencies/curlpp/include")
 
 
 if (WIN32)

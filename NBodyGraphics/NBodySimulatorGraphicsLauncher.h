@@ -4,6 +4,7 @@
 #include <memory>
 #include <string_view>
 #include <glm/glm.hpp>
+#include "QueryEntities/QueryEntities.h"
 
 class Scene;
 class Recorder;
@@ -19,6 +20,7 @@ public:
 
 private:
     GLFWwindow* window;
+    QueryEntities queryEntities;
 
     int windowWidth = 1280;
     int windowHeight = 720;

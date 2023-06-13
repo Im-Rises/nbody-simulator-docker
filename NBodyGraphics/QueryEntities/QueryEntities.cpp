@@ -5,38 +5,55 @@
 #include "QueryEntities.h"
 #include <string>
 #include <array>
-QueryEntities::QueryEntities() {
-    // easyHandle.setOpt(cURLpp::Options::Url("http://localhost:8080/all/"));
+#include <iostream>
+#include <nlohmann/json.hpp>
 
+using json = nlohmann::json;
+
+QueryEntities::QueryEntities() : curl(nullptr) {
+     curl_global_init(CURL_GLOBAL_ALL);
+     curl = curl_easy_init();
+
+     if(!curl) {
+         std::cout << "Error initializing curl" << std::endl;
+     }
+
+     curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8080/all/");
+
+     // Configuration de la fonction de rappel pour stocker la réponse
+     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,
+         [this](void* contents, size_t size, size_t nmemb, std::string* response)
+         {
+            return GetAllParticlesCallback(contents, size, nmemb, response);}
+         );
+     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 }
 
 
-std::vector<glm::vec3> QueryEntities::GetAllParticles() {
+auto QueryEntities::GetAllParticlesCallback(void* contents, size_t size, size_t nmemb, std::string* response) -> size_t {
+     size_t total_size = size * nmemb;
+     response->append(static_cast<char*>(contents), total_size);
+     Parse();
+     return total_size;
+}
 
-//    try {
-//        easyHandle.perform();
-//
-//        os << easyHandle;
-//
-//        std::cout << os.str() << std::endl;
-//    }
-//    catch (curlpp::RuntimeError& e) {
-//        std::cout << "Runtime Error : " << e.what() << std::endl;
-//    }
-//    catch (curlpp::LogicError& e) {
-//        std::cout << "Logic Error : " << e.what() << std::endl;
-//    }
-//
-//    // parse json string to vec3 array
-//    std::string json = os.str();
-//    std::vector<glm::vec3> vec3Array;
-//
-//    for(auto it= json["particules"].iterator(); it != json[1].end(); ++it) {
-//        glm::vec3 vec3 = glm::vec3(it["x"], it["y"], it["z"]);
-//
-//    }
-//
 
-    // return array
-    return std::vector<glm::vec3>();
+void QueryEntities::AskGetAllParticles() {
+
+    res = curl_easy_perform(curl);
+
+    if(res != CURLE_OK) {
+         std::cout << "Error while performing curl request : " << curl_easy_strerror(res) << std::endl;
+    }
+}
+void QueryEntities::Parse() const {
+    std::cout << "Response : " << response << std::endl;
+
+    std::vector<glm::vec3> res;
+    json j = json::parse(response);
+
+    for(auto it = j[1].begin(); it != j.end(); ++it) {
+        std::cout << "x : " << it.value()["x"] << std::endl;
+    }
+
 }

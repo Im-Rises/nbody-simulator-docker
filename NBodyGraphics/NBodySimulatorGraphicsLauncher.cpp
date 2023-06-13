@@ -168,7 +168,8 @@ void NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
     /*
      * Fetch new particles position
      */
-
+    // Query askposition
+    queryEntities.AskGetAllParticles();
 
 }
 
