@@ -1,19 +1,15 @@
 #include "Recorder.h"
 #include <iostream>
 
-Recorder::Recorder(int width, int height) : width(width), height(height), framebuffer(new unsigned int[width * height * 3]) {
+Recorder::Recorder(int width, int height) : width(width), height(height), framebuffer(new unsigned char[width * height * 3]) {
     InitializeFBO();
     InitializeVideoWriter();
 }
 
-// Recorder::Recorder() {
-//     InitializeFBO();
-//     InitializeVideoWriter();
-// }
-
 Recorder::~Recorder() {
     std::cout << "Recorder destructor" << std::endl;
     videoWriter.release();
+    delete[] framebuffer;
 }
 
 void Recorder::InitializeFBO() {
@@ -46,24 +42,26 @@ void Recorder::InitializeVideoWriter() {
     }
 }
 
-
 void Recorder::StartCapture() {
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
     glViewport(0, 0, width, height);
 }
+
 void Recorder::StopCapture() {
     glBindTexture(GL_TEXTURE_2D, texture);
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, framebuffer);
 
     cv::Mat image(height, width, CV_8UC3, framebuffer);
 
+    cv::cvtColor(image, image, cv::COLOR_BGR2RGB); // Correct color conversion
+
     videoWriter.write(image);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+
 void Recorder::SetWidthHeight(int width, int height) {
     this->width = width;
     this->height = height;
     delete[] framebuffer;
-    framebuffer = new unsigned int[width * height * 3];
+    framebuffer = new unsigned char[width * height * 3];
 }

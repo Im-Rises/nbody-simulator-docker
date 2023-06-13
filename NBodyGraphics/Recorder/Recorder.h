@@ -8,7 +8,7 @@ class Recorder {
 private:
     GLuint fbo;
     GLuint texture;
-    unsigned int* framebuffer;
+    unsigned char* framebuffer;
 
     int width = 1280;
     int height = 720;
@@ -17,7 +17,7 @@ private:
     cv::VideoWriter videoWriter;
 
 public:
-//    Recorder();
+    //    Recorder();
     explicit Recorder(int width, int height);
     Recorder(const Recorder&) = delete;
     auto operator=(const Recorder&) -> Recorder& = delete;
