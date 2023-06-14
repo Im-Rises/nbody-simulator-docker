@@ -93,6 +93,8 @@ private:
     static auto getGLMVersion() -> std::string;
 
     static auto getOpenCVVersion() -> std::string_view;
+
+    static auto getNlohmannJsonVersion() -> std::string_view;
 };
 
 #endif // NBODY_SIMULATOR_LAUNCHER_H

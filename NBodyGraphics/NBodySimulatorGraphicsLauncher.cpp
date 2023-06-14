@@ -1,6 +1,8 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "cppcoreguidelines-pro-type-vararg"
 
+#include <nlohmann/json.hpp>
+
 #include "NBodySimulatorGraphicsLauncher.h"
 
 #include "InputManager.h"
@@ -77,7 +79,8 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
               << "GLFW version: " << getGLFWVersion() << std::endl
               << "Glad version: " << getGladVersion() << std::endl
               << "GLM version: " << getGLMVersion() << std::endl
-              << "OpenCV version: " << getOpenCVVersion() << std::endl;
+              << "OpenCV version: " << getOpenCVVersion() << std::endl
+              << "nlhomann/json version: " << getNlohmannJsonVersion() << std::endl;
 }
 
 NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
@@ -275,5 +278,8 @@ auto NBodySimulatorGraphicsLauncher::getOpenCVVersion() -> std::string_view {
     return CV_VERSION;
 }
 
+auto NBodySimulatorGraphicsLauncher::getNlohmannJsonVersion() -> std::string_view {
+    return "3.11.2";
+}
 
 #pragma clang diagnostic pop
