@@ -63,12 +63,12 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
     glfwMakeContextCurrent(window);
     //    glfwSwapInterval(1); // Enable vsync
     glfwSwapInterval(0); // Disable vsync
-    //    glfwWindowHint(GLFW_REFRESH_RATE, 0); // Disable refresh rate
-    //    glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE); // Disable refresh rate
-    //    glfwWindowHint(GLFW_REFRESH_RATE, 60);
+                         //    glfwWindowHint(GLFW_REFRESH_RATE, 0); // Disable refresh rate
+                         //    glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE); // Disable refresh rate
+                         //    glfwWindowHint(GLFW_REFRESH_RATE, 60);
 
-    // hide window
-        glfwHideWindow(window);
+    //    // hide window
+    //    glfwHideWindow(window);
 
     // Callbacks
     glfwSetWindowUserPointer(window, this);
@@ -110,6 +110,9 @@ void NBodySimulatorGraphicsLauncher::start() {
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     float deltaTime = 0.0F;
 
+    float timeStop = 5.0F;
+    float accumulatorStop = 0.0F;
+
     while (glfwWindowShouldClose(window) == 0)
     {
         auto currentTime = std::chrono::high_resolution_clock::now();
@@ -123,6 +126,10 @@ void NBodySimulatorGraphicsLauncher::start() {
         updateScreen();
 
         previousTime = currentTime;
+
+        accumulatorStop += deltaTime;
+        if (accumulatorStop >= timeStop)
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 }
 
@@ -171,8 +178,6 @@ void NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
     /*
      * Fetch new particles position
      */
-
-
 }
 
 void NBodySimulatorGraphicsLauncher::updateScreen() {
