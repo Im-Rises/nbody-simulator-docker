@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  opengl:
+    build:
+      context: . #dossier de l'image
+      dockerfile: Dockerfile

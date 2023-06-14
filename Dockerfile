@@ -11,6 +11,7 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libglfw3-dev
 RUN apt-get install -y libcurl4-openssl-dev
 RUN apt-get install -y curl
+RUN apt-get install -y xvfb
 
 WORKDIR nbody
 
@@ -19,4 +20,4 @@ COPY . .
 RUN cmake .
 RUN make
 
-ENTRYPOINT ["./NBodyGraphics/NBodyGraphics"]
+ENTRYPOINT ["bash", "./run-opengl.sh"]
