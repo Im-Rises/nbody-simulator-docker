@@ -121,9 +121,7 @@ const std::array<float, 108> Cube::Vertices = {
 
 
 const char* const Cube::VertexShaderSource =
-    R"(#version 300 es
-
-        precision highp float;
+    R"(#version 330 core
 
         layout (location = 0) in vec3 a_vertex;
 
@@ -136,9 +134,7 @@ const char* const Cube::VertexShaderSource =
 )";
 
 const char* const Cube::FragmentShaderSource =
-    R"(#version 300 es
-
-        precision highp float;
+    R"(#version 330 core
 
         out vec4 o_fragColor;
 
@@ -148,7 +144,7 @@ const char* const Cube::FragmentShaderSource =
         }
 )";
 
-Cube::Cube() : shader(VertexShaderSource, FragmentShaderSource, false) {
+Cube::Cube() : shader(VertexShaderSource, FragmentShaderSource) {
     position = glm::vec3(5.0F, 0.0F, 0.0F);
     // Set initial position
     updateModelMatrix();

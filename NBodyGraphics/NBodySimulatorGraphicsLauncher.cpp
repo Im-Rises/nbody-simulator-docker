@@ -47,12 +47,6 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
     glfwMakeContextCurrent(window);
     //    glfwSwapInterval(1); // Enable vsync
     glfwSwapInterval(0); // Disable vsync
-    //    glfwWindowHint(GLFW_REFRESH_RATE, 0); // Disable refresh rate
-    //    glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE); // Disable refresh rate
-    //    glfwWindowHint(GLFW_REFRESH_RATE, 60);
-
-    //    // hide window
-    //    glfwHideWindow(window);
 
     // Callbacks
     glfwSetWindowUserPointer(window, this);
@@ -63,6 +57,9 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
         exit(1);
 
     centerWindow();
+
+    //    // hide window
+    //    glfwHideWindow(window);
 
     // Setup OpenGL state
     glEnable(GL_DEPTH_TEST);

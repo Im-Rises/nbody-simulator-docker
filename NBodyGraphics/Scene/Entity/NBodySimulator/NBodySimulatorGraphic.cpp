@@ -34,17 +34,17 @@ const char* const NBodySimulatorGraphic::FragmentShaderSource =
         }
 )";
 
-NBodySimulatorGraphic::NBodySimulatorGraphic(int particleCount) : shader(VertexShaderSource, FragmentShaderSource, false) {
+NBodySimulatorGraphic::NBodySimulatorGraphic(int particleCount) : shader(VertexShaderSource, FragmentShaderSource) {
     // Resize the particles vector
     particles.resize(particleCount);
 
-    for (auto& particle: particles){
+    for (auto& particle : particles)
+    {
         // Set random position
         particle.position = glm::vec3(
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
-            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F
-        );
+            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);
     }
 
     // Init the VAO
