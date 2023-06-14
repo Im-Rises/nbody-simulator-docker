@@ -42,27 +42,24 @@ app.get('/all/present/', (req, res) => {
       {
         const keysPresent = keys.filter(key => key % 2 == valueFuture)
 
+        if(keysPresent.length == 0)
+        {
+
+          return res.status(200).send({
+            message: `No particules in present`,
+            particules: []
+          })
+        }
+
         client.mget(keysPresent, (err, values) => {
           if (err) {
             console.error(err);
             return;
           }
 
-          const keyValuePairs = {};
-      
-          // Parcourez les clés et les valeurs associées
-          for (let i = 0; i < keys.length; i++) {
-            const key = keysPresent[i];
-            const value = values[i];
-            keyValuePairs[key] = value; // Ajoutez la clé et la valeur à l'objet
-          }
-      
-          // Convertissez l'objet en JSON
-          const jsonData = JSON.stringify(keyValuePairs);
-
           return res.status(200).send({
             message: `Retrieved all particules' data`,
-            particules: jsonData
+            particules: values
           })
         })
       }
@@ -85,27 +82,25 @@ app.get('/all/future/', (req, res) => {
       {
         const keysFuture = keys.filter(key => key % 2 == ((valueFuture + 1) % 2) )
 
+
+        if(keysFuture.length == 0)
+        {
+          return res.status(200).send({
+            message: `No particules in present`,
+            particules: []
+          })
+        }
+
         client.mget(keysFuture, (err, values) => {
           if (err) {
             console.error(err);
             return;
           }
-
-          const keyValuePairs = {};
-      
-          // Parcourez les clés et les valeurs associées
-          for (let i = 0; i < keys.length; i++) {
-            const key = keysFuture[i];
-            const value = values[i];
-            keyValuePairs[key] = value; // Ajoutez la clé et la valeur à l'objet
-          }
-      
-          // Convertissez l'objet en JSON
-          const jsonData = JSON.stringify(keyValuePairs);
+    
 
           return res.status(200).send({
             message: `Retrieved all particules' data`,
-            particules: jsonData
+            particules: values
           })
         })
       }
