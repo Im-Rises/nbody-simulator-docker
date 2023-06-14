@@ -31,30 +31,14 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
     if (glfwInit() == 0)
         exit(1);
 
-// Decide GL+GLSL versions
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-    const char* glsl_version = "#version 300 es";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-#elif defined(__APPLE__)
-    const char* glsl_version = "#version 430";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);           // Required on Mac
-#else
-    const char* glsl_version = "#version 330";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);           // 3.0+ only
-#endif
 
     // According to init windowSize
     displayWidth = windowWidth;
     displayHeight = windowHeight;
-
 
     // Create window with graphics context
     window = glfwCreateWindow(displayWidth, displayHeight, PROJECT_NAME.data(), nullptr, nullptr);
@@ -63,9 +47,9 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
     glfwMakeContextCurrent(window);
     //    glfwSwapInterval(1); // Enable vsync
     glfwSwapInterval(0); // Disable vsync
-                         //    glfwWindowHint(GLFW_REFRESH_RATE, 0); // Disable refresh rate
-                         //    glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE); // Disable refresh rate
-                         //    glfwWindowHint(GLFW_REFRESH_RATE, 60);
+    //    glfwWindowHint(GLFW_REFRESH_RATE, 0); // Disable refresh rate
+    //    glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE); // Disable refresh rate
+    //    glfwWindowHint(GLFW_REFRESH_RATE, 60);
 
     //    // hide window
     //    glfwHideWindow(window);
