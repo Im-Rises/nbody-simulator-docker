@@ -1,9 +1,9 @@
 include_directories("${CMAKE_SOURCE_DIR}/dependencies")
 include_directories("${CMAKE_SOURCE_DIR}/dependencies/glad/include")
 include_directories("${CMAKE_SOURCE_DIR}/dependencies/glfw/include")
+include_directories("${CMAKE_SOURCE_DIR}/dependencies/glm")
 
 if (WIN32)
-
     list(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/dependencies/OpenCV)
 endif ()
 
@@ -25,8 +25,8 @@ target_link_libraries(${PROJECT_NAME} OpenGL::GL)
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 
-target_link_libraries(${PROJECT_NAME} CURL::libcurl)
+target_link_libraries(${PROJECT_NAME} ${CURL_LIBRARIES})
 
-
-find_package(glfw3 3.3 REQUIRED)
+find_package(glfw3 REQUIRED)
 target_link_libraries(${PROJECT_NAME} glfw ${CMAKE_DL_LIBS})
+
