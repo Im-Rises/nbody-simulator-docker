@@ -93,6 +93,8 @@ private:
     static auto getGladVersion() -> std::string_view;
 
     static auto getGLMVersion() -> std::string;
+
+    static auto getOpenCVVersion() -> std::string_view;
 };
 
 #endif // NBODY_SIMULATOR_LAUNCHER_H
