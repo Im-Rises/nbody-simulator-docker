@@ -20,7 +20,7 @@ This is a simple nbody simulator made with OpenGL and C++ with the help of the I
 ## Dependencies
 
 - OpenGL version: 4.6.0
-- OpenCV version: ???
+- OpenCV version:4.7.0-dev
 - GLSL version: 4.60
 - GLFW version: 3.3.8
 - Glad version: 0.1.36

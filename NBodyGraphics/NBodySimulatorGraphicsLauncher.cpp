@@ -76,7 +76,8 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
               << "GLSL version: " << getGLSLVersion() << std::endl
               << "GLFW version: " << getGLFWVersion() << std::endl
               << "Glad version: " << getGladVersion() << std::endl
-              << "GLM version: " << getGLMVersion() << std::endl;
+              << "GLM version: " << getGLMVersion() << std::endl
+              << "OpenCV version: " << getOpenCVVersion() << std::endl;
 }
 
 NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
@@ -265,6 +266,10 @@ auto NBodySimulatorGraphicsLauncher::getGladVersion() -> std::string_view {
 auto NBodySimulatorGraphicsLauncher::getGLMVersion() -> std::string {
     return std::to_string(GLM_VERSION_MAJOR) + "." + std::to_string(GLM_VERSION_MINOR) + "." +
            std::to_string(GLM_VERSION_PATCH);
+}
+
+auto NBodySimulatorGraphicsLauncher::getOpenCVVersion() -> std::string_view {
+    return CV_VERSION;
 }
 
 
