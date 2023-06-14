@@ -102,9 +102,9 @@ void curlPostRequest(const std::string& url, const std::string& data) {
 auto main(int argc, char* argv[]) -> int {
 
     // Check arguments
-    if (argc < 4)
+    if (argc < 5)
     {
-        std::cout << "Usage: " << argv[0] << " <baseIndex> <numParticles>" << std::endl;
+        std::cout << "Usage: " << argv[0] << " <baseIndex> <numParticles> <addressPost> <particlesCountWork>" << std::endl;
         return 1;
     }
 
@@ -112,6 +112,7 @@ auto main(int argc, char* argv[]) -> int {
     auto baseIndex = std::atoi(argv[1]);
     auto numParticles = std::atoi(argv[2]);
     auto addressPost = std::string(argv[3]);
+    auto particlesCountWork = std::atoi(argv[4]);
 
     // Init random
     srand(static_cast<unsigned int>(time(nullptr)));
