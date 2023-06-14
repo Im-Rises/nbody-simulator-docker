@@ -58,8 +58,8 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
 
     centerWindow();
 
-    //    // hide window
-    //    glfwHideWindow(window);
+    // hide window
+    glfwHideWindow(window);
 
     // Setup OpenGL state
     glEnable(GL_DEPTH_TEST);
@@ -86,7 +86,7 @@ NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
 }
 
 void NBodySimulatorGraphicsLauncher::start() {
-    scene = std::make_unique<Scene>(displayWidth, displayHeight, 1000);
+    scene = std::make_unique<Scene>(displayWidth, displayHeight, 10000);
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
 
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();

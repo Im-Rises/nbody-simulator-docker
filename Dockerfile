@@ -20,4 +20,4 @@ COPY . .
 RUN cmake .
 RUN make
 
-ENTRYPOINT ["bash", "./run-opengl.sh"]
+#ENTRYPOINT ["bash", "./run-opengl.sh"]
