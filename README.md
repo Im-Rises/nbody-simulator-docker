@@ -24,7 +24,7 @@ This is a simple nbody simulator made with OpenGL and C++ with the help of the I
 - GLFW version: 3.3.8
 - Glad version: 0.1.36
 - GLM version: 0.9.9
-- OpenCV version:4.7.0-dev
+- OpenCV version: 4.7.0-dev
 
 ## Architecture
 

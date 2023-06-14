@@ -113,6 +113,9 @@ void NBodySimulatorGraphicsLauncher::start() {
         if (accumulatorStop >= timeStop)
             glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
+
+    scene.reset();
+    recorder.reset();
 }
 
 void NBodySimulatorGraphicsLauncher::handleInputs() {
