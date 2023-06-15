@@ -31,6 +31,8 @@ This is a simple nbody simulator made with OpenGL and C++ with the help of the I
 
 ```bash
 ffmpeg -f x11grab -i title="Nbody Simulator raphics" -vcodec libx264 -pix_fmt yuv420p -tune zerolatency -preset ultrafast -f mpegts http://127.0.0.1:8080
+ffmpeg -f x11grab -y -r 30 -s 1920x1080 -i $DISPLAY -vcodec huffyuv out.avi
+ffmpeg -f x11grab -video_size 1920x1080 -framerate 30 -i $DISPLAY -vcodec libx264 -preset ultrafast -tune zerolatency -f mpegts udp://localhost:1234
 ```
 
 ```mermaid
