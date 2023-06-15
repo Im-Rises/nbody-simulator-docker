@@ -29,6 +29,10 @@ This is a simple nbody simulator made with OpenGL and C++ with the help of the I
 
 ## Architecture
 
+```bash
+ffmpeg -f x11grab -i title="Nbody Simulator raphics" -vcodec libx264 -pix_fmt yuv420p -tune zerolatency -preset ultrafast -f mpegts http://127.0.0.1:8080
+```
+
 ```mermaid
 flowchart LR
     subgraph Architecture
