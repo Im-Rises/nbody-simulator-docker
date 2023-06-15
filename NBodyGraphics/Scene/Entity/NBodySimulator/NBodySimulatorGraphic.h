@@ -37,6 +37,7 @@ public:
 public:
     void render(glm::mat4 cameraViewMatrix, glm::mat4 cameraProjectionMatrix) override;
 
+    void SetParticles(const std::vector<glm::vec3>& particles);
 };
 
 #endif // NBODY_SIMULATOR_H

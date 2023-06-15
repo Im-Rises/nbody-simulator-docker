@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Scene.h"
 
 Scene::Scene(int display_w, int display_h, int particlesCount) : camera(display_w, display_h), nbodySimulatorGraphic(particlesCount) {
@@ -18,4 +19,7 @@ void Scene::updateProjectionMatrix(int display_w, int display_h) {
 
 void Scene::reset() {
     camera.reset();
+}
+void Scene::SetParticles(const std::vector<glm::vec3>& particles) {
+    nbodySimulatorGraphic.SetParticles(particles);
 }

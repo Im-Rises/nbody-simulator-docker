@@ -68,15 +68,19 @@ void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
 
 auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> nlohmann::json {
     nlohmann::json json;
-    json["particles"] = nlohmann::json::array();
+    json["particules"] = nlohmann::json::array();
     for (int i = 0; i < particles.size(); i++)
     {
-        json["particles"].push_back(
+        json["particules"].push_back(
             { { "index", i + baseIndex },
                 { "position", { particles[i].position.x, particles[i].position.y, particles[i].position.z } },
                 { "velocity", { particles[i].velocity.x, particles[i].velocity.y, particles[i].velocity.z } } });
     }
     return json;
+}
+
+size_t static DumpCallback(char *ptr, size_t size, size_t nmemb, void *userdata) {
+    return size * nmemb;
 }
 
 void curlPostRequest(const std::string& url, const std::string& data) {
@@ -89,9 +93,20 @@ void curlPostRequest(const std::string& url, const std::string& data) {
     if (curl)
     {
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        // Définition de l'en-tête "Content-Type: application/json"
+        struct curl_slist *headers = NULL;
+        headers = curl_slist_append(headers, "Content-Type: application/json");
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
-
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, DumpCallback);
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L); // change to 1L to see verbose output
+        std::cout << "Sending data to " << url << std::endl;
         res = curl_easy_perform(curl);
+        std::cout << "Data sent" << std::endl;
+        if(res != CURLE_OK)
+            std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
+
 
         curl_easy_cleanup(curl);
     }
@@ -102,7 +117,7 @@ void curlPostRequest(const std::string& url, const std::string& data) {
 auto main(int argc, char* argv[]) -> int {
 
     // Check arguments
-    if (argc < 5)
+    if (argc < 4)
     {
         std::cout << "Usage: " << argv[0] << " <baseIndex> <numParticles> <addressPost> <particlesCountWork>" << std::endl;
         return 1;
@@ -112,7 +127,7 @@ auto main(int argc, char* argv[]) -> int {
     auto baseIndex = std::atoi(argv[1]);
     auto numParticles = std::atoi(argv[2]);
     auto addressPost = std::string(argv[3]);
-    auto particlesCountWork = std::atoi(argv[4]);
+    // auto particlesCountWork = std::atoi(argv[4]);
 
     // Init random
     srand(static_cast<unsigned int>(time(nullptr)));

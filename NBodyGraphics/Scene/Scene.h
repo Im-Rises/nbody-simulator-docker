@@ -20,6 +20,8 @@ public:
 
     void render();
 
+    void SetParticles(const std::vector<glm::vec3>& particles);
+
 public:
     void updateProjectionMatrix(int display_w, int display_h);
 

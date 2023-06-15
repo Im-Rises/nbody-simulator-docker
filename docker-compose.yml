@@ -5,3 +5,5 @@ services:
     build:
       context: . #dossier de l'image
       dockerfile: Dockerfile
+    volumes:
+      - ./NBodyGraphics/output_dir/:/nbody/NBodyGraphics/output_dir/

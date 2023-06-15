@@ -105,3 +105,8 @@ void NBodySimulatorGraphic::render(glm::mat4 cameraViewMatrix, glm::mat4 cameraP
     // Unbind the VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+void NBodySimulatorGraphic::SetParticles(const std::vector<glm::vec3>& particles) {
+    for (int i = 0; i < particles.size(); i++) {
+        this->particles[i].position = particles[i];
+    }
+}

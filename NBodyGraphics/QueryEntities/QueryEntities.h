@@ -5,24 +5,20 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <string>
-
+#include <functional>
+#include "QueryCallbackParameter.h"
 // curl -X POST http://localhost:8080/api -d '{"particules":[{"index": 1, "x": 1}, {"index": 2, "x": 2}
 // ]}' -H "Content-Type: application/json"
 
 
 class QueryEntities {
-    typedef void(*Callback)(std::vector<glm::vec3>);
 
-    Callback callbackfct;
     // Use to initialize and terminate cURLpp
     CURL* curl;
     CURLcode res;
 
-    std::string response;
+    QueryCallbackParameter callbackParameter;
 
-    size_t GetAllParticlesCallback(void* contents, size_t size, size_t nmemb, std::string* response);
-
-    void Parse() const;
 public:
     QueryEntities();
 
@@ -31,9 +27,9 @@ public:
     QueryEntities(QueryEntities&&) = delete;
     auto operator=(QueryEntities&&) -> QueryEntities& = delete;
 
-    ~QueryEntities() = default;
+    ~QueryEntities();
 
-    inline void SetCallback(Callback callback) { callbackfct = callback; }
+    inline void SetCallback(const QueryCallbackParameter::CallbackQuery& callback) { callbackParameter.SetCallback(callback); }
     void AskGetAllParticles();
 };
 

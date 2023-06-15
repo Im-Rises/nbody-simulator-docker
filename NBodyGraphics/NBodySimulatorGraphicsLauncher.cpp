@@ -77,7 +77,15 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
               << "GLFW version: " << getGLFWVersion() << std::endl
               << "Glad version: " << getGladVersion() << std::endl
               << "GLM version: " << getGLMVersion() << std::endl
-              << "OpenCV version: " << getOpenCVVersion() << std::endl;
+              << "OpenCV version: " << getOpenCVVersion() << std::endl
+              << "GLM version: " << getGLMVersion() << std::endl;
+
+    // Setup callback function when we get particles positions
+    auto callbackSetParticles = [this] (const std::vector<glm::vec3>& particles) {
+        scene->SetParticles(particles);
+    };
+
+    queryEntities.SetCallback(callbackSetParticles);
 }
 
 NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
@@ -164,7 +172,9 @@ void NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
      * Fetch new particles position
      */
     // Query askposition
+
     queryEntities.AskGetAllParticles();
+
 
 }
 
