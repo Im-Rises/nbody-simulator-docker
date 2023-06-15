@@ -1,6 +1,9 @@
 #include <iostream>
 #include "NBodySimulatorGraphicsLauncher.h"
 
+#include <cstdio>
+#include <cstdlib>
+
 auto main(int argc, char* argv[]) -> int {
     (void)argc;
     (void)argv;

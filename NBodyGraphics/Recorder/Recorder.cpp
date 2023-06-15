@@ -57,6 +57,7 @@ void Recorder::StopCapture() {
 
     videoWriter.write(image);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //    frame = image;
 }
 
 void Recorder::SetWidthHeight(int width, int height) {

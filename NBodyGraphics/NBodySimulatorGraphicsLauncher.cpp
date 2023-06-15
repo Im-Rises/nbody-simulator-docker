@@ -16,6 +16,7 @@
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 #include "Scene/Scene.h"
 #include "Recorder/Recorder.h"
+#include "FfmpegPiper/FfmpegPiper.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -47,8 +48,8 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
     if (window == nullptr)
         exit(1);
     glfwMakeContextCurrent(window);
-    //    glfwSwapInterval(1); // Enable vsync
-    glfwSwapInterval(0); // Disable vsync
+    glfwSwapInterval(1); // Enable vsync
+    //    glfwSwapInterval(0); // Disable vsync
 
     // Callbacks
     glfwSetWindowUserPointer(window, this);
@@ -91,12 +92,13 @@ NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
 void NBodySimulatorGraphicsLauncher::start() {
     scene = std::make_unique<Scene>(displayWidth, displayHeight, 10000);
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
+    ffmpegPiper = std::make_unique<FfmpegPiper>(displayWidth, displayHeight, 60);
 
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     float deltaTime = 0.0F;
 
-    float timeStop = 5.0F;
-    float accumulatorStop = 0.0F;
+    //    float timeStop = 5.0F;
+    //    float accumulatorStop = 0.0F;
 
     while (glfwWindowShouldClose(window) == 0)
     {
@@ -112,9 +114,9 @@ void NBodySimulatorGraphicsLauncher::start() {
 
         previousTime = currentTime;
 
-        accumulatorStop += deltaTime;
-        if (accumulatorStop >= timeStop)
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        //        accumulatorStop += deltaTime;
+        //        if (accumulatorStop >= timeStop)
+        //            glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 
     scene.reset();
@@ -178,6 +180,8 @@ void NBodySimulatorGraphicsLauncher::updateScreen() {
     scene->render();
 
     recorder->StopCapture();
+
+    ffmpegPiper->updateFrame();
 
     glfwSwapBuffers(window);
 }

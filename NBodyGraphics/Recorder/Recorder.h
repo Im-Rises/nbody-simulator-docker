@@ -13,8 +13,9 @@ private:
     int width = 1280;
     int height = 720;
     const int fps = 25;
-    int frame_id = 0;
+    //    int frame_id = 0;
     cv::VideoWriter videoWriter;
+    cv::Mat frame;
 
 public:
     //    Recorder();
@@ -32,6 +33,8 @@ public:
     void StartCapture();
 
     void StopCapture();
+
+    auto getTexture() -> unsigned int { return texture; }
 };
 
 
