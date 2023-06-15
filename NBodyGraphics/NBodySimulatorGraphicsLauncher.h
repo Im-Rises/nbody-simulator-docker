@@ -8,6 +8,7 @@
 
 class Scene;
 class Recorder;
+class FfmpegPiper;
 
 struct GLFWwindow;
 
@@ -25,11 +26,14 @@ private:
     int windowWidth = 1280;
     int windowHeight = 720;
 
+    const int fixedDeltaTime = 0.02F;
+
     int displayWidth, displayHeight;
     int windowPosX, windowPosY;
 
     std::unique_ptr<Scene> scene;
     std::unique_ptr<Recorder> recorder;
+    //    std::unique_ptr<FfmpegPiper> ffmpegPiper;
 
     struct {
         float x = 0.0F;
@@ -95,6 +99,8 @@ private:
     static auto getGLMVersion() -> std::string;
 
     static auto getOpenCVVersion() -> std::string_view;
+
+    static auto getNlohmannJsonVersion() -> std::string_view;
 };
 
 #endif // NBODY_SIMULATOR_LAUNCHER_H
