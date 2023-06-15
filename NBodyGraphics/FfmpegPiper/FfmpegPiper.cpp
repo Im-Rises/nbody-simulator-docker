@@ -25,12 +25,9 @@ FfmpegPiper::~FfmpegPiper() {
 }
 
 void FfmpegPiper::updateFrame(const unsigned char* fbo) {
-//    fwrite(fbo, 1, width * height * 3, pipe);
-
-
 }
 
-
+//    fwrite(fbo, 1, width * height * 3, pipe);
 // void FfmpegPiper::updateFrame(const unsigned char* frame) {
 //     // Send a FBO frame to ffmpeg
 //     fwrite(frame, 1, width * height * 3, pipe);

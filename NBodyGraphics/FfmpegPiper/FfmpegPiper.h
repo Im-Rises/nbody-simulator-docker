@@ -7,15 +7,15 @@ class FfmpegPiper {
 private:
     int width;
     int height;
-    int framerate;
+    int frameRate;
 
     FILE* pipe;
 
 
 public:
-    FfmpegPiper(const int width, const int height, const int framerate)
+    FfmpegPiper(const int width, const int height, const int framerate);
 
-        FfmpegPiper(const FfmpegPiper&) = delete;
+    FfmpegPiper(const FfmpegPiper&) = delete;
     auto operator=(const FfmpegPiper&) -> FfmpegPiper& = delete;
     FfmpegPiper(FfmpegPiper&&) = delete;
     auto operator=(FfmpegPiper&&) -> FfmpegPiper& = delete;

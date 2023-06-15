@@ -62,8 +62,7 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
     centerWindow();
 
     // hide window
-    glfwHideWindow(window);
-
+    //    glfwHideWindow(window
     // Setup OpenGL state
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -92,7 +91,7 @@ NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
 void NBodySimulatorGraphicsLauncher::start() {
     scene = std::make_unique<Scene>(displayWidth, displayHeight, 10000);
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
-    ffmpegPiper = std::make_unique<FfmpegPiper>(displayWidth, displayHeight, 60);
+    //    ffmpegPiper = std::make_unique<FfmpegPiper>(displayWidth, displayHeight, 60);
 
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     float deltaTime = 0.0F;
@@ -181,7 +180,7 @@ void NBodySimulatorGraphicsLauncher::updateScreen() {
 
     recorder->StopCapture();
 
-    ffmpegPiper->updateFrame();
+    //    ffmpegPiper->updateFrame();
 
     glfwSwapBuffers(window);
 }
