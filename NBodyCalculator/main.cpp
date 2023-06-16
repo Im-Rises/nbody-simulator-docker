@@ -79,7 +79,7 @@ auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> n
     return json;
 }
 
-size_t static DumpCallback(char *ptr, size_t size, size_t nmemb, void *userdata) {
+size_t static DumpCallback(char* ptr, size_t size, size_t nmemb, void* userdata) {
     return size * nmemb;
 }
 
@@ -94,7 +94,7 @@ void curlPostRequest(const std::string& url, const std::string& data) {
     {
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         // Définition de l'en-tête "Content-Type: application/json"
-        struct curl_slist *headers = NULL;
+        struct curl_slist* headers = NULL;
         headers = curl_slist_append(headers, "Content-Type: application/json");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
@@ -104,7 +104,7 @@ void curlPostRequest(const std::string& url, const std::string& data) {
         std::cout << "Sending data to " << url << std::endl;
         res = curl_easy_perform(curl);
         std::cout << "Data sent" << std::endl;
-        if(res != CURLE_OK)
+        if (res != CURLE_OK)
             std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
 
 
@@ -149,24 +149,24 @@ auto main(int argc, char* argv[]) -> int {
     curlPostRequest(addressPost, json.dump());
 
     /* Loop*/
-    //    auto previousTime = std::chrono::high_resolution_clock::now();
-    //    float deltaTime = 0.0F;
-    //    float accumulator = 0.0F;
+    auto previousTime = std::chrono::high_resolution_clock::now();
+    float deltaTime = 0.0F;
+    float accumulator = 0.0F;
     while (!exitMainLoopFlag)
     {
-        //        auto currentTime = std::chrono::high_resolution_clock::now();
-        //        deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
-        //
-        //        accumulator += deltaTime;
-        //        while (accumulator >= FixedDeltaTime)
-        //        {
-        //            updatePhysics(particles, FixedDeltaTime);
-        //            accumulator -= FixedDeltaTime;
-        //            auto json = particlesToJson(particles, baseIndex);
-        //            curlPostRequest(addressPost, json.dump());
-        //        }
-        //
-        //        previousTime = currentTime;
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
+
+        accumulator += deltaTime;
+        while (accumulator >= FixedDeltaTime)
+        {
+            updatePhysics(particles, FixedDeltaTime);
+            accumulator -= FixedDeltaTime;
+            auto json = particlesToJson(particles, baseIndex);
+            curlPostRequest(addressPost, json.dump());
+        }
+
+        previousTime = currentTime;
     }
 
     std::cout << "Exiting..." << std::endl;
