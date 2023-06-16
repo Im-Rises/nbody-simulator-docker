@@ -34,7 +34,7 @@ void Recorder::InitializeVideoWriter() {
     int fourcc = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
     cv::Size size = cv::Size(width, height);
 
-    videoWriter.open("output_dir/output123.avi", fourcc, fps, size, true);
+    videoWriter.open("output123.avi", fourcc, fps, size, true);
     std::cout << "open video" << std::endl;
     if (!videoWriter.isOpened())
     {

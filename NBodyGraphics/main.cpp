@@ -12,8 +12,7 @@ auto main(int argc, char* argv[]) -> int {
     }
     else
     {
-        std::cout << "Enter the number of particles: ";
-        std::cin >> particlesCount;
+        exit(2);
     }
 
     std::cout << NBodySimulatorGraphicsLauncher::PROJECT_NAME << " " << NBodySimulatorGraphicsLauncher::PROJECT_VERSION << std::endl
