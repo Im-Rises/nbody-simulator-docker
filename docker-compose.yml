@@ -25,6 +25,9 @@ services:
       context: ./src/NBodyGraphics #dossier de l'image
       dockerfile: Dockerfile
     stdin_open: true
+    network_mode: bridge
+    links:
+      - api
     volumes:
       - ./src/dependencies/:/nbody/dependencies/
       - ./src/NBodyGraphics/output_dir/:/nbody/output_dir/
@@ -32,6 +35,8 @@ services:
     build:
       context: ./src/NBodyCalculator #dossier de l'image
       dockerfile: Dockerfile
-    stdin_open: true
+    links:
+      - api
+    network_mode: bridge
     volumes: 
       - ./src/dependencies/:/nbody/dependencies/

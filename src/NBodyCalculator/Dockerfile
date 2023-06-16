@@ -17,6 +17,6 @@ COPY . .
 
 RUN chmod +x ./setup.sh
 
-CMD [ "0", "100", "http://api:8080" ]
+CMD [ "0", "100", "http://api:9000" ]
 
 ENTRYPOINT ["./setup.sh"]
