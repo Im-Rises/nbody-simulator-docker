@@ -25,6 +25,8 @@ std::vector<glm::vec3> QueryCallbackParameter::Parse() {
         // parse json string which represent the particle
         //std::cout << "Particule" << particule.get<std::string>() << std::endl;
         json particules = json::parse(particule.get<std::string>());
+        if(particules["index"] == 2)
+            std::cout << "x : " << particules["position"][0] << std::endl;
 
         // make a vec3 with the position in the json particle
         res.emplace_back(particules["position"][0], particules["position"][1], particules["position"][2]);
