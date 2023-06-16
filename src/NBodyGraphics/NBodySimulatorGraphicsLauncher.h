@@ -43,7 +43,7 @@ private:
         float w = 1.0F;
     } clear_color;
 
-    float pointSize = 2.0F;
+    float pointSize = 5.0F;
 
     bool isFullscreen = false;
 
