@@ -153,13 +153,12 @@ auto main(int argc, char* argv[]) -> int {
     const float FixedDeltaTime = 0.02F;
     float accumulator = 0.0F;
     //
-    const float currentTime = 0.0F;
-    float previousTime = 0.0F;
+    auto previousTime = std::chrono::high_resolution_clock::now();
     float deltaTime = 0.0F;
     //
     while (!exitMainLoopFlag)
     {
-        currentTime = std::chrono::high_resolution_clock::now();
+        auto currentTime = std::chrono::high_resolution_clock::now();
 
         deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
 
@@ -167,7 +166,6 @@ auto main(int argc, char* argv[]) -> int {
         while (accumulator >= FixedDeltaTime)
         {
             updatePhysics(particles, FixedDeltaTime);
-            curlPostRequest(addressPost, json.dump());
             accumulator -= FixedDeltaTime;
         }
 

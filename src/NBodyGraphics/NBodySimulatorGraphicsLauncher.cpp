@@ -99,23 +99,25 @@ void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
     scene = std::make_unique<Scene>(displayWidth, displayHeight, particlesCount);
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
 
-    float timeStop = 5.0F;
+    const float TimeStop = 5.0F;
     float accumulatorStop = 0.0F;
     float previousTime = 0.0F;
     while (glfwWindowShouldClose(window) == 0)
     {
-        handleInputs();
-
         auto currentTime = std::chrono::high_resolution_clock::now();
 
         deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
+
+        handleInputs();
+
+        updateGame(deltaTime);
 
         updateScreen();
 
         previousTime = currentTime;
 
         accumulatorStop += deltaTime;
-        if (accumulatorStop >= timeStop)
+        if (accumulatorStop >= TimeStop)
             glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 
