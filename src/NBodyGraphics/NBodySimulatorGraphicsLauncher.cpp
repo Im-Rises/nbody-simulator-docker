@@ -97,29 +97,31 @@ NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
 
 void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
     scene = std::make_unique<Scene>(displayWidth, displayHeight, particlesCount);
-    recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
+    recorder = std::make_unique<Recorder>(displayWidth, displayHeight, fixedFrameRate);
 
+    // Timer stop
     const float TimeStop = 5.0F;
     float accumulatorStop = 0.0F;
 
-    auto previousTime = std::chrono::high_resolution_clock::now();
-    float deltaTime = 0.0F;
-
+    // Game loop
     while (glfwWindowShouldClose(window) == 0)
     {
-        auto currentTime = std::chrono::high_resolution_clock::now();
-
-        deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
+        auto startMs = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now());
 
         handleInputs();
 
-        updateGame(deltaTime);
+        updateGame(fixedDeltaTime);
 
         updateScreen();
 
-        previousTime = currentTime;
+        auto endMs = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now());
+        auto delayMs = fixedDeltaTime - std::chrono::duration_cast<std::chrono::duration<float>>(endMs - startMs).count();
+        if (delayMs > 0.0F)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(delayMs * 1000.0F)));
+        }
 
-        accumulatorStop += deltaTime;
+        accumulatorStop += fixedDeltaTime;
         if (accumulatorStop >= TimeStop)
             glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
