@@ -75,6 +75,12 @@ auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> n
             { { "index", i + baseIndex },
                 { "position", { particles[i].position.x, particles[i].position.y, particles[i].position.z } },
                 { "velocity", { particles[i].velocity.x, particles[i].velocity.y, particles[i].velocity.z } } });
+
+        json["particules"].push_back(
+                { { "index", i + baseIndex },
+                  { "position", { particles[i].position.x, particles[i].position.y, particles[i].position.z } },
+                  { "velocity", { particles[i].velocity.x, particles[i].velocity.y, particles[i].velocity.z } } }); //todo : fromiel doit rendre ca propre
+
     }
     return json;
 }
@@ -167,6 +173,8 @@ auto main(int argc, char* argv[]) -> int {
         {
             updatePhysics(particles, FixedDeltaTime);
             accumulator -= FixedDeltaTime;
+            json = particlesToJson(particles, baseIndex);
+            curlPostRequest(addressPost, json.dump());
         }
 
         previousTime = currentTime;
