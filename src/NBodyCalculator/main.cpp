@@ -92,7 +92,7 @@ void curlPostRequest(const std::string& url, const std::string& data) {
     curl = curl_easy_init();
     if (curl)
     {
-        curl_easy_setopt(curl, CURLOPT_URL, (url+"/api/").c_str());
+        curl_easy_setopt(curl, CURLOPT_URL, (url + "/api/").c_str());
         // Définition de l'en-tête "Content-Type: application/json"
         struct curl_slist* headers = NULL;
         headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -149,9 +149,29 @@ auto main(int argc, char* argv[]) -> int {
     curlPostRequest(addressPost, json.dump());
 
     /* Loop*/
+    //
+    const float FixedDeltaTime = 0.02F;
+    float accumulator = 0.0F;
+    //
+    const float currentTime = 0.0F;
+    float previousTime = 0.0F;
+    float deltaTime = 0.0F;
+    //
     while (!exitMainLoopFlag)
     {
-        curlPostRequest(addressPost, json.dump());
+        currentTime = std::chrono::high_resolution_clock::now();
+
+        deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
+
+        accumulator += deltaTime;
+        while (accumulator >= FixedDeltaTime)
+        {
+            updatePhysics(particles, FixedDeltaTime);
+            curlPostRequest(addressPost, json.dump());
+            accumulator -= FixedDeltaTime;
+        }
+
+        previousTime = currentTime;
     }
 
     std::cout << "Exiting..." << std::endl;

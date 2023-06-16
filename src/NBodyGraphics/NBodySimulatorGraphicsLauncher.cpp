@@ -98,34 +98,21 @@ NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
 void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
     scene = std::make_unique<Scene>(displayWidth, displayHeight, particlesCount);
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
-    //    ffmpegPiper = std::make_unique<FfmpegPiper>(displayWidth, displayHeight, 60);
 
-    //
     float timeStop = 5.0F;
     float accumulatorStop = 0.0F;
-    //
-    float deltaTime = 0.0F;
-    float accumulator = 0.0F;
-    float FixedDeltaTime = 0.02F;
-    auto previousTime = std::chrono::high_resolution_clock::now();
-    //
+    float previousTime = 0.0F;
     while (glfwWindowShouldClose(window) == 0)
     {
         handleInputs();
 
         auto currentTime = std::chrono::high_resolution_clock::now();
+
         deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
 
-        accumulator += deltaTime;
-        if (accumulator >= FixedDeltaTime)
-        {
-            updateGame(deltaTime);
-            accumulator -= FixedDeltaTime;
-        }
+        updateScreen();
 
         previousTime = currentTime;
-
-        updateScreen();
 
         accumulatorStop += deltaTime;
         if (accumulatorStop >= timeStop)
