@@ -26,8 +26,6 @@ private:
     int windowWidth = 1280;
     int windowHeight = 720;
 
-//    const int fixedDeltaTime = 0.02F;
-
     const int fixedFrameRate = 24.0F;
     const float fixedDeltaTime = 1.0F / fixedFrameRate;
 
