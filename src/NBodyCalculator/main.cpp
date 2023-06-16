@@ -16,10 +16,10 @@
 #include <csignal>
 #endif
 
-const float GravityConstant = 6.67408e-11F;
-const float ParticleMass = 1.0F;
+const float GravityConstant = 1.0F;
+const float ParticleMass = 50.0F;
 const float FixedDeltaTime = 0.02F;
-const float Softening = 0.1F;
+const float Softening = 10.0F;
 const float Friction = 0.99F;
 
 bool exitMainLoopFlag = false;
