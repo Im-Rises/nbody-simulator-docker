@@ -8,13 +8,12 @@ project(NBodyGraphics)
 
 include_directories("${CMAKE_SOURCE_DIR}/dependencies")
 include_directories("${CMAKE_SOURCE_DIR}/dependencies/glad/include")
-include_directories("${CMAKE_SOURCE_DIR}/dependencies/glfw/include")
 
 if (WIN32)
     list(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/dependencies/OpenCV)
 endif ()
 
-file(GLOB_RECURSE SRCS_HEADERS_GLAD "${CMAKE_SOURCE_DIR}/dependencies/glad/*.c" "${CMAKE_SOURCE_DIR}/dependencies/glad/*.h")
+file(GLOB_RECURSE SRCS_HEADERS_GLAD "${CMAKE_SOURCE_DIR}/dependencies/glad/*.c")
 
 set(SRCS FfmpegPiper/FfmpegPiper.cpp
         QueryEntities/QueryCallbackParameter.cpp QueryEntities/QueryEntities.cpp

@@ -101,7 +101,10 @@ void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
 
     const float TimeStop = 5.0F;
     float accumulatorStop = 0.0F;
-    float previousTime = 0.0F;
+
+    auto previousTime = std::chrono::high_resolution_clock::now();
+    float deltaTime = 0.0F;
+
     while (glfwWindowShouldClose(window) == 0)
     {
         auto currentTime = std::chrono::high_resolution_clock::now();
