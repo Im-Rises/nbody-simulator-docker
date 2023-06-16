@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <random>
 
 #include <nlohmann/json.hpp>
 
@@ -21,6 +22,7 @@ const float ParticleMass = 50.0F;
 const float FixedDeltaTime = 0.02F;
 const float Softening = 10.0F;
 const float Friction = 0.99F;
+const float SpawnRadius = 3.0F;
 
 bool exitMainLoopFlag = false;
 
@@ -143,12 +145,23 @@ auto main(int argc, char* argv[]) -> int {
 
     /* Init */
     auto particles = std::vector<Particle>(numParticles);
+    std::mt19937 randomEngine;
+    std::uniform_real_distribution<float> randomFloats(0.0F, static_cast<float>(2.0F * M_PI));
     for (auto& particle : particles)
     {
-        particle.position = glm::vec3(
+        const float angle1 = randomFloats(randomEngine);
+        const float angle2 = randomFloats(randomEngine);
+        const float x = SpawnRadius * std::sin(angle1) * std::cos(angle2);
+        const float y = SpawnRadius * std::sin(angle1) * std::sin(angle2);
+        const float z = SpawnRadius * std::cos(angle1);
+        particle.position = glm::vec3(x, y, z) + position;
+        particle.velocity = glm::vec3(0.0F, 0.0F, 0.0F);
+
+
+        /*particle.position = glm::vec3(
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
-            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);
+            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);*/
     }
 
     auto json = particlesToJson(particles, baseIndex);
