@@ -72,12 +72,12 @@ auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> n
     for (int i = 0; i < particles.size(); i++)
     {
         json["particules"].push_back(
-            { { "index", i + baseIndex },
+            { { "index", 2 * i + baseIndex },
                 { "position", { particles[i].position.x, particles[i].position.y, particles[i].position.z } },
                 { "velocity", { particles[i].velocity.x, particles[i].velocity.y, particles[i].velocity.z } } });
 
         json["particules"].push_back(
-                { { "index", i + baseIndex },
+                { { "index", 2 * i + 1 + baseIndex },
                   { "position", { particles[i].position.x, particles[i].position.y, particles[i].position.z } },
                   { "velocity", { particles[i].velocity.x, particles[i].velocity.y, particles[i].velocity.z } } }); //todo : fromiel doit rendre ca propre
 
