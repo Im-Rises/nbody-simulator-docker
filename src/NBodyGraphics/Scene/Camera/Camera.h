@@ -7,7 +7,7 @@
 class Camera {
 private:
     // Define the camera Up
-    glm::vec3 cameraUp = glm::vec3(0.0F, 1.0F, 0.0F);
+    glm::vec3 cameraUp = glm::vec3(0.0F, 0.5F, 0.0F);
 
     // Matrix transformations
     glm::mat4 viewMatrix;
