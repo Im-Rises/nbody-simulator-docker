@@ -83,7 +83,7 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
               << "nlhomann/json version: " << getNlohmannJsonVersion() << std::endl;
 
     // Setup callback function when we get particles positions
-    auto callbackSetParticles = [this] (const std::vector<glm::vec3>& particles) {
+    auto callbackSetParticles = [this](const std::vector<glm::vec3>& particles) {
         scene->SetParticles(particles);
     };
 
@@ -95,8 +95,8 @@ NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
     glfwTerminate();
 }
 
-void NBodySimulatorGraphicsLauncher::start() {
-    scene = std::make_unique<Scene>(displayWidth, displayHeight, 10000);
+void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
+    scene = std::make_unique<Scene>(displayWidth, displayHeight, particlesCount);
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
     //    ffmpegPiper = std::make_unique<FfmpegPiper>(displayWidth, displayHeight, 60);
 
@@ -176,8 +176,6 @@ void NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
      */
 
     queryEntities.AskGetAllParticles();
-
-
 }
 
 void NBodySimulatorGraphicsLauncher::updateScreen() {
