@@ -11,6 +11,9 @@ web/*.js.mem
 web/*.wasm
 [Mm]akefile
 *.cbp
+dependencies/OpenCV/
+*.dll
+*.avi
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,intellij+all,cmake
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,intellij+all,cmake

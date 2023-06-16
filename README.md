@@ -11,9 +11,6 @@
 
 This is a simple nbody simulator made with OpenGL and C++ with the help of the ImGui library for the UI.
 
-> **Note:**   
-> The tests are running at 144Hz with 10 000 000 particles on a Windows 11 machine with an Nvidia RTX 2070 6GB.
-
 ## Images
 
 ## Videos
@@ -22,12 +19,76 @@ This is a simple nbody simulator made with OpenGL and C++ with the help of the I
 
 ## Dependencies
 
-- OpenGL version: 4.6.0
-- GLSL version: 4.60
+- OpenGL version: 3.3
+- GLSL version: 330
 - GLFW version: 3.3.8
 - Glad version: 0.1.36
-- ImGui version: 1.89.4 WIP
-- GLM version: 0.9.8
+- GLM version: 0.9.9
+- OpenCV version: 4.7.0-dev
+- nlhomann/json version: 3.9.1
+
+## Architecture
+
+```bash
+ffmpeg -f x11grab -i title="Nbody Simulator raphics" -vcodec libx264 -pix_fmt yuv420p -tune zerolatency -preset ultrafast -f mpegts http://127.0.0.1:8080
+ffmpeg -f x11grab -y -r 30 -s 1920x1080 -i $DISPLAY -vcodec huffyuv out.avi
+ffmpeg -f x11grab -video_size 1920x1080 -framerate 30 -i $DISPLAY -vcodec libx264 -preset ultrafast -tune zerolatency -f mpegts udp://localhost:1234
+```
+
+```mermaid
+flowchart LR
+    subgraph Architecture
+        subgraph Docker-Calculator
+        docker1 & docker2 & docker...
+        end
+        docker1 & docker2 & docker... <--> |GET/POST| api-redis
+        subgraph Redis
+        api-redis
+        end
+        api-redis --> |GET| api-video-generator
+        subgraph Video-Generator
+        docker-volume
+        api-video-generator --> |Save| docker-volume
+        ffmpeg --> |Read| docker-volume
+        end
+        ffmpeg --> |UDP| site-web
+    end
+```
+
+## Json data transfer
+
+```json
+{
+  "particles": [
+    {
+      "index": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "velocity": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "velocity": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}
+```
 
 ## Github-Actions
 
@@ -54,26 +115,26 @@ glm:
 glad:  
 <https://glad.dav1d.de/>
 
-Dear ImGui:  
-<https://github.com/ocornut/imgui>
-
 OpenGL:  
 <https://www.opengl.org/>
 
-OpenCL:  
-<https://www.khronos.org/blog/your-opencl-developer-experience-just-got-upgraded>  
-<https://github.com/KhronosGroup/OpenCL-Guide>  
-<https://github.com/KhronosGroup/OpenCL-SDK>
+Json:  
+<https://github.com/nlohmann/json>
 
-## Documentation
-
-learnopengl (OpenGL tutorial):  
-<https://learnopengl.com/In-Practice/2D-Game/Particles>
-
-OpenCL NBody example:  
-<https://github.com/KhronosGroup/OpenCL-SDK/tree/f510201a092363b66969888df49c68721ca2c4fb/samples/extensions/khr/nbody>
+libcurl:  
+<https://curl.se/libcurl/>
 
 ## Contributors
+
+Axel COURMONT:
+
+- @Alshkor
+- <https://github.com/Alshkor>
+
+Alexis ROVILLE:
+
+- @Fromiel
+- <https://github.com/Fromiel>
 
 Quentin MOREL:
 
