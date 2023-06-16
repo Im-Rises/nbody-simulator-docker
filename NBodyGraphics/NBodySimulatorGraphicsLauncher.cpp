@@ -100,29 +100,36 @@ void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight);
     //    ffmpegPiper = std::make_unique<FfmpegPiper>(displayWidth, displayHeight, 60);
 
-    std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
+    //
+    float timeStop = 5.0F;
+    float accumulatorStop = 0.0F;
+    //
     float deltaTime = 0.0F;
-
-    //    float timeStop = 5.0F;
-    //    float accumulatorStop = 0.0F;
-
+    float accumulator = 0.0F;
+    float FixedDeltaTime = 0.02F;
+    auto previousTime = std::chrono::high_resolution_clock::now();
+    //
     while (glfwWindowShouldClose(window) == 0)
     {
-        auto currentTime = std::chrono::high_resolution_clock::now();
-
-        deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
-
         handleInputs();
 
-        updateGame(deltaTime);
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
 
-        updateScreen();
+        accumulator += deltaTime;
+        if (accumulator >= FixedDeltaTime)
+        {
+            updateGame(deltaTime);
+            accumulator -= FixedDeltaTime;
+        }
 
         previousTime = currentTime;
 
-        //        accumulatorStop += deltaTime;
-        //        if (accumulatorStop >= timeStop)
-        //            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        updateScreen();
+
+        accumulatorStop += deltaTime;
+        if (accumulatorStop >= timeStop)
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 
     scene.reset();
@@ -169,7 +176,7 @@ void NBodySimulatorGraphicsLauncher::handleInputs() {
 }
 
 void NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
-    scene->update(deltaTime);
+    //    scene->update(deltaTime);
 
     /*
      * Fetch new particles position

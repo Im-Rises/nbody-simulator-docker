@@ -149,24 +149,24 @@ auto main(int argc, char* argv[]) -> int {
     curlPostRequest(addressPost, json.dump());
 
     /* Loop*/
-    auto previousTime = std::chrono::high_resolution_clock::now();
-    float deltaTime = 0.0F;
-    float accumulator = 0.0F;
+    //    auto previousTime = std::chrono::high_resolution_clock::now();
+    //    float deltaTime = 0.0F;
+    //    float accumulator = 0.0F;
     while (!exitMainLoopFlag)
     {
-        auto currentTime = std::chrono::high_resolution_clock::now();
-        deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
-
-        accumulator += deltaTime;
-        while (accumulator >= FixedDeltaTime)
-        {
-            updatePhysics(particles, FixedDeltaTime);
-            accumulator -= FixedDeltaTime;
-            auto json = particlesToJson(particles, baseIndex);
-            curlPostRequest(addressPost, json.dump());
-        }
-
-        previousTime = currentTime;
+        //        auto currentTime = std::chrono::high_resolution_clock::now();
+        //        deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
+        //
+        //        accumulator += deltaTime;
+        //        while (accumulator >= FixedDeltaTime)
+        //        {
+        //            updatePhysics(particles, FixedDeltaTime);
+        //            accumulator -= FixedDeltaTime;
+        //            auto json = particlesToJson(particles, baseIndex);
+        //            curlPostRequest(addressPost, json.dump());
+        //        }
+        //
+        //        previousTime = currentTime;
     }
 
     std::cout << "Exiting..." << std::endl;
