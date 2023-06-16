@@ -12,7 +12,7 @@ private:
 
     int width = 1280;
     int height = 720;
-    const int fps = 30;
+    int fps = 30;
     //    int frame_id = 0;
     cv::VideoWriter videoWriter;
     cv::Mat frame;
