@@ -19,7 +19,7 @@ private:
 
 public:
     //    Recorder();
-    explicit Recorder(int width, int height);
+    explicit Recorder(int width, int heigh, float framerate);
     Recorder(const Recorder&) = delete;
     auto operator=(const Recorder&) -> Recorder& = delete;
     Recorder(Recorder&&) = delete;
