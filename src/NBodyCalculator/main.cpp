@@ -52,7 +52,7 @@ void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
                 auto distance = glm::distance(particle.position, otherParticle.position);
                 auto direction = glm::normalize(otherParticle.position - particle.position);
 
-                auto force = GravityConstant * ParticleMass * ParticleMass / ((distance * distance) + std::pow((Softening * Softening), 3.0F / 2));
+                auto force = GravityConstant * ParticleMass * ParticleMass / ((distance * distance) + Softening);
                 sumForces += direction * force;
             }
 
@@ -62,9 +62,9 @@ void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
 
     for (auto& particle : particles)
     {
+        particle.position += (particle.velocity * deltaTime) + ((particle.acceleration * (deltaTime * deltaTime)) / 2.0F);
         particle.velocity += particle.acceleration * deltaTime;
         particle.velocity *= Friction;
-        particle.position += (particle.velocity * deltaTime) + ((particle.acceleration * (deltaTime * deltaTime)) / 2.0F);
     }
 }
 
@@ -154,7 +154,7 @@ auto main(int argc, char* argv[]) -> int {
         const float x = SpawnRadius * std::sin(angle1) * std::cos(angle2);
         const float y = SpawnRadius * std::sin(angle1) * std::sin(angle2);
         const float z = SpawnRadius * std::cos(angle1);
-        particle.position = glm::vec3(x, y, z) + position;
+        particle.position = glm::vec3(x, y, z);
         particle.velocity = glm::vec3(0.0F, 0.0F, 0.0F);
 
 
