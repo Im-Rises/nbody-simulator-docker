@@ -104,6 +104,8 @@ void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
 
     auto previousTime = std::chrono::high_resolution_clock::now();
     float deltaTime = 0.0F;
+    const float fixedDeltaTime = 0.5F;
+    float accumulator = 0.0F;
 
     while (glfwWindowShouldClose(window) == 0)
     {
@@ -113,7 +115,15 @@ void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
 
         handleInputs();
 
-        updateGame(deltaTime);
+     //   updateGame(deltaTime);
+
+        accumulator += deltaTime;
+
+        if(accumulator >= fixedDeltaTime)
+        {
+            updateGame(deltaTime);
+            accumulator = 0.0F;
+        }
 
         updateScreen();
 
