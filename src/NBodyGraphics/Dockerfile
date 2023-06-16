@@ -18,6 +18,6 @@ WORKDIR nbody
 
 COPY . .
 
-CMD [ "100" ]
+CMD [ "10" ]
 
 ENTRYPOINT ["bash", "./run-opengl.sh"]

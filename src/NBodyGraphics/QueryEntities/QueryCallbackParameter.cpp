@@ -13,7 +13,7 @@ std::vector<glm::vec3> QueryCallbackParameter::Parse() {
     std::vector<glm::vec3> res;
 
     // parse json string
-    //std::cout << response<< std::endl;
+    //std::cout << response << std::endl;
     json j;
     try {
         j = json::parse(response);
