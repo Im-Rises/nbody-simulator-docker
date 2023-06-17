@@ -12,13 +12,17 @@
 
 ## Description
 
-This is a simple nbody simulator made with OpenGL and C++ with the help of the ImGui library for the UI.
+This is a simple n-body simulator made with OpenGL for the graphics part and C++ for the logic part.
+The project is running on a complete docker environment.
+
+> **Note**  
+> The project is a test of paralleling the calculation of the particles on different docker containers and store them in
+> a redis database.
+> A docker is also used to generate the video from the redis database.
 
 ## Images
 
 ## Videos
-
-## Features
 
 ## Dependencies
 
@@ -29,6 +33,7 @@ This is a simple nbody simulator made with OpenGL and C++ with the help of the I
 - GLM version: 0.9.9
 - OpenCV version: 4.7.0-dev
 - nlhomann/json version: 3.9.1
+- libcurl version: 7.74.0
 
 ## Architecture
 
@@ -52,56 +57,13 @@ flowchart LR
     end
 ```
 
-## Json data transfer
-
-```json
-{
-  "particles": [
-    {
-      "index": 0,
-      "position": [
-        0,
-        0,
-        0
-      ],
-      "velocity": [
-        0,
-        0,
-        0
-      ]
-    },
-    {
-      "index": 1,
-      "position": [
-        0,
-        0,
-        0
-      ],
-      "velocity": [
-        0,
-        0,
-        0
-      ]
-    }
-  ]
-}
-```
-
-## Github-Actions
-
-[![CodeQL](https://github.com/Im-Rises/NBodySimulator/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/Im-Rises/NBodySimulator/actions/workflows/codeql.yml)
-[![CMake](https://github.com/Im-Rises/NBodySimulator/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/Im-Rises/NBodySimulator/actions/workflows/cmake.yml)
-[![flawfinder](https://github.com/Im-Rises/NBodySimulator/actions/workflows/flawfinder.yml/badge.svg?branch=main)](https://github.com/Im-Rises/NBodySimulator/actions/workflows/flawfinder.yml)
-[![cpp-linter](https://github.com/Im-Rises/NBodySimulator/actions/workflows/cpp-linter.yml/badge.svg?branch=main)](https://github.com/Im-Rises/NBodySimulator/actions/workflows/cpp-linter.yml)
-
-The project is set with a set of different scripts:
-
-- CodeQL: This script is used to check the code for security issues.
-- CMake: This script is used to build the project.
-- Flawfinder: This script is used to check the code for security issues.
-- Cpp Linter: This script is used to check the code for security issues.
-
 ## Libraries
+
+docker:  
+<https://www.docker.com/>
+
+cmake:  
+<https://cmake.org/>
 
 glfw:  
 <https://www.glfw.org/docs/latest/>
