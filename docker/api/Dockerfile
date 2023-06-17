@@ -4,6 +4,8 @@ WORKDIR /src
 
 COPY . .
 
+RUN yarn global add nodemon
+
 RUN yarn install
 
 CMD ["npm", "run", "start"]
