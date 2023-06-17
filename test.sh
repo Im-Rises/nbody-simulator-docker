@@ -2,4 +2,4 @@
 
 docker-compose down
 docker-compose up -d --build
-docker logs -f nbody-simulator-cloud_opengl_1
+docker logs -f nbody-simulator-docker_opengl_1

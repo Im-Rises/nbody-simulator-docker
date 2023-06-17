@@ -1,4 +1,4 @@
-# nbody-simulator-cloud
+# nbody-simulator-docker
 
 <p align="center">
       <img src="https://user-images.githubusercontent.com/59691442/183268126-b3d19e66-8f2d-463a-805e-ae6ef7cc6c01.png" alt="cmakeLogo" style="height:60px;"/>

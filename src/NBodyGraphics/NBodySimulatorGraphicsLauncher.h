@@ -16,7 +16,7 @@ class NBodySimulatorGraphicsLauncher {
 public:
     static constexpr std::string_view PROJECT_NAME = "Nbody Simulator Graphics";
     static constexpr std::string_view PROJECT_VERSION = "1.0.0";
-    static constexpr std::string_view PROJECT_LINK = "https://github.com/Im-Rises/nbody-simulator-cloud";
+    static constexpr std::string_view PROJECT_LINK = "https://github.com/Im-Rises/nbody-simulator-docker";
     static constexpr std::string_view PROJECT_AUTHOR = "Alshkor (Axel Courmont), Im-Rises (Quentin Morel), Fromiel (Alexis Roville)";
 
 private:
