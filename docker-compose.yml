@@ -16,8 +16,8 @@ services:
     command: /bin/sh -c 'nodemon -e js,html index.js'
     ports:
       - 8080:9000
-    volumes:
-      - ./docker/api:/src
+    #volumes:
+      #- ./docker/api:/src
     links:
       - redis
   opengl:
