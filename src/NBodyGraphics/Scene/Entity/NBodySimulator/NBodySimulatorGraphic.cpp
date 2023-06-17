@@ -38,14 +38,14 @@ NBodySimulatorGraphic::NBodySimulatorGraphic(int particleCount) : shader(VertexS
     // Resize the particles vector
     particles.resize(particleCount);
 
-    //    for (auto& particle : particles)
-    //    {
-    //        // Set random position
-    //        particle.position = glm::vec3(
-    //            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
-    //            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
-    //            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);
-    //    }
+    for (auto& particle : particles)
+    {
+        // Set random position
+        particle.velocity = glm::vec3(
+            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
+            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
+            static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);
+    }
 
     // Init the VAO
     glGenVertexArrays(1, &VAO);
