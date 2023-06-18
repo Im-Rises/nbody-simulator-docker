@@ -100,7 +100,7 @@ void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight, fixedFrameRate);
 
     // Timer stop
-    const float TimeStop = 20.0F;
+    const float TimeStop = 2.0F;
     float accumulatorStop = 0.0F;
 
     // Game loop

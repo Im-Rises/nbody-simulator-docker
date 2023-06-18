@@ -13,7 +13,7 @@ client.on('connect', () => console.log(`Redis is connected on port ${REDIS_PORT}
 client.on("error", (error) => console.error(error))
 
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '100mb' }));
 
 app.get('/api/:particuleIndex', (req, res) => {
   try {
@@ -57,7 +57,8 @@ app.get('/all/present/', (req, res) => {
             console.error(err);
             return;
           }
-
+          //console.log(values.length)
+          //console.log(JSON.stringify(values).length)
           return res.status(200).send({
             message: `Retrieved all particules' data`,
             particules: values
@@ -125,7 +126,7 @@ app.post('/switch/', (req, res) => {
 
 app.post('/api/', (req, res) => {
   try {
-    console.log(req.body)
+    //console.log(req.body)
     const particules = req.body.particules
     particules.forEach(particule => {
       client.setex(particule.index, 1440, JSON.stringify(particule))

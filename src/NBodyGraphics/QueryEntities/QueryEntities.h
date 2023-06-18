@@ -19,6 +19,7 @@ class QueryEntities {
 
     QueryCallbackParameter callbackParameter;
 
+
 public:
     QueryEntities();
 
@@ -31,6 +32,8 @@ public:
 
     inline void SetCallback(const QueryCallbackParameter::CallbackQuery& callback) { callbackParameter.SetCallback(callback); }
     void AskGetAllParticles();
+
+    static bool isQuerying;
 };
 
 

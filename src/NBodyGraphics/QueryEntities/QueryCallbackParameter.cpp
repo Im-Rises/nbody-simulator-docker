@@ -13,24 +13,20 @@ std::vector<glm::vec3> QueryCallbackParameter::Parse() {
     std::vector<glm::vec3> res;
 
     // parse json string
-    //std::cout << response << std::endl;
-
-    json j;
+    //std::cout << "Length of response : " << response.length() << std::endl;
     try {
+        json j;
         j = json::parse(response);
-    } catch (json::parse_error& e) {
-        std::cout << "Error while parsing json : " << e.what() << std::endl;
-    }
-    //std::cout << "Check initial parse" << std::endl;
-    for(const auto& particule : j["particules"]) {
-        // parse json string which represent the particle
-        //std::cout << "Particule" << particule.get<std::string>() << std::endl;
-        json particules = json::parse(particule.get<std::string>());
-        //if(particules["index"] == 2)
-         //   std::cout << "x : " << particules["position"][0] << std::endl;
+        for(const auto& particule : j["particules"]) {
+            // parse json string which represent the particle
+            json particules = json::parse(particule.get<std::string>());
 
-        // make a vec3 with the position in the json particle
-        res.emplace_back(particules["position"][0], particules["position"][1], particules["position"][2]);
+            // make a vec3 with the position in the json particle
+            res.emplace_back(particules["position"][0], particules["position"][1], particules["position"][2]);
+        }
+        return res;
+    } catch (json::parse_error& e) {
+        //std::cout << "Error while parsing json : " << e.what() << std::endl;
+        return res;
     }
-    return res;
 }
