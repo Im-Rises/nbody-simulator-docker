@@ -40,7 +40,7 @@ NBodySimulatorGraphic::NBodySimulatorGraphic(int particleCount) : shader(VertexS
 
     for (auto& particle : particles)
     {
-        // Set random position
+        // Set random velocity (for color)
         particle.velocity = glm::vec3(
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F,
