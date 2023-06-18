@@ -100,4 +100,4 @@ Quentin MOREL:
 - @Im-Rises
 - <https://github.com/Im-Rises>
 
-[![GitHub contributors](https://contrib.rocks/image?repo=Im-Rises/NBodySimulator)](https://github.com/Im-Rises/NBodySimulator/graphs/contributors)
+[![GitHub contributors](https://contrib.rocks/image?repo=Im-Rises/nbody-simulator-docker)](https://github.com/Im-Rises/nbody-simulator-docker/graphs/contributors)
