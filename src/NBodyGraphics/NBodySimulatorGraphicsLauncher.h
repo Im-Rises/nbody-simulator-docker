@@ -61,7 +61,7 @@ public:
     ~NBodySimulatorGraphicsLauncher();
 
 public:
-    void start(int particlesCount);
+    void start(const int particlesCount, const float recordingTime);
 
 private:
     void handleInputs();

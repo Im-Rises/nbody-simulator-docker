@@ -27,7 +27,7 @@ public:
     float yaw;
     float initialPitch = 0.0F;
     float pitch;
-    glm::vec3 initPosition = glm::vec3(0.0F, 0.0F, 10.0F);
+    glm::vec3 initPosition = glm::vec3(0.0F, 0.0F, 25.0F);
     glm::vec3 position;
 
     // Movement buffer to take into account the deltaTime

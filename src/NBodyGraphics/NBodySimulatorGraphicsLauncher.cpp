@@ -95,12 +95,11 @@ NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
     glfwTerminate();
 }
 
-void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
+void NBodySimulatorGraphicsLauncher::start(const int particlesCount, const float recordingTime) {
     scene = std::make_unique<Scene>(displayWidth, displayHeight, particlesCount);
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight, fixedFrameRate);
 
     // Timer stop
-    const float TimeStop = 2.0F;
     float accumulatorStop = 0.0F;
 
     // Game loop
@@ -122,7 +121,7 @@ void NBodySimulatorGraphicsLauncher::start(int particlesCount) {
         }
 
         accumulatorStop += fixedDeltaTime;
-        if (accumulatorStop >= TimeStop)
+        if (accumulatorStop >= recordingTime)
             glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 
