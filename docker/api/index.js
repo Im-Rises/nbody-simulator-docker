@@ -129,9 +129,18 @@ app.post('/api/', (req, res) => {
     //console.log(req.body)
     const particules = req.body.particules
     particules.forEach(particule => {
+      if(valueFuture == 0)
+      {
+        particule.index = particule.index * 2 + 1;
+      }
+      else
+      {
+        particule.index = particule.index * 2;
+      }
       client.setex(particule.index, 1440, JSON.stringify(particule))
     })
     const particuleLog = JSON.stringify(particules)
+    valueFuture = (valueFuture + 1) % 2 //temporaire en attendant qu'il y ait plusieurs container de calcul
     return res.status(200).send({
       particule: particuleLog
     })
@@ -139,5 +148,6 @@ app.post('/api/', (req, res) => {
     console.log(error)
   }
 })
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
