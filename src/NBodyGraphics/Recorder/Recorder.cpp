@@ -1,10 +1,9 @@
 #include "Recorder.h"
 #include <iostream>
 
-Recorder::Recorder(int width, int height, float frameRate) : width(width), height(height), framebuffer(new unsigned char[width * height * 3]) {
+Recorder::Recorder(int width, int height, float frameRate) : width(width), height(height), framebuffer(new unsigned char[width * height * 3]), fps(static_cast<int>(frameRate)) {
     InitializeFBO();
     InitializeVideoWriter();
-    fps = frameRate;
 }
 
 Recorder::~Recorder() {

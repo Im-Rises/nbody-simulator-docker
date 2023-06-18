@@ -10,12 +10,20 @@
 
 using json = nlohmann::json;
 
+bool QueryEntities::isQuerying = false;
+
 // Callback function used to treat the response
 size_t static CallbackRequest(char *ptr, size_t size, size_t nmemb, void *userdata) {
     auto *callbackParameter = static_cast<QueryCallbackParameter*>(userdata);
 
     // Store the response in the callbackParameter
-    callbackParameter->response = ptr;
+    if(QueryEntities::isQuerying) {
+        callbackParameter->response.append(ptr);
+    }
+    else {
+        QueryEntities::isQuerying = true;
+        callbackParameter->response = ptr;
+    }
 
     // Call the callback function with the response parsed
     callbackParameter->CallbackFct(callbackParameter->Parse());
@@ -30,9 +38,11 @@ QueryEntities::QueryEntities() : curl(nullptr) {
      if(!curl) {
          std::cout << "Error initializing curl" << std::endl;
      }
+     isQuerying = false;
 
      curl_easy_setopt(curl, CURLOPT_URL, "http://api:9000/all/present");
      curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+
      // Configuration de la fonction de rappel pour stocker la réponse
      curl_easy_setopt(curl, CURLOPT_WRITEDATA, &callbackParameter);
      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CallbackRequest);
@@ -41,7 +51,7 @@ QueryEntities::QueryEntities() : curl(nullptr) {
 
 // Ask the server to get all the particles
 void QueryEntities::AskGetAllParticles() {
-
+    isQuerying = false;
      if(!curl) {
          std::cout << "Error while performing curl request : " << curl_easy_strerror(res) << std::endl;
      }

@@ -15,7 +15,7 @@ services:
     network_mode: bridge
     command: /bin/sh -c 'nodemon -e js,html index.js'
     ports:
-      - 8080:9000
+      - "8080:9000"
     #    volumes:
     #      - ./docker/api:/src
     links:
@@ -24,7 +24,7 @@ services:
     build:
       context: ./src/NBodyGraphics #dossier de l'image
       dockerfile: Dockerfile
-    stdin_open: true
+    #    stdin_open: true
     network_mode: bridge
     links:
       - api

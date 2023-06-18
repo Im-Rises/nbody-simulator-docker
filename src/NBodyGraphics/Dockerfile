@@ -14,10 +14,10 @@ RUN apt-get install -y curl
 RUN apt-get install -y xvfb
 RUN apt-get install -y libglm-dev
 
-WORKDIR nbody
+WORKDIR /nbody
 
 COPY . .
 
-CMD [ "10" ]
+CMD [ "1000", "10" ]
 
 ENTRYPOINT ["bash", "./run-opengl.sh"]

@@ -26,8 +26,8 @@ private:
     int windowWidth = 1280;
     int windowHeight = 720;
 
-    const int fixedFrameRate = 60.0F;
-    const float fixedDeltaTime = 1.0F / fixedFrameRate;
+    static constexpr int FIXED_FRAME_RATE = 60.0F;
+    static constexpr float FIXED_DELTA_TIME = 1.0F / FIXED_FRAME_RATE;
 
     int displayWidth, displayHeight;
     int windowPosX, windowPosY;
@@ -43,7 +43,7 @@ private:
         float w = 1.0F;
     } clear_color;
 
-    float pointSize = 5.0F;
+    float pointSize = 4.0F;
 
     bool isFullscreen = false;
 
@@ -61,7 +61,7 @@ public:
     ~NBodySimulatorGraphicsLauncher();
 
 public:
-    void start(int particlesCount);
+    void start(const int particlesCount, const float recordingTime);
 
 private:
     void handleInputs();
