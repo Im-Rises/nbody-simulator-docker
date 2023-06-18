@@ -120,8 +120,9 @@ void NBodySimulatorGraphicsLauncher::start(const int particlesCount, const float
             std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(delayMs * 1000.0F)));
         }
 
-        float realDeltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(endMs - startMs).count();
-        accumulatorStop += realDeltaTime;
+        //        float realDeltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(endMs - startMs).count();
+        //        accumulatorStop += realDeltaTime;
+        accumulatorStop += FIXED_DELTA_TIME;
         if (accumulatorStop >= recordingTime)
             glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
