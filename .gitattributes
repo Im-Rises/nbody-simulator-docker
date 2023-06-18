@@ -1,3 +1,4 @@
 * text=auto eol=lf
 **/dependencies/** linguist-vendored
 web/** linguist-vendored
+* linguistic-language=Dockerfile

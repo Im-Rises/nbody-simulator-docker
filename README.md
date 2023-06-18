@@ -1,21 +1,28 @@
-# nbody-simulator-cloud
+# nbody-simulator-docker
 
 <p align="center">
-      <img src="https://user-images.githubusercontent.com/59691442/183268126-b3d19e66-8f2d-463a-805e-ae6ef7cc6c01.png" alt="cmakeLogo" style="height:60px;"/>
-      <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="cppLogo" style="height:60px;"/>
-      <img src="https://img.shields.io/badge/OpenGL-FFFFFF?style=for-the-badge&logo=opengl" alt="openglLogo" style="height:60px;"/>
-      <img src="https://user-images.githubusercontent.com/59691442/190315147-ec9dc33f-0090-4f0d-98ab-514eb1463e01.png" alt="glfwLogo" style="height:60px;"/>
+        <img src="https://user-images.githubusercontent.com/59691442/183268126-b3d19e66-8f2d-463a-805e-ae6ef7cc6c01.png" alt="cmakeLogo" style="height:60px;"/>
+        <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="cppLogo" style="height:60px;"/>
+        <img src="https://img.shields.io/badge/OpenGL-FFFFFF?style=for-the-badge&logo=opengl" alt="openglLogo" style="height:60px;"/>
+        <img src="https://github.com/Im-Rises/nbody-simulator-docker/assets/59691442/b527fd70-f38f-4384-878d-3de6929e1e30" alt="imGuiLogo" style="height:60px;"/>
+        <img src="https://user-images.githubusercontent.com/59691442/190315147-ec9dc33f-0090-4f0d-98ab-514eb1463e01.png" alt="glfwLogo" style="height:60px;"/>
 </p>
+
+[//]: # (         <img src="https://img.shields.io/badge/ImGui-FFFFFF?style=for-the-badge&logo=imGui" alt="imGuiLogo" style="height:60px;"/>)
 
 ## Description
 
-This is a simple nbody simulator made with OpenGL and C++ with the help of the ImGui library for the UI.
+This is a simple n-body simulator made with OpenGL for the graphics part and C++ for the logic part.
+The project is running on a complete docker environment.
+
+> **Note**  
+> The project is a test of paralleling the calculation of the particles on different docker containers and store them in
+> a redis database.
+> A docker is also used to generate the video from the redis database.
 
 ## Images
 
 ## Videos
-
-## Features
 
 ## Dependencies
 
@@ -26,14 +33,9 @@ This is a simple nbody simulator made with OpenGL and C++ with the help of the I
 - GLM version: 0.9.9
 - OpenCV version: 4.7.0-dev
 - nlhomann/json version: 3.9.1
+- libcurl version: 7.74.0
 
 ## Architecture
-
-```bash
-ffmpeg -f x11grab -i title="Nbody Simulator raphics" -vcodec libx264 -pix_fmt yuv420p -tune zerolatency -preset ultrafast -f mpegts http://127.0.0.1:8080
-ffmpeg -f x11grab -y -r 30 -s 1920x1080 -i $DISPLAY -vcodec huffyuv out.avi
-ffmpeg -f x11grab -video_size 1920x1080 -framerate 30 -i $DISPLAY -vcodec libx264 -preset ultrafast -tune zerolatency -f mpegts udp://localhost:1234
-```
 
 ```mermaid
 flowchart LR
@@ -55,56 +57,13 @@ flowchart LR
     end
 ```
 
-## Json data transfer
-
-```json
-{
-  "particles": [
-    {
-      "index": 0,
-      "position": [
-        0,
-        0,
-        0
-      ],
-      "velocity": [
-        0,
-        0,
-        0
-      ]
-    },
-    {
-      "index": 1,
-      "position": [
-        0,
-        0,
-        0
-      ],
-      "velocity": [
-        0,
-        0,
-        0
-      ]
-    }
-  ]
-}
-```
-
-## Github-Actions
-
-[![CodeQL](https://github.com/Im-Rises/NBodySimulator/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/Im-Rises/NBodySimulator/actions/workflows/codeql.yml)
-[![CMake](https://github.com/Im-Rises/NBodySimulator/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/Im-Rises/NBodySimulator/actions/workflows/cmake.yml)
-[![flawfinder](https://github.com/Im-Rises/NBodySimulator/actions/workflows/flawfinder.yml/badge.svg?branch=main)](https://github.com/Im-Rises/NBodySimulator/actions/workflows/flawfinder.yml)
-[![cpp-linter](https://github.com/Im-Rises/NBodySimulator/actions/workflows/cpp-linter.yml/badge.svg?branch=main)](https://github.com/Im-Rises/NBodySimulator/actions/workflows/cpp-linter.yml)
-
-The project is set with a set of different scripts:
-
-- CodeQL: This script is used to check the code for security issues.
-- CMake: This script is used to build the project.
-- Flawfinder: This script is used to check the code for security issues.
-- Cpp Linter: This script is used to check the code for security issues.
-
 ## Libraries
+
+docker:  
+<https://www.docker.com/>
+
+cmake:  
+<https://cmake.org/>
 
 glfw:  
 <https://www.glfw.org/docs/latest/>
