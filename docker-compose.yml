@@ -1,46 +1,154 @@
-version: '3.7'
-
 services:
-  redis:
-    image: redis:6.2-alpine
-    restart: unless-stopped
-    network_mode: bridge
-    expose:
-      - 6379
   api:
     build:
       context: ./docker/api
       dockerfile: Dockerfile
-    restart: unless-stopped
-    network_mode: bridge
-    environment:
-      - NB_PARTICULES=${NB_PARTICULES}
     command: /bin/sh -c 'nodemon -e js,html index.js'
-    ports:
-      - "8080:9000"
+    environment:
+    - NB_PARTICULES=1000
     links:
-      - redis
+    - redis
+    network_mode: bridge
+    ports:
+    - 8080:9000
+    restart: unless-stopped
   opengl:
     build:
-      context: ./src/NBodyGraphics #dossier de l'image
+      context: ./src/NBodyGraphics
       dockerfile: Dockerfile
-    network_mode: bridge
     environment:
-      - NB_PARTICULES=${NB_PARTICULES}
-      - TIME_SIMULATION=${TIME_SIMULATION}
+    - NB_PARTICULES=1000
+    - TIME_SIMULATION=60.0
     links:
-      - api
+    - api
+    network_mode: bridge
     volumes:
-      - ./src/dependencies/:/nbody/dependencies/
-      - ./src/NBodyGraphics/output_dir/:/nbody/output_dir/
-  particulecalculator:
+    - ./src/dependencies/:/nbody/dependencies/
+    - ./src/NBodyGraphics/output_dir/:/nbody/output_dir/
+  particulecalculator_0:
     build:
-      context: ./src/NBodyCalculator #dossier de l'image
+      context: ./src/NBodyCalculator
       dockerfile: Dockerfile
-    links:
-      - api
-    network_mode: bridge
     environment:
-      - NB_PARTICULES=${NB_PARTICULES}
+      FIRSTINDEX: '0'
+      LASTINDEX: '100'
+    links:
+    - api
+    network_mode: bridge
     volumes:
-      - ./src/dependencies/:/nbody/dependencies/
+      ./src/dependencies/: /nbody/dependencies/
+  particulecalculator_1:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '100'
+      LASTINDEX: '200'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+      ./src/dependencies/: /nbody/dependencies/
+  particulecalculator_2:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '200'
+      LASTINDEX: '300'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+      ./src/dependencies/: /nbody/dependencies/
+  particulecalculator_3:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '300'
+      LASTINDEX: '400'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+      ./src/dependencies/: /nbody/dependencies/
+  particulecalculator_4:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '400'
+      LASTINDEX: '500'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+      ./src/dependencies/: /nbody/dependencies/
+  particulecalculator_5:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '500'
+      LASTINDEX: '600'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+      ./src/dependencies/: /nbody/dependencies/
+  particulecalculator_6:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '600'
+      LASTINDEX: '700'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+      ./src/dependencies/: /nbody/dependencies/
+  particulecalculator_7:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '700'
+      LASTINDEX: '800'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+      ./src/dependencies/: /nbody/dependencies/
+  particulecalculator_8:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '800'
+      LASTINDEX: '900'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+      ./src/dependencies/: /nbody/dependencies/
+  particulecalculator_9:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '900'
+      LASTINDEX: '1000'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+      ./src/dependencies/: /nbody/dependencies/
+  redis:
+    expose:
+    - '6379'
+    image: redis:6.2-alpine
+    network_mode: bridge
+    restart: unless-stopped
+version: '3'

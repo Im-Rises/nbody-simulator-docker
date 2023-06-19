@@ -18,6 +18,6 @@ RUN chmod +x ./setup.sh
 
 ENV NB_PARTICULES=10
 
-CMD [ "0" , "$NB_PARTICULES", "http://api:9000" ]
+CMD [ "0", "http://api:9000" ]
 
 ENTRYPOINT ["./setup.sh"]

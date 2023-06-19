@@ -247,8 +247,6 @@ auto main(int argc, char* argv[]) -> int {
         return 1;
     }
 
-    std::cout << argv[1] << " " <<  std::getenv("NB_PARTICULES") << " "<<argv[2] << " " << argv[3] << " " << argv[4] << std::endl;
-
     // Get arguments
     baseIndex = std::atoi(argv[1]);
     numParticles = std::atoi(std::getenv("NB_PARTICULES"));
