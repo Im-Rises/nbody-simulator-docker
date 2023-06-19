@@ -126,7 +126,7 @@ auto main(int argc, char* argv[]) -> int {
         return 1;
     }
 
-    std::cout << argv[1] << " " << argv[2] << " " << argv[3] << argv[4] << std::endl;
+    std::cout << argv[1] << " " << argv[2] << " " << argv[3] << std::endl;
 
     // Get arguments
     auto baseIndex = std::atoi(argv[1]);
