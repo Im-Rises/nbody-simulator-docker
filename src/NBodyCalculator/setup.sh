@@ -1,5 +1,5 @@
 #!/bin/sh
 
-cmake .
+cmake -DDOCKER_BUILD=ON .
 make
 ./NBodyCalculator $1 $2 $3

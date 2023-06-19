@@ -1,15 +1,22 @@
 cmake_minimum_required(VERSION 3.8)
 
+option(DOCKER_BUILD "Build inside Docker" OFF)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(NBodyGraphics)
 
-include_directories("${CMAKE_SOURCE_DIR}/dependencies")
-include_directories("${CMAKE_SOURCE_DIR}/dependencies/glad/include")
-
-file(GLOB_RECURSE SRCS_HEADERS_GLAD "${CMAKE_SOURCE_DIR}/dependencies/glad/*.c")
+if (DOCKER_BUILD)
+    include_directories("${CMAKE_SOURCE_DIR}/dependencies")
+    include_directories("${CMAKE_SOURCE_DIR}/dependencies/glad/include")
+    file(GLOB_RECURSE SRCS_HEADERS_GLAD "${CMAKE_SOURCE_DIR}/dependencies/glad/*.c")
+else ()
+    include_directories("${CMAKE_SOURCE_DIR}/../dependencies")
+    include_directories("${CMAKE_SOURCE_DIR}/../dependencies/glad/include")
+    file(GLOB_RECURSE SRCS_HEADERS_GLAD "${CMAKE_SOURCE_DIR}/../dependencies/glad/*.c")
+endif ()
 
 set(SRCS FfmpegPiper/FfmpegPiper.cpp
         QueryEntities/QueryCallbackParameter.cpp QueryEntities/QueryEntities.cpp
