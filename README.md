@@ -69,7 +69,6 @@ end
 graph TB
     subgraph Host
     
-    subgraph Containers
     A((Start))
     B[NBodyGraphics]
     C[API-Redis]
@@ -79,15 +78,14 @@ graph TB
     G[NBodycalculator...]
     H[API-Redis]
     I[NBodyGraphics]
+    J[Volume]
+    
     A --> B
     B --> | Physic update | C
     C --> | Particle request update | D & E & F & G
     D & E & F & G --> | Send updated particles | H
     H --> | Send updated particles | I
     I --> | Do another cycle | B
-    end
-    
-    J[Volume]
     I --> | Save video | J
     end
 ```
