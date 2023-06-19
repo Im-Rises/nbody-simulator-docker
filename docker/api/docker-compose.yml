@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+  redis:
+    image: redis:6.2-alpine
+    restart: unless-stopped
+    network_mode: bridge
+    expose:
+      - 6379
+  api:
+    build:
+      context: ./docker/api
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    network_mode: bridge
+    environment:
+      - NB_PARTICULES=${NB_PARTICULES}
+    command: /bin/sh -c 'nodemon -e js,html index.js'
+    ports:
+      - "8080:9000"
+    links:
+      - redis
+  opengl:
+    build:
+      context: ./src/NBodyGraphics #dossier de l'image
+      dockerfile: Dockerfile
+    network_mode: bridge
+    environment:
+      - NB_PARTICULES=${NB_PARTICULES}
+      - TIME_SIMULATION=${TIME_SIMULATION}
+    links:
+      - api
+    volumes:
+      - ./src/dependencies/:/nbody/dependencies/
+      - ./src/NBodyGraphics/output_dir/:/nbody/output_dir/
+  particulecalculator:
+    build:
+      context: ./src/NBodyCalculator #dossier de l'image
+      dockerfile: Dockerfile
+    links:
+      - api
+    network_mode: bridge
+    environment:
+      - NB_PARTICULES=${NB_PARTICULES}
+    volumes:
+      - ./src/dependencies/:/nbody/dependencies/

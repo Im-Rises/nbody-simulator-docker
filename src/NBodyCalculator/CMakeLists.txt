@@ -1,15 +1,18 @@
 cmake_minimum_required(VERSION 3.8)
 
+option(DOCKER_BUILD "Build inside Docker" OFF)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(NBodyCalculator)
 
-include_directories("${CMAKE_SOURCE_DIR}/dependencies")
-
-#file(GLOB_RECURSE SRCS "${CMAKE_SOURCE_DIR}/*.cpp")
-#file(GLOB_RECURSE HEADERS "${CMAKE_SOURCE_DIR}/*.h")
+if (DOCKER_BUILD)
+    include_directories("${CMAKE_SOURCE_DIR}/dependencies")
+else ()
+    include_directories("${CMAKE_SOURCE_DIR}/../dependencies")
+endif ()
 
 find_package(CURL REQUIRED)
 

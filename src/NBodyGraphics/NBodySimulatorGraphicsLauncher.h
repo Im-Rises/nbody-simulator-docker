@@ -66,7 +66,7 @@ public:
 private:
     void handleInputs();
 
-    void updateGame(float deltaTime);
+    bool updateGame(float deltaTime);
 
     void updateScreen();
 

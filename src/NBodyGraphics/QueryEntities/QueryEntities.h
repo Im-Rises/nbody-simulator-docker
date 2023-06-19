@@ -31,7 +31,7 @@ public:
     ~QueryEntities();
 
     inline void SetCallback(const QueryCallbackParameter::CallbackQuery& callback) { callbackParameter.SetCallback(callback); }
-    void AskGetAllParticles();
+    bool AskGetAllParticles();
 
     static bool isQuerying;
 };

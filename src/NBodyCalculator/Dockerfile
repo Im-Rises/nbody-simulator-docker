@@ -10,13 +10,14 @@ RUN apk add curl-dev
 RUN apk add curl
 RUN apk add glm-dev
 
-
 WORKDIR /nbody
 
 COPY . .
 
 RUN chmod +x ./setup.sh
 
-CMD [ "0", "1000", "http://api:9000" ]
+ENV NB_PARTICULES=10
+
+CMD ["http://api:9000" ]
 
 ENTRYPOINT ["./setup.sh"]
