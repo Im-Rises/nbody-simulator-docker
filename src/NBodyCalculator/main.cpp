@@ -55,9 +55,9 @@ void signalHandler(int signum) {
     }
 }
 
-
+// Update la physique des particules que gère le conteneur
 void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
-    for (auto& particle : particles)
+    for (auto& particle : particles) /// todo Modifier pour n'update que les particules correspondant au conteneur
     {
         glm::vec3 sumForces(0.0F, 0.0F, 0.0F);
         for (auto& otherParticle : particles)
@@ -83,10 +83,11 @@ void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
     }
 }
 
+// Retourne le string contenant le json des particules du conteneur
 auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> nlohmann::json {
     nlohmann::json json;
     json["particules"] = nlohmann::json::array();
-    for (int i = 0; i < particles.size(); i++)
+    for (int i = 0; i < particles.size(); i++) ///todo Modifier pour n'update que les particules correspondant au conteneur
     {
         json["particules"].push_back(
             { { "index", 2 * i + baseIndex },
@@ -97,9 +98,11 @@ auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> n
     return json;
 }
 
+// Update particles pour qu'elles soient en accord avec le json que retourne la base de données
 void parseJsonToParticles() {
+    std::cout << "request all particules : " << getParticleBuffer << std::endl;
     nlohmann::json j = nlohmann::json::parse(getParticleBuffer);
-
+    getParticleBuffer.clear();
     for(const auto& particule : j["particules"]) {
         // parse json string which represent the particle
         nlohmann::json p = nlohmann::json::parse(particule.get<std::string>());
@@ -110,11 +113,15 @@ void parseJsonToParticles() {
     }
 }
 
+// callback de la fonction curlPostParticles
 size_t static dumpCallback(char* ptr, size_t size, size_t nmemb, void* userdata) {
     return size * nmemb;
 }
 
+// callback de la fonction curlGetFrame stocke le frame dans la variable currentFrame et si le frame change set changedFrame a true
+// se qui déclenchera la fonction curlGetParticles
 size_t static callbackGetFrame(char* ptr, size_t size, size_t nmemb, void* userdata) {
+    std::cout << "string : " << ptr << std::endl;
     nlohmann::json j = nlohmann::json::parse(ptr);
 
 
@@ -126,15 +133,18 @@ size_t static callbackGetFrame(char* ptr, size_t size, size_t nmemb, void* userd
     return size * nmemb;
 }
 
+// callback de la fonction curlGetParticles stocke le json contenant les particules dans la variable getParticleBuffer
 size_t static callbackGetParticles(char* ptr, size_t size, size_t nmemb, void* userdata) {
     getParticleBuffer.append(ptr);
 
     return size * nmemb;
 }
 
+// Initialize les 3 requêtes que va faire le docker
 void initializeRequest() {
         curl_global_init(CURL_GLOBAL_ALL);
         curlPostParticles = curl_easy_init();
+        // La requête POST qui se charge d'envoyer les particules au serveur
         if (curlPostParticles)
         {
             curl_easy_setopt(curlPostParticles, CURLOPT_URL, (addressPost + "/api/").c_str());
@@ -152,9 +162,9 @@ void initializeRequest() {
         }
 
         curlGetFrame = curl_easy_init();
+        // La requête GET qui se charge de récupérer le frame actuel
         if(curlGetFrame) {
             curl_easy_setopt(curlGetFrame, CURLOPT_URL, (addressPost + "/getFrame/").c_str());
-            std::cout << "address post : " << (addressPost + "/getFrame/").c_str() << std::endl;
             curl_easy_setopt(curlGetFrame, CURLOPT_CUSTOMREQUEST, "GET");
 
             curl_easy_setopt(curlGetFrame, CURLOPT_WRITEFUNCTION, callbackGetFrame);
@@ -165,6 +175,7 @@ void initializeRequest() {
         }
 
         curlGetParticles = curl_easy_init();
+        // La requête GET qui se charge de récupérer les particules du frame actuel
         if(curlGetParticles) {
             curl_easy_setopt(curlGetParticles, CURLOPT_URL, (addressPost + "/getParticlesPresent/").c_str());
             curl_easy_setopt(curlGetParticles, CURLOPT_VERBOSE, 0L);
@@ -177,7 +188,7 @@ void initializeRequest() {
         }
 }
 
-
+// Envoie les particules au serveur
 void curlPostRequest(const std::string& data) {
     CURLcode res;
 
@@ -188,6 +199,7 @@ void curlPostRequest(const std::string& data) {
         std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
 }
 
+// Récupère les particules du serveur puis mets à jour la physique des particules et démarre la requête post
 void curlGetParticlesRequest() {
     CURLcode res;
 
@@ -203,6 +215,7 @@ void curlGetParticlesRequest() {
     curlPostRequest(j.dump());
 }
 
+// Récupère le frame actuel du serveur et si le frame a changé lance la requête curlGetParticlesRequest
 void curlGetRequest() {
     CURLcode res;
     std::cout << "perform request" << std::endl;
@@ -217,7 +230,7 @@ void curlGetRequest() {
     }
 }
 
-
+// Cleanup des requêtes
 void cleanup() {
     curl_easy_cleanup(curlPostParticles);
     curl_easy_cleanup(curlGetFrame);
@@ -234,14 +247,17 @@ auto main(int argc, char* argv[]) -> int {
         return 1;
     }
 
-    std::cout << argv[1] << " " << argv[2] << " " << argv[3] << std::endl;
+    std::cout << argv[1] << " " <<  std::getenv("NB_PARTICULES") << " "<<argv[2] << " " << argv[3] << " " << argv[4] << std::endl;
 
     // Get arguments
     baseIndex = std::atoi(argv[1]);
-    numParticles = std::atoi(argv[2]);
+    numParticles = std::atoi(std::getenv("NB_PARTICULES"));
     addressPost = std::string(argv[3]);
     // auto particlesCountWork = std::atoi(argv[4]);
+
+    // Init curl
     initializeRequest();
+
     // Init random
     srand(static_cast<unsigned int>(time(nullptr)));
 
@@ -284,7 +300,9 @@ auto main(int argc, char* argv[]) -> int {
     //
     while (!exitMainLoopFlag)
     {
-        curlGetRequest();
+        // GET la frame du serveur et si elle change, appelle les autres fonctions pour mettre à jour les toutes les particules puis mettre à jour la
+        // physique des particules et enfin envoyer les particules au serveur
+        //curlGetRequest();
 
 //        auto currentTime = std::chrono::high_resolution_clock::now();
 //

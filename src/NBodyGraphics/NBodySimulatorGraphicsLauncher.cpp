@@ -85,7 +85,7 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
     // Setup callback function when we get particles positions
     auto callbackSetParticles = [this](const std::vector<glm::vec3>& particles) {
         scene->SetParticles(particles);
-        UpdateScreen();
+        updateScreen();
     };
 
     queryEntities.SetCallback(callbackSetParticles);
