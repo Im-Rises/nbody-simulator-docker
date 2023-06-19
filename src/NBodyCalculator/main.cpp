@@ -116,6 +116,8 @@ void parseJsonToParticles() {
         // make a vec3 with the position in the json particle
         allParticles[p["index"]].position = glm::vec3(p["position"][0], p["position"][1], p["position"][2]);
         //res.emplace_back(particules["position"][0], particules["position"][1], particules["position"][2]);
+
+        std::cout << "Particles : " << p["position"][0] << " " <<  p["position"][1] << " " << p["position"][2] << std::endl;
     }
 }
 
@@ -134,6 +136,7 @@ size_t static callbackGetFrame(char* ptr, size_t size, size_t nmemb, void* userd
     if(currentFrame != j["frame"]) {
         changedFrame = true;
         currentFrame = j["frame"];
+        std::cout << "Frame changed : " << currentFrame << std::endl;
     }
 
     return size * nmemb;
@@ -164,7 +167,7 @@ void initializeRequest() {
             curl_easy_setopt(curlPostParticles, CURLOPT_VERBOSE, 0L); // change to 1L to see verbose output
         }
         else {
-            std::cout << "Error generatiing Curl Get Frame" << std::endl;
+            std::cout << "Error generating Curl Get Frame" << std::endl;
         }
 
         curlGetFrame = curl_easy_init();
@@ -177,7 +180,7 @@ void initializeRequest() {
             curl_easy_setopt(curlGetFrame, CURLOPT_VERBOSE, 0L); // change to 1L to see verbose output
         }
         else {
-            std::cout << "Error generatiing Curl Get Frame" << std::endl;
+            std::cout << "Error generating Curl Get Frame" << std::endl;
         }
 
         curlGetParticles = curl_easy_init();
@@ -190,7 +193,7 @@ void initializeRequest() {
             curl_easy_setopt(curlGetParticles, CURLOPT_WRITEFUNCTION, callbackGetParticles);
         }
         else {
-            std::cout << "Error generatiing Curl Get Frame" << std::endl;
+            std::cout << "Error generating Curl Get Frame" << std::endl;
         }
 }
 
@@ -202,7 +205,7 @@ void curlPostRequest(const std::string& data) {
     res = curl_easy_perform(curlPostParticles);
 
     if (res != CURLE_OK)
-        std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
+        std::cout << "Error post particles: " << curl_easy_strerror(res) << std::endl;
 }
 
 // Récupère les particules du serveur puis mets à jour la physique des particules et démarre la requête post
@@ -212,7 +215,7 @@ void curlGetParticlesRequest() {
     res = curl_easy_perform(curlGetParticles);
 
     if (res != CURLE_OK)
-        std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
+        std::cout << "Error get all particles: " << curl_easy_strerror(res) << std::endl;
 
     parseJsonToParticles();
     updatePhysics(FixedDeltaTime);
@@ -226,8 +229,7 @@ void curlGetRequest() {
     res = curl_easy_perform(curlGetFrame);
 
     if (res != CURLE_OK)
-        std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
-        std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
+        std::cout << "Error Get Frame: " << curl_easy_strerror(res) << std::endl;
     if(changedFrame) {
         changedFrame = false;
         curlGetParticlesRequest();

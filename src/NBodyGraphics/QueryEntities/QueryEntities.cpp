@@ -49,7 +49,7 @@ QueryEntities::QueryEntities() : curl(nullptr) {
 }
 
 // Ask the server to get all the particles
-void QueryEntities::AskGetAllParticles() {
+bool QueryEntities::AskGetAllParticles() {
     isQuerying = false;
      if(!curl) {
          std::cout << "Error while performing curl request : " << curl_easy_strerror(res) << std::endl;
@@ -66,7 +66,7 @@ void QueryEntities::AskGetAllParticles() {
     if(wasUpdated) {
          callbackParameter.CallbackFct(parsed);
     }
-
+    return wasUpdated;
 }
 QueryEntities::~QueryEntities() {
     curl_easy_cleanup(curl);

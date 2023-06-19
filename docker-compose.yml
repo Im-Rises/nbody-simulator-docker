@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     command: /bin/sh -c 'nodemon -e js,html index.js'
     environment:
-    - NB_PARTICULES=100
+    - NB_PARTICULES=500
     links:
     - redis
     network_mode: bridge
@@ -17,8 +17,8 @@ services:
       context: ./src/NBodyGraphics
       dockerfile: Dockerfile
     environment:
-    - NB_PARTICULES=100
-    - TIME_SIMULATION=30.0
+    - NB_PARTICULES=500
+    - TIME_SIMULATION=5.0
     links:
     - api
     network_mode: bridge
@@ -31,7 +31,19 @@ services:
       dockerfile: Dockerfile
     environment:
       FIRSTINDEX: '0'
-      LASTINDEX: '100'
+      LASTINDEX: '250'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+    - ./src/dependencies/:/nbody/dependencies/
+  particulecalculator_1:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '250'
+      LASTINDEX: '500'
     links:
     - api
     network_mode: bridge

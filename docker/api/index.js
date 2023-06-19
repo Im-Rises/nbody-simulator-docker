@@ -10,7 +10,7 @@ const client = redis.createClient(redisPort)
 const totalparticules = process.env.NB_PARTICULES || 1000
 
 var valueFuture = 0
-var currentFrame = 0
+var currentFrame = -1
 var nbParticulesCalculated = 0
 
 var switched = false
@@ -51,9 +51,9 @@ app.get('/all/present/', (req, res) => {
 
       if (keys) 
       {
-        const keysPresent = keys.filter(key => key % 2 == valueFuture)
+        const keysPresent = keys.filter(key => (key % 2) === valueFuture)
 
-        if(keysPresent.length == 0)
+        if(keysPresent.length === 0)
         {
 
           return res.status(200).send({
@@ -68,10 +68,11 @@ app.get('/all/present/', (req, res) => {
             console.error(err);
             return;
           }
-          var s = switched
+          let s = switched
           switched = false
           if(s)
           {
+            console.log("send graphics")
             currentFrame++;
           }
           //console.log(values.length)
@@ -193,6 +194,7 @@ function switchParticules()
 {
   valueFuture = (valueFuture + 1) % 2
   switched = true
+  nbParticulesCalculated = 0;
 }
 
 
@@ -226,7 +228,9 @@ app.post('/api/', (req, res) => {
       //console.log(particule.index);
       client.setex(particule.index, 1440, JSON.stringify(particule))
     })
+
     nbParticulesCalculated += particules.length
+    console.log(nbParticulesCalculated)
     if(nbParticulesCalculated >= totalparticules)
     {
       switchParticules()

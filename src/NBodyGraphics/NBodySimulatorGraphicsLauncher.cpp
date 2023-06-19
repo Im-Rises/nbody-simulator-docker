@@ -110,7 +110,6 @@ void NBodySimulatorGraphicsLauncher::start(const int particlesCount, const float
 
         handleInputs();
 
-        updateGame(FIXED_DELTA_TIME);
 
 //        updateScreen();
 //
@@ -123,7 +122,10 @@ void NBodySimulatorGraphicsLauncher::start(const int particlesCount, const float
 
         //        float realDeltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(endMs - startMs).count();
         //        accumulatorStop += realDeltaTime;
-        accumulatorStop += FIXED_DELTA_TIME;
+        if(updateGame(FIXED_DELTA_TIME)) {
+            accumulatorStop += FIXED_DELTA_TIME;
+        }
+
         if (accumulatorStop >= recordingTime)
             glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
@@ -171,14 +173,14 @@ void NBodySimulatorGraphicsLauncher::handleInputs() {
     }
 }
 
-void NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
+bool NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
     //    scene->update(deltaTime);
 
     /*
      * Fetch new particles position
      */
 
-    queryEntities.AskGetAllParticles();
+    return queryEntities.AskGetAllParticles();
 }
 
 void NBodySimulatorGraphicsLauncher::updateScreen() {
