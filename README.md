@@ -47,7 +47,7 @@ flowchart LR
     end
     docker1 & docker2 & docker... <--> |GET/POST| api-redis
     subgraph Redis
-    api-redis --> | Read/Write | redis
+    api-redis
     end
     api-redis --> |Send particles| NBodyGraphics
     NBodyGraphics --> |Request update| api-redis
@@ -58,7 +58,7 @@ flowchart LR
     NBodyGraphics
     end
     
-    NBodyGraphics --> |Save| Volume
+    NBodyGraphics --> |Save video | Volume
    
 end
 ```
