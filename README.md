@@ -24,6 +24,50 @@ The project is running on a complete docker environment.
 
 ## Videos
 
+## How to use
+
+To use the project, you need to have docker installed on your computer.
+You can download it here: <https://www.docker.com/>
+
+You also need to install the following linux lib:
+
+```bash
+sudo apt-get install xvfb
+```
+
+You also need python3 installed on your computer.
+You can download it here: <https://www.python.org/downloads/>
+
+Once you have installed the requirements, you can install the python libs with the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+This will install the required libs to generate the `docker-compose.yml` using the `docker-compose-generator.py` python
+script.
+
+```bash
+python3 docker-compose-generator.py <total_particles> <number_of_calculators> <simulation_recording_time>
+```
+
+exemple:
+
+```bash
+python3 docker-compose-generator.py 1000 4 10
+```
+
+This will generate a `docker-compose.yml` file with 4 calculators and 1000 particles and a simulation recording time of
+10 seconds.
+
+Once created you can run the `docker-compose.yml` with the following command:
+
+```bash
+./test.sh
+```
+
+An output video will be genereated in the `./src/NBodyGraphics/output_dir` folder.
+
 ## Dependencies
 
 - OpenGL version: 3.3

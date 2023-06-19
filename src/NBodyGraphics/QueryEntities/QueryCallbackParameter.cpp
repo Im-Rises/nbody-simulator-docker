@@ -13,25 +13,27 @@ std::vector<glm::vec3> QueryCallbackParameter::Parse(bool& wasUpdated) {
     std::vector<glm::vec3> res;
 
     // parse json string
-    //std::cout << "Length of response : " << response.length() << std::endl;
-//    try {
-//
-//    } catch (json::parse_error& e) {
-//        //std::cout << "Error while parsing json : " << e.what() << std::endl;
-//        return res;
-//    }
-//
+    // std::cout << "Length of response : " << response.length() << std::endl;
+    //    try {
+    //
+    //    } catch (json::parse_error& e) {
+    //        //std::cout << "Error while parsing json : " << e.what() << std::endl;
+    //        return res;
+    //    }
+    //
     json j;
     j = json::parse(response);
 
     wasUpdated = j["wasUpdated"];
-    if(!wasUpdated) {
+    if (!wasUpdated)
+    {
         return res;
     }
 
-    std::cout << "len particule received : " << j["particules"].size() << std::endl;
+    //    std::cout << "len particule received : " << j["particules"].size() << std::endl;
 
-    for(const auto& particule : j["particules"]) {
+    for (const auto& particule : j["particules"])
+    {
         // parse json string which represent the particle
         json particules = json::parse(particule.get<std::string>());
 
