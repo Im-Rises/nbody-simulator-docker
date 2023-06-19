@@ -257,8 +257,9 @@ auto main(int argc, char* argv[]) -> int {
     std::cout << argv[1] << " " <<  std::getenv("NB_PARTICULES") << " "<<argv[2] << " " << argv[3] << " " << argv[4] << std::endl;
 
     // Get arguments
-    baseIndex = std::atoi(argv[1]);
-    numParticles = std::atoi(std::getenv("NB_PARTICULES"));
+    baseIndex = std::atoi(std::getenv("FIRSTINDEX"));
+    int lastIndex = std::atoi(std::getenv("LASTINDEX"));
+    numParticles = lastIndex - baseIndex;
     addressPost = std::string(argv[3]);
     // auto particlesCountWork = std::atoi(argv[4]);
 
