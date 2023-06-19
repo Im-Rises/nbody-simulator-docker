@@ -46,7 +46,8 @@ struct Particle {
     Particle() : position(glm::vec3(0.0F)), velocity(glm::vec3(0.0F, 0.0F, 0.0F)) {}
 };
 
-std::vector<Particle> particles;
+std::vector<Particle> modifiedParticles;
+std::vector<Particle> allParticles;
 
 void signalHandler(int signum) {
     if (signum == SIGINT)
@@ -56,11 +57,11 @@ void signalHandler(int signum) {
 }
 
 // Update la physique des particules que gère le conteneur
-void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
-    for (auto& particle : particles) /// todo Modifier pour n'update que les particules correspondant au conteneur
+void updatePhysics( float deltaTime) {
+    for (auto& particle : modifiedParticles)
     {
         glm::vec3 sumForces(0.0F, 0.0F, 0.0F);
-        for (auto& otherParticle : particles)
+        for (auto& otherParticle : allParticles)
         {
             if (&particle != &otherParticle)
             {
@@ -75,7 +76,7 @@ void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
         }
     }
 
-    for (auto& particle : particles)
+    for (auto& particle : modifiedParticles)
     {
         particle.position += (particle.velocity * deltaTime) + ((particle.acceleration * (deltaTime * deltaTime)) / 2.0F);
         particle.velocity += particle.acceleration * deltaTime;
@@ -87,12 +88,12 @@ void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
 auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> nlohmann::json {
     nlohmann::json json;
     json["particules"] = nlohmann::json::array();
-    for (int i = 0; i < particles.size(); i++) ///todo Modifier pour n'update que les particules correspondant au conteneur
+    for (int i = baseIndex; i < baseIndex + numParticles; i++)
     {
         json["particules"].push_back(
             { { "index", 2 * i + baseIndex },
-                { "position", { particles[i].position.x, particles[i].position.y, particles[i].position.z } },
-                { "velocity", { particles[i].velocity.x, particles[i].velocity.y, particles[i].velocity.z } } });
+                { "position", { modifiedParticles[i].position.x, modifiedParticles[i].position.y, modifiedParticles[i].position.z } },
+                { "velocity", { modifiedParticles[i].velocity.x, modifiedParticles[i].velocity.y, modifiedParticles[i].velocity.z } } });
 
     }
     return json;
@@ -103,12 +104,18 @@ void parseJsonToParticles() {
     std::cout << "request all particules : " << getParticleBuffer << std::endl;
     nlohmann::json j = nlohmann::json::parse(getParticleBuffer);
     getParticleBuffer.clear();
+
+    int len = j["particules"].size();
+    if(allParticles.empty()) {
+        allParticles.resize(len);
+    }
+
     for(const auto& particule : j["particules"]) {
         // parse json string which represent the particle
         nlohmann::json p = nlohmann::json::parse(particule.get<std::string>());
 
         // make a vec3 with the position in the json particle
-        particles[p["index"]].position = glm::vec3(p["position"][0], p["position"][1], p["position"][2]);
+        allParticles[p["index"]].position = glm::vec3(p["position"][0], p["position"][1], p["position"][2]);
         //res.emplace_back(particules["position"][0], particules["position"][1], particules["position"][2]);
     }
 }
@@ -127,7 +134,7 @@ size_t static callbackGetFrame(char* ptr, size_t size, size_t nmemb, void* userd
 
     if(currentFrame != j["frame"]) {
         changedFrame = true;
-        currentFrame == j["frame"];
+        currentFrame = j["frame"];
     }
 
     return size * nmemb;
@@ -177,7 +184,7 @@ void initializeRequest() {
         curlGetParticles = curl_easy_init();
         // La requête GET qui se charge de récupérer les particules du frame actuel
         if(curlGetParticles) {
-            curl_easy_setopt(curlGetParticles, CURLOPT_URL, (addressPost + "/getParticlesPresent/").c_str());
+            curl_easy_setopt(curlGetParticles, CURLOPT_URL, (addressPost + "/all/particules").c_str());
             curl_easy_setopt(curlGetParticles, CURLOPT_VERBOSE, 0L);
 
             // Configuration de la fonction de rappel pour stocker la réponse
@@ -210,8 +217,8 @@ void curlGetParticlesRequest() {
 
     parseJsonToParticles();
 
-    updatePhysics(particles, FixedDeltaTime);
-    nlohmann::json j = particlesToJson(particles, baseIndex);
+    updatePhysics(FixedDeltaTime);
+    nlohmann::json j = particlesToJson(modifiedParticles, baseIndex);
     curlPostRequest(j.dump());
 }
 
@@ -265,18 +272,18 @@ auto main(int argc, char* argv[]) -> int {
     signal(SIGINT, signalHandler);
 
     /* Init */
-    particles = std::vector<Particle>(numParticles);
+    modifiedParticles = std::vector<Particle>(numParticles);
     std::mt19937 randomEngine;
     std::uniform_real_distribution<float> randomFloats(0.0F, static_cast<float>(2.0F * M_PI));
-    for (auto& particle : particles)
+    for (auto p : modifiedParticles)
     {
         const float angle1 = randomFloats(randomEngine);
         const float angle2 = randomFloats(randomEngine);
         const float x = SpawnRadius * std::sin(angle1) * std::cos(angle2);
         const float y = SpawnRadius * std::sin(angle1) * std::sin(angle2);
         const float z = SpawnRadius * std::cos(angle1);
-        particle.position = glm::vec3(x, y, z);
-        particle.velocity = glm::vec3(0.0F, 0.0F, 0.0F);
+        p.position = glm::vec3(x, y, z);
+        p.velocity = glm::vec3(0.0F, 0.0F, 0.0F);
 
 
         /*particle.position = glm::vec3(
