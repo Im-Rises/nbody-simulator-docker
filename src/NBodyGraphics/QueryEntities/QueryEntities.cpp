@@ -61,10 +61,10 @@ void QueryEntities::AskGetAllParticles() {
 
 
     bool wasUpdated = false;
-    std::vector<glm::vec3> query parsed = callbackParameter->Parse(&wasUpdated);
+    std::vector<glm::vec3> parsed = callbackParameter.Parse(wasUpdated);
 
     if(wasUpdated) {
-         callbackParameter->CallbackFct(callbackParameter->Parse());
+         callbackParameter.CallbackFct(parsed);
     }
 
 }

@@ -22,7 +22,7 @@ public:
 
     std::string response;
 
-    std::vector<glm::vec3> Parse();
+    std::vector<glm::vec3> Parse(bool& wasUpdated);
 
 };
 
