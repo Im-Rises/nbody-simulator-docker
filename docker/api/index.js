@@ -89,6 +89,47 @@ app.get('/all/present/', (req, res) => {
   }
 })
 
+app.get('/all/particules/', (req, res) => {
+  try {
+    client.keys('*', async (err, keys) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      if (keys) 
+      {
+        const keysPresent = keys.filter(key => key % 2 == valueFuture)
+
+        if(keysPresent.length == 0)
+        {
+
+          return res.status(200).send({
+            message: `No particules in present`,
+            particules: [],
+            wasUpdated: false
+          })
+        }
+
+        client.mget(keysPresent, (err, values) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          //console.log(values.length)
+          //console.log(JSON.stringify(values).length)
+          return res.status(200).send({
+            message: `Retrieved all particules' data`,
+            particules: values,
+          })
+        })
+      }
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 //Obtenir les particules du futur (normalement ce n'est pas utile)
 app.get('/all/future/', (req, res) => {
   try {
