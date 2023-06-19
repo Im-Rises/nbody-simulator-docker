@@ -18,7 +18,4 @@ WORKDIR /nbody
 
 COPY . .
 
-ENV NB_PARTICULES=${NB_PARTICULES}
-ENV TIME_SIMULATION=${TIME_SIMULATION}
-
-CMD ["bash", "./run-opengl.sh", "${NB_PARTICULES}", "${TIME_SIMULATION}"]
+CMD ["bash", "./run-opengl.sh"]

@@ -91,7 +91,7 @@ auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> n
     for (int i = baseIndex; i < baseIndex + numParticles; i++)
     {
         json["particules"].push_back(
-            { { "index", 2 * i + baseIndex },
+            { { "index", i + baseIndex },
                 { "position", { modifiedParticles[i].position.x, modifiedParticles[i].position.y, modifiedParticles[i].position.z } },
                 { "velocity", { modifiedParticles[i].velocity.x, modifiedParticles[i].velocity.y, modifiedParticles[i].velocity.z } } });
 
@@ -101,15 +101,17 @@ auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> n
 
 // Update particles pour qu'elles soient en accord avec le json que retourne la base de données
 void parseJsonToParticles() {
-    std::cout << "request all particules : " << getParticleBuffer << std::endl;
+    std::cout << getParticleBuffer<< std::endl;
     nlohmann::json j = nlohmann::json::parse(getParticleBuffer);
     getParticleBuffer.clear();
 
     int len = j["particules"].size();
     if(allParticles.empty()) {
+        std::cout << "len particules : " << len << std::endl;
         allParticles.resize(len);
     }
 
+   std::cout << "parsing particules" << std::endl;
     for(const auto& particule : j["particules"]) {
         // parse json string which represent the particle
         nlohmann::json p = nlohmann::json::parse(particule.get<std::string>());
@@ -155,6 +157,7 @@ void initializeRequest() {
         if (curlPostParticles)
         {
             curl_easy_setopt(curlPostParticles, CURLOPT_URL, (addressPost + "/api/").c_str());
+            std::cout << "url : " << (addressPost + "/api/").c_str() << std::endl;
             // Définition de l'en-tête "Content-Type: application/json"
             struct curl_slist* headers = NULL;
             headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -172,6 +175,7 @@ void initializeRequest() {
         // La requête GET qui se charge de récupérer le frame actuel
         if(curlGetFrame) {
             curl_easy_setopt(curlGetFrame, CURLOPT_URL, (addressPost + "/getFrame/").c_str());
+            std::cout << "url : " << (addressPost + "/api/").c_str() << std::endl;
             curl_easy_setopt(curlGetFrame, CURLOPT_CUSTOMREQUEST, "GET");
 
             curl_easy_setopt(curlGetFrame, CURLOPT_WRITEFUNCTION, callbackGetFrame);
@@ -185,6 +189,7 @@ void initializeRequest() {
         // La requête GET qui se charge de récupérer les particules du frame actuel
         if(curlGetParticles) {
             curl_easy_setopt(curlGetParticles, CURLOPT_URL, (addressPost + "/all/particules").c_str());
+            std::cout << "url : " << (addressPost + "/api/").c_str() << std::endl;
             curl_easy_setopt(curlGetParticles, CURLOPT_VERBOSE, 0L);
 
             // Configuration de la fonction de rappel pour stocker la réponse
@@ -210,14 +215,17 @@ void curlPostRequest(const std::string& data) {
 void curlGetParticlesRequest() {
     CURLcode res;
 
+    std::cout << "perform get particles" << std::endl;
     res = curl_easy_perform(curlGetParticles);
+    std::cout << "end get particles" << std::endl;
 
     if (res != CURLE_OK)
         std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
 
     parseJsonToParticles();
-
+    std::cout << " parsed all particles" << std::endl;
     updatePhysics(FixedDeltaTime);
+    std::cout << "physic updated" << std::endl;
     nlohmann::json j = particlesToJson(modifiedParticles, baseIndex);
     curlPostRequest(j.dump());
 }
@@ -231,6 +239,7 @@ void curlGetRequest() {
         std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
     if(changedFrame) {
         changedFrame = false;
+        std::cout << "get particle" << std::endl;
         curlGetParticlesRequest();
     }
 }
@@ -289,7 +298,7 @@ auto main(int argc, char* argv[]) -> int {
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);*/
     }
 
-
+    curlPostRequest(particlesToJson(modifiedParticles, baseIndex).dump());
 
 //    auto json = particlesToJson(particles, baseIndex);
 //    curlPostRequest(addressPost, json.dump());
