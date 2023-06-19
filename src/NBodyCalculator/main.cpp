@@ -63,7 +63,7 @@ void updatePhysics( float deltaTime) {
         glm::vec3 sumForces(0.0F, 0.0F, 0.0F);
         for (auto& otherParticle : allParticles)
         {
-            if (&particle != &otherParticle)
+            if (particle.position != otherParticle.position)
             {
                 auto distance = glm::distance(particle.position, otherParticle.position);
                 auto direction = glm::normalize(otherParticle.position - particle.position);
@@ -88,7 +88,7 @@ void updatePhysics( float deltaTime) {
 auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> nlohmann::json {
     nlohmann::json json;
     json["particules"] = nlohmann::json::array();
-    for (int i = baseIndex; i < baseIndex + numParticles; i++)
+    for (int i = 0; i < numParticles; i++)
     {
         json["particules"].push_back(
             { { "index", i + baseIndex },
@@ -101,17 +101,14 @@ auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> n
 
 // Update particles pour qu'elles soient en accord avec le json que retourne la base de données
 void parseJsonToParticles() {
-    std::cout << getParticleBuffer<< std::endl;
     nlohmann::json j = nlohmann::json::parse(getParticleBuffer);
     getParticleBuffer.clear();
 
     int len = j["particules"].size();
     if(allParticles.empty()) {
-        std::cout << "len particules : " << len << std::endl;
         allParticles.resize(len);
     }
 
-   std::cout << "parsing particules" << std::endl;
     for(const auto& particule : j["particules"]) {
         // parse json string which represent the particle
         nlohmann::json p = nlohmann::json::parse(particule.get<std::string>());
@@ -130,7 +127,7 @@ size_t static dumpCallback(char* ptr, size_t size, size_t nmemb, void* userdata)
 // callback de la fonction curlGetFrame stocke le frame dans la variable currentFrame et si le frame change set changedFrame a true
 // se qui déclenchera la fonction curlGetParticles
 size_t static callbackGetFrame(char* ptr, size_t size, size_t nmemb, void* userdata) {
-    std::cout << "string : " << ptr << std::endl;
+    //std::cout << "string : " << ptr << std::endl;
     nlohmann::json j = nlohmann::json::parse(ptr);
 
 
@@ -157,7 +154,6 @@ void initializeRequest() {
         if (curlPostParticles)
         {
             curl_easy_setopt(curlPostParticles, CURLOPT_URL, (addressPost + "/api/").c_str());
-            std::cout << "url : " << (addressPost + "/api/").c_str() << std::endl;
             // Définition de l'en-tête "Content-Type: application/json"
             struct curl_slist* headers = NULL;
             headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -175,7 +171,6 @@ void initializeRequest() {
         // La requête GET qui se charge de récupérer le frame actuel
         if(curlGetFrame) {
             curl_easy_setopt(curlGetFrame, CURLOPT_URL, (addressPost + "/getFrame/").c_str());
-            std::cout << "url : " << (addressPost + "/api/").c_str() << std::endl;
             curl_easy_setopt(curlGetFrame, CURLOPT_CUSTOMREQUEST, "GET");
 
             curl_easy_setopt(curlGetFrame, CURLOPT_WRITEFUNCTION, callbackGetFrame);
@@ -189,7 +184,6 @@ void initializeRequest() {
         // La requête GET qui se charge de récupérer les particules du frame actuel
         if(curlGetParticles) {
             curl_easy_setopt(curlGetParticles, CURLOPT_URL, (addressPost + "/all/particules").c_str());
-            std::cout << "url : " << (addressPost + "/api/").c_str() << std::endl;
             curl_easy_setopt(curlGetParticles, CURLOPT_VERBOSE, 0L);
 
             // Configuration de la fonction de rappel pour stocker la réponse
@@ -215,17 +209,13 @@ void curlPostRequest(const std::string& data) {
 void curlGetParticlesRequest() {
     CURLcode res;
 
-    std::cout << "perform get particles" << std::endl;
     res = curl_easy_perform(curlGetParticles);
-    std::cout << "end get particles" << std::endl;
 
     if (res != CURLE_OK)
         std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
 
     parseJsonToParticles();
-    std::cout << " parsed all particles" << std::endl;
     updatePhysics(FixedDeltaTime);
-    std::cout << "physic updated" << std::endl;
     nlohmann::json j = particlesToJson(modifiedParticles, baseIndex);
     curlPostRequest(j.dump());
 }
@@ -237,9 +227,9 @@ void curlGetRequest() {
 
     if (res != CURLE_OK)
         std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
+        std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
     if(changedFrame) {
         changedFrame = false;
-        std::cout << "get particle" << std::endl;
         curlGetParticlesRequest();
     }
 }
@@ -281,7 +271,7 @@ auto main(int argc, char* argv[]) -> int {
     modifiedParticles = std::vector<Particle>(numParticles);
     std::mt19937 randomEngine;
     std::uniform_real_distribution<float> randomFloats(0.0F, static_cast<float>(2.0F * M_PI));
-    for (auto p : modifiedParticles)
+    for (auto& p : modifiedParticles)
     {
         const float angle1 = randomFloats(randomEngine);
         const float angle2 = randomFloats(randomEngine);

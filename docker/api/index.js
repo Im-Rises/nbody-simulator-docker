@@ -132,7 +132,7 @@ app.get('/all/particules/', (req, res) => {
 
           }
           //console.log(values.length)
-          console.log(values)
+          //console.log(values)
           //console.log(JSON.stringify(values).length)
           return res.status(200).send({
             message: `Retrieved all particules' data`,
@@ -149,7 +149,7 @@ app.get('/all/particules/', (req, res) => {
 //Obtenir les particules du futur (normalement ce n'est pas utile)
 app.get('/all/future/', (req, res) => {
   try {
-    console.log("test")
+    //console.log("test")
     client.keys('*', async (err, keys) => {
       if (err) {
         console.error(err);
@@ -212,7 +212,7 @@ app.get('/getFrame/', (req, res) => {
 //Mettre à jour des particules
 app.post('/api/', (req, res) => {
   try {
-    console.log(req.body.particules)
+    //console.log(req.body.particules)
     const particules = req.body.particules
     particules.forEach(particule => {
       if(valueFuture === 0)
