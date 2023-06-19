@@ -40,20 +40,50 @@ The project is running on a complete docker environment.
 ```mermaid
 flowchart LR
     subgraph Architecture
-        subgraph Docker-Calculator
-        docker1 & docker2 & docker...
-        end
-        docker1 & docker2 & docker... <--> |GET/POST| api-redis
-        subgraph Redis
-        api-redis
-        end
-        api-redis --> |GET| api-video-generator
-        subgraph Video-Generator
-        docker-volume
-        api-video-generator --> |Save| docker-volume
-        ffmpeg --> |Read| docker-volume
-        end
-        ffmpeg --> |UDP| site-web
+    subgraph Docker-Calculator
+    docker1 & docker2 & docker...
+    end
+    docker1 & docker2 & docker... <--> |GET/POST| api-redis
+    subgraph Redis
+    api-redis
+    end
+    api-redis --> |GET| NBodyGraphics
+    NBodyGraphics --> |Request update| api-redis
+    subgraph Video-Generator
+    NBodyGraphics --> |Save| Volume
+    end
+end
+```
+
+## Logigram
+
+```mermaid
+graph TB
+    subgraph Host
+    
+    subgraph Containers
+    A((Start))
+    B[NBodyGraphics]
+    C[API-Redis]
+    D[NBodycalculator1]
+    E[NBodycalculator2]
+    F[NBodycalculator3]
+    G[NBodycalculator...]
+    H[API-Redis]
+    I[NBodyGraphics]
+    
+    A --> B
+    B --> | Physic update | C
+    C --> | Particle set update | D & E & F & G
+    D & E & F & G --> | Send updated particles | H
+    H --> | Send updated particles | I
+    I --> | Do another cycle | B
+    end
+    
+    J[Volume]
+    
+    I --> | Save video | J
+    
     end
 ```
 
