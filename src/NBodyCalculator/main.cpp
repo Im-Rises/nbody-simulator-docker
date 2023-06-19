@@ -117,7 +117,7 @@ void parseJsonToParticles() {
         allParticles[p["index"]].position = glm::vec3(p["position"][0], p["position"][1], p["position"][2]);
         //res.emplace_back(particules["position"][0], particules["position"][1], particules["position"][2]);
 
-        std::cout << "Particles : " << p["position"][0] << " " <<  p["position"][1] << " " << p["position"][2] << std::endl;
+//        std::cout << "Particles : " << p["position"][0] << " " <<  p["position"][1] << " " << p["position"][2] << std::endl;
     }
 }
 

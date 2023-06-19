@@ -28,6 +28,9 @@ std::vector<glm::vec3> QueryCallbackParameter::Parse(bool& wasUpdated) {
     if(!wasUpdated) {
         return res;
     }
+
+    std::cout << "len particule received : " << j["particules"].size() << std::endl;
+
     for(const auto& particule : j["particules"]) {
         // parse json string which represent the particle
         json particules = json::parse(particule.get<std::string>());

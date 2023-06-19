@@ -72,7 +72,7 @@ app.get('/all/present/', (req, res) => {
           switched = false
           if(s)
           {
-            console.log("send graphics")
+            // console.log("send graphics")
             currentFrame++;
           }
           //console.log(values.length)
@@ -230,7 +230,7 @@ app.post('/api/', (req, res) => {
     })
 
     nbParticulesCalculated += particules.length
-    console.log(nbParticulesCalculated)
+    // console.log(nbParticulesCalculated)
     if(nbParticulesCalculated >= totalparticules)
     {
       switchParticules()

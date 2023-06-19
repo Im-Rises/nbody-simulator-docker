@@ -19,7 +19,7 @@ public:
     float rotationSpeed = 0.1F;
     float fov = 90.0F;
     float nearPlane = 0.1F;
-    float farPlane = 100.0F;
+    float farPlane = 10000.0F;
 
     // Position and rotation of the camera
     bool constrainPitch = true;
