@@ -26,7 +26,6 @@ size_t static CallbackRequest(char *ptr, size_t size, size_t nmemb, void *userda
     }
 
     // Call the callback function with the response parsed
-    callbackParameter->CallbackFct(callbackParameter->Parse());
     return size * nmemb;
 }
 
@@ -59,6 +58,15 @@ void QueryEntities::AskGetAllParticles() {
     if(res != CURLE_OK) {
          std::cout << "Error while performing curl request : " << curl_easy_strerror(res) << std::endl;
     }
+
+
+    bool wasUpdated = false;
+    std::vector<glm::vec3> query parsed = callbackParameter->Parse(&wasUpdated);
+
+    if(wasUpdated) {
+         callbackParameter->CallbackFct(callbackParameter->Parse());
+    }
+
 }
 QueryEntities::~QueryEntities() {
     curl_easy_cleanup(curl);

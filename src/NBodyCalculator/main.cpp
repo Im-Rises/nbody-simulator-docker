@@ -24,14 +24,19 @@ const float Softening = 10.0F;
 const float Friction = 0.99F;
 const float SpawnRadius = 3.0F;
 
+int baseIndex;
+int numParticles;
+std::string addressPost;
+int currentFrame = -1;
+bool changedFrame = false;
+CURL* curlPostParticles;
+CURL* curlGetFrame;
+CURL* curlGetParticles;
+
+std::string getParticleBuffer;
+
 bool exitMainLoopFlag = false;
 
-void signalHandler(int signum) {
-    if (signum == SIGINT)
-    {
-        exitMainLoopFlag = true;
-    }
-}
 
 struct Particle {
     glm::vec3 position;
@@ -40,6 +45,16 @@ struct Particle {
 
     Particle() : position(glm::vec3(0.0F)), velocity(glm::vec3(0.0F, 0.0F, 0.0F)) {}
 };
+
+std::vector<Particle> particles;
+
+void signalHandler(int signum) {
+    if (signum == SIGINT)
+    {
+        exitMainLoopFlag = true;
+    }
+}
+
 
 void updatePhysics(std::vector<Particle>& particles, float deltaTime) {
     for (auto& particle : particles)
@@ -82,38 +97,131 @@ auto particlesToJson(const std::vector<Particle>& particles, int baseIndex) -> n
     return json;
 }
 
-size_t static DumpCallback(char* ptr, size_t size, size_t nmemb, void* userdata) {
+void parseJsonToParticles() {
+    nlohmann::json j = nlohmann::json::parse(getParticleBuffer);
+
+    for(const auto& particule : j["particules"]) {
+        // parse json string which represent the particle
+        nlohmann::json p = nlohmann::json::parse(particule.get<std::string>());
+
+        // make a vec3 with the position in the json particle
+        particles[p["index"]].position = glm::vec3(p["position"][0], p["position"][1], p["position"][2]);
+        //res.emplace_back(particules["position"][0], particules["position"][1], particules["position"][2]);
+    }
+}
+
+size_t static dumpCallback(char* ptr, size_t size, size_t nmemb, void* userdata) {
     return size * nmemb;
 }
 
-void curlPostRequest(const std::string& url, const std::string& data) {
-    CURL* curl;
-    CURLcode res;
-
-    curl_global_init(CURL_GLOBAL_ALL);
-
-    curl = curl_easy_init();
-    if (curl)
-    {
-        curl_easy_setopt(curl, CURLOPT_URL, (url + "/api/").c_str());
-        // Définition de l'en-tête "Content-Type: application/json"
-        struct curl_slist* headers = NULL;
-        headers = curl_slist_append(headers, "Content-Type: application/json");
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, DumpCallback);
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L); // change to 1L to see verbose output
-        std::cout << "Sending data to " << url << std::endl;
-        res = curl_easy_perform(curl);
-        std::cout << "Data sent" << std::endl;
-        if (res != CURLE_OK)
-            std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
+size_t static callbackGetFrame(char* ptr, size_t size, size_t nmemb, void* userdata) {
+    nlohmann::json j = nlohmann::json::parse(ptr);
 
 
-        curl_easy_cleanup(curl);
+    if(currentFrame != j["frame"]) {
+        changedFrame = true;
+        currentFrame == j["frame"];
     }
 
+    return size * nmemb;
+}
+
+size_t static callbackGetParticles(char* ptr, size_t size, size_t nmemb, void* userdata) {
+    getParticleBuffer.append(ptr);
+
+    return size * nmemb;
+}
+
+void initializeRequest() {
+        curl_global_init(CURL_GLOBAL_ALL);
+        curlPostParticles = curl_easy_init();
+        if (curlPostParticles)
+        {
+            curl_easy_setopt(curlPostParticles, CURLOPT_URL, (addressPost + "/api/").c_str());
+            // Définition de l'en-tête "Content-Type: application/json"
+            struct curl_slist* headers = NULL;
+            headers = curl_slist_append(headers, "Content-Type: application/json");
+            curl_easy_setopt(curlPostParticles, CURLOPT_HTTPHEADER, headers);
+            curl_easy_setopt(curlPostParticles, CURLOPT_CUSTOMREQUEST, "POST");
+
+            curl_easy_setopt(curlPostParticles, CURLOPT_WRITEFUNCTION, dumpCallback);
+            curl_easy_setopt(curlPostParticles, CURLOPT_VERBOSE, 0L); // change to 1L to see verbose output
+        }
+        else {
+            std::cout << "Error generatiing Curl Get Frame" << std::endl;
+        }
+
+        curlGetFrame = curl_easy_init();
+        if(curlGetFrame) {
+            curl_easy_setopt(curlGetFrame, CURLOPT_URL, (addressPost + "/getFrame/").c_str());
+            std::cout << "address post : " << (addressPost + "/getFrame/").c_str() << std::endl;
+            curl_easy_setopt(curlGetFrame, CURLOPT_CUSTOMREQUEST, "GET");
+
+            curl_easy_setopt(curlGetFrame, CURLOPT_WRITEFUNCTION, callbackGetFrame);
+            curl_easy_setopt(curlGetFrame, CURLOPT_VERBOSE, 0L); // change to 1L to see verbose output
+        }
+        else {
+            std::cout << "Error generatiing Curl Get Frame" << std::endl;
+        }
+
+        curlGetParticles = curl_easy_init();
+        if(curlGetParticles) {
+            curl_easy_setopt(curlGetParticles, CURLOPT_URL, (addressPost + "/getParticlesPresent/").c_str());
+            curl_easy_setopt(curlGetParticles, CURLOPT_VERBOSE, 0L);
+
+            // Configuration de la fonction de rappel pour stocker la réponse
+            curl_easy_setopt(curlGetParticles, CURLOPT_WRITEFUNCTION, callbackGetParticles);
+        }
+        else {
+            std::cout << "Error generatiing Curl Get Frame" << std::endl;
+        }
+}
+
+
+void curlPostRequest(const std::string& data) {
+    CURLcode res;
+
+    curl_easy_setopt(curlPostParticles, CURLOPT_POSTFIELDS, data.c_str());
+    res = curl_easy_perform(curlPostParticles);
+
+    if (res != CURLE_OK)
+        std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
+}
+
+void curlGetParticlesRequest() {
+    CURLcode res;
+
+    res = curl_easy_perform(curlGetParticles);
+
+    if (res != CURLE_OK)
+        std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
+
+    parseJsonToParticles();
+
+    updatePhysics(particles, FixedDeltaTime);
+    nlohmann::json j = particlesToJson(particles, baseIndex);
+    curlPostRequest(j.dump());
+}
+
+void curlGetRequest() {
+    CURLcode res;
+    std::cout << "perform request" << std::endl;
+    res = curl_easy_perform(curlGetFrame);
+    std::cout << "end request" << std::endl;
+
+    if (res != CURLE_OK)
+        std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
+    if(changedFrame) {
+        changedFrame = false;
+        curlGetParticlesRequest();
+    }
+}
+
+
+void cleanup() {
+    curl_easy_cleanup(curlPostParticles);
+    curl_easy_cleanup(curlGetFrame);
+    curl_easy_cleanup(curlGetParticles);
     curl_global_cleanup();
 }
 
@@ -129,11 +237,11 @@ auto main(int argc, char* argv[]) -> int {
     std::cout << argv[1] << " " << argv[2] << " " << argv[3] << std::endl;
 
     // Get arguments
-    auto baseIndex = std::atoi(argv[1]);
-    auto numParticles = std::atoi(argv[2]);
-    auto addressPost = std::string(argv[3]);
+    baseIndex = std::atoi(argv[1]);
+    numParticles = std::atoi(argv[2]);
+    addressPost = std::string(argv[3]);
     // auto particlesCountWork = std::atoi(argv[4]);
-
+    initializeRequest();
     // Init random
     srand(static_cast<unsigned int>(time(nullptr)));
 
@@ -141,7 +249,7 @@ auto main(int argc, char* argv[]) -> int {
     signal(SIGINT, signalHandler);
 
     /* Init */
-    auto particles = std::vector<Particle>(numParticles);
+    particles = std::vector<Particle>(numParticles);
     std::mt19937 randomEngine;
     std::uniform_real_distribution<float> randomFloats(0.0F, static_cast<float>(2.0F * M_PI));
     for (auto& particle : particles)
@@ -161,12 +269,14 @@ auto main(int argc, char* argv[]) -> int {
             static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0F - 1.0F);*/
     }
 
-    auto json = particlesToJson(particles, baseIndex);
-    curlPostRequest(addressPost, json.dump());
+
+
+//    auto json = particlesToJson(particles, baseIndex);
+//    curlPostRequest(addressPost, json.dump());
 
     /* Loop*/
     //
-    const float FixedDeltaTime = 0.02F;
+    //const float FixedDeltaTime = 0.02F;
     float accumulator = 0.0F;
     //
     auto previousTime = std::chrono::high_resolution_clock::now();
@@ -174,20 +284,19 @@ auto main(int argc, char* argv[]) -> int {
     //
     while (!exitMainLoopFlag)
     {
-        auto currentTime = std::chrono::high_resolution_clock::now();
+        curlGetRequest();
 
-        deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
-
-        accumulator += deltaTime;
-        while (accumulator >= FixedDeltaTime)
-        {
-            updatePhysics(particles, FixedDeltaTime);
-            accumulator -= FixedDeltaTime;
-            json = particlesToJson(particles, baseIndex);
-            //curlPostRequest(addressPost, json.dump());
-        }
-
-        previousTime = currentTime;
+//        auto currentTime = std::chrono::high_resolution_clock::now();
+//
+//        deltaTime = std::chrono::duration<float>(currentTime - previousTime).count();
+//
+//        accumulator += deltaTime;
+//        while (accumulator >= FixedDeltaTime)
+//        {
+//
+//        }
+//
+//        previousTime = currentTime;
     }
 
     std::cout << "Exiting..." << std::endl;
