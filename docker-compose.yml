@@ -13,19 +13,21 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     network_mode: bridge
+    environment:
+      - NB_PARTICULES=${NB_PARTICULES}
     command: /bin/sh -c 'nodemon -e js,html index.js'
     ports:
       - "8080:9000"
-    #    volumes:
-    #      - ./docker/api:/src
     links:
       - redis
   opengl:
     build:
       context: ./src/NBodyGraphics #dossier de l'image
       dockerfile: Dockerfile
-    #    stdin_open: true
     network_mode: bridge
+    environment:
+      - NB_PARTICULES=${NB_PARTICULES}
+      - TIME_SIMULATION=${TIME_SIMULATION}
     links:
       - api
     volumes:
@@ -38,5 +40,7 @@ services:
     links:
       - api
     network_mode: bridge
+    environment:
+      - NB_PARTICULES=${NB_PARTICULES}
     volumes:
       - ./src/dependencies/:/nbody/dependencies/

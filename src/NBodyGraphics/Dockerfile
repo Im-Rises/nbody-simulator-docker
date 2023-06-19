@@ -18,6 +18,6 @@ WORKDIR /nbody
 
 COPY . .
 
-CMD [ "1000", "60" ]
+CMD [ ${NB_PARTICULES}, ${TIME_SIMULATION} ]
 
 ENTRYPOINT ["bash", "./run-opengl.sh"]
