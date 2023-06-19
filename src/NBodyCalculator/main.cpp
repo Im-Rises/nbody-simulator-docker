@@ -225,9 +225,7 @@ void curlGetParticlesRequest() {
 // Récupère le frame actuel du serveur et si le frame a changé lance la requête curlGetParticlesRequest
 void curlGetRequest() {
     CURLcode res;
-    std::cout << "perform request" << std::endl;
     res = curl_easy_perform(curlGetFrame);
-    std::cout << "end request" << std::endl;
 
     if (res != CURLE_OK)
         std::cout << "Error: " << curl_easy_strerror(res) << std::endl;
@@ -248,9 +246,9 @@ void cleanup() {
 auto main(int argc, char* argv[]) -> int {
 
     // Check arguments
-    if (argc < 4)
+    if (argc < 2)
     {
-        std::cout << "Usage: " << argv[0] << " <baseIndex> <numParticles> <addressPost> <particlesCountWork>" << std::endl;
+        std::cout << "Usage: " << argv[0] << " <addressPost>" << std::endl;
         return 1;
     }
 
@@ -258,7 +256,7 @@ auto main(int argc, char* argv[]) -> int {
     baseIndex = std::atoi(std::getenv("FIRSTINDEX"));
     int lastIndex = std::atoi(std::getenv("LASTINDEX"));
     numParticles = lastIndex - baseIndex;
-    addressPost = std::string(argv[3]);
+    addressPost = std::string(argv[1]);
     // auto particlesCountWork = std::atoi(argv[4]);
 
     // Init curl
@@ -308,7 +306,7 @@ auto main(int argc, char* argv[]) -> int {
     {
         // GET la frame du serveur et si elle change, appelle les autres fonctions pour mettre à jour les toutes les particules puis mettre à jour la
         // physique des particules et enfin envoyer les particules au serveur
-        //curlGetRequest();
+        curlGetRequest();
 
 //        auto currentTime = std::chrono::high_resolution_clock::now();
 //

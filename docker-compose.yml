@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     command: /bin/sh -c 'nodemon -e js,html index.js'
     environment:
-    - NB_PARTICULES=1000
+    - NB_PARTICULES=100
     links:
     - redis
     network_mode: bridge
@@ -17,8 +17,8 @@ services:
       context: ./src/NBodyGraphics
       dockerfile: Dockerfile
     environment:
-    - NB_PARTICULES=1000
-    - TIME_SIMULATION=60.0
+    - NB_PARTICULES=100
+    - TIME_SIMULATION=30.0
     links:
     - api
     network_mode: bridge
@@ -36,115 +36,7 @@ services:
     - api
     network_mode: bridge
     volumes:
-      ./src/dependencies/: /nbody/dependencies/
-  particulecalculator_1:
-    build:
-      context: ./src/NBodyCalculator
-      dockerfile: Dockerfile
-    environment:
-      FIRSTINDEX: '100'
-      LASTINDEX: '200'
-    links:
-    - api
-    network_mode: bridge
-    volumes:
-      ./src/dependencies/: /nbody/dependencies/
-  particulecalculator_2:
-    build:
-      context: ./src/NBodyCalculator
-      dockerfile: Dockerfile
-    environment:
-      FIRSTINDEX: '200'
-      LASTINDEX: '300'
-    links:
-    - api
-    network_mode: bridge
-    volumes:
-      ./src/dependencies/: /nbody/dependencies/
-  particulecalculator_3:
-    build:
-      context: ./src/NBodyCalculator
-      dockerfile: Dockerfile
-    environment:
-      FIRSTINDEX: '300'
-      LASTINDEX: '400'
-    links:
-    - api
-    network_mode: bridge
-    volumes:
-      ./src/dependencies/: /nbody/dependencies/
-  particulecalculator_4:
-    build:
-      context: ./src/NBodyCalculator
-      dockerfile: Dockerfile
-    environment:
-      FIRSTINDEX: '400'
-      LASTINDEX: '500'
-    links:
-    - api
-    network_mode: bridge
-    volumes:
-      ./src/dependencies/: /nbody/dependencies/
-  particulecalculator_5:
-    build:
-      context: ./src/NBodyCalculator
-      dockerfile: Dockerfile
-    environment:
-      FIRSTINDEX: '500'
-      LASTINDEX: '600'
-    links:
-    - api
-    network_mode: bridge
-    volumes:
-      ./src/dependencies/: /nbody/dependencies/
-  particulecalculator_6:
-    build:
-      context: ./src/NBodyCalculator
-      dockerfile: Dockerfile
-    environment:
-      FIRSTINDEX: '600'
-      LASTINDEX: '700'
-    links:
-    - api
-    network_mode: bridge
-    volumes:
-      ./src/dependencies/: /nbody/dependencies/
-  particulecalculator_7:
-    build:
-      context: ./src/NBodyCalculator
-      dockerfile: Dockerfile
-    environment:
-      FIRSTINDEX: '700'
-      LASTINDEX: '800'
-    links:
-    - api
-    network_mode: bridge
-    volumes:
-      ./src/dependencies/: /nbody/dependencies/
-  particulecalculator_8:
-    build:
-      context: ./src/NBodyCalculator
-      dockerfile: Dockerfile
-    environment:
-      FIRSTINDEX: '800'
-      LASTINDEX: '900'
-    links:
-    - api
-    network_mode: bridge
-    volumes:
-      ./src/dependencies/: /nbody/dependencies/
-  particulecalculator_9:
-    build:
-      context: ./src/NBodyCalculator
-      dockerfile: Dockerfile
-    environment:
-      FIRSTINDEX: '900'
-      LASTINDEX: '1000'
-    links:
-    - api
-    network_mode: bridge
-    volumes:
-      ./src/dependencies/: /nbody/dependencies/
+    - ./src/dependencies/:/nbody/dependencies/
   redis:
     expose:
     - '6379'

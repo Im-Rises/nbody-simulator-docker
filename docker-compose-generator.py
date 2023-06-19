@@ -20,9 +20,9 @@ def generate_docker_compose(total_particles, num_containers, time_simulation):
                 "FIRSTINDEX": str(int(cmd_argument_debut)),
                 "LASTINDEX": str(int(cmd_argument_fin))
             },
-            "volumes": {
-                "./src/dependencies/": "/nbody/dependencies/"
-            }
+            "volumes": [
+                "./src/dependencies/:/nbody/dependencies/"
+            ]
         }
 
         services[service_name] = service
