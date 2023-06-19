@@ -39,23 +39,31 @@ The project is running on a complete docker environment.
 
 ```mermaid
 flowchart LR
-    subgraph Architecture
-    subgraph Docker-Calculator
+    
+    subgraph Host
+    
+    subgraph Docker-Calculators
     docker1 & docker2 & docker...
     end
     docker1 & docker2 & docker... <--> |GET/POST| api-redis
     subgraph Redis
-    api-redis
+    api-redis --> | Read/Write | redis
     end
-    api-redis --> |GET| NBodyGraphics
+    api-redis --> |Send particles| NBodyGraphics
     NBodyGraphics --> |Request update| api-redis
     subgraph Video-Generator
-    NBodyGraphics --> |Save| Volume
     end
+    
+    subgraph Video-Generator
+    NBodyGraphics
+    end
+    
+    NBodyGraphics --> |Save| Volume
+   
 end
 ```
 
-## Logigram
+## Logic Diagram
 
 ```mermaid
 graph TB
@@ -71,19 +79,16 @@ graph TB
     G[NBodycalculator...]
     H[API-Redis]
     I[NBodyGraphics]
-    
     A --> B
     B --> | Physic update | C
-    C --> | Particle set update | D & E & F & G
+    C --> | Particle request update | D & E & F & G
     D & E & F & G --> | Send updated particles | H
     H --> | Send updated particles | I
     I --> | Do another cycle | B
     end
     
     J[Volume]
-    
     I --> | Save video | J
-    
     end
 ```
 
