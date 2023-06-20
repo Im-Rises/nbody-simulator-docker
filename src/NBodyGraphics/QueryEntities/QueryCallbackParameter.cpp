@@ -32,12 +32,11 @@ bool QueryCallbackParameter::Parse() {
     {
         // parse json string which represent the particle
         json p = json::parse(particule.get<std::string>());
-//        if(p["index"] > bufferVector.size()) {
-//            std::cout << "index > size buffer vector : " << p["index"] << std::endl;
-//            continue;
-//        }
+        int index = p["index"];
+        int index2 = index / 2;
+
         // make a vec3 with the position in the json particle
-        bufferVector[p["index"]] = glm::vec3(p["position"][0], p["position"][1], p["position"][2]);
+        bufferVector[index2] = glm::vec3(p["position"][0], p["position"][1], p["position"][2]);
     }
     return wasUpdated;
 }
