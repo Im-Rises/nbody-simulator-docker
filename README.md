@@ -24,6 +24,8 @@ The project is running on a complete docker environment.
 
 ## Videos
 
+https://github.com/Im-Rises/nbody-simulator-docker/assets/59691442/59ef1c71-e2bb-4bd5-99f8-66eace4280b5
+
 ## How to use
 
 To use the project, you need to have docker installed on your computer.
