@@ -15,60 +15,62 @@ bool QueryEntities::isQuerying = false;
 // Callback function used to treat the response
 size_t static CallbackRequest(char *ptr, size_t size, size_t nmemb, void *userdata) {
     auto *callbackParameter = static_cast<QueryCallbackParameter*>(userdata);
-
-    // Store the response in the callbackParameter
-    if(QueryEntities::isQuerying) {
-        callbackParameter->response.append(ptr);
+    if(callbackParameter->response.empty()) {
+        callbackParameter->response = ptr;
     }
     else {
-        QueryEntities::isQuerying = true;
-        callbackParameter->response = ptr;
+        callbackParameter->response.append(ptr);
     }
 
     // Call the callback function with the response parsed
     return size * nmemb;
 }
 
-// Make the curl request
-QueryEntities::QueryEntities() : curl(nullptr) {
-     curl_global_init(CURL_GLOBAL_ALL);
-     curl = curl_easy_init();
-
-     if(!curl) {
-         std::cout << "Error initializing curl" << std::endl;
-     }
-     isQuerying = false;
-
-     curl_easy_setopt(curl, CURLOPT_URL, "http://api:9000/all/present");
-     curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
-
-     // Configuration de la fonction de rappel pour stocker la réponse
-     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &callbackParameter);
-     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CallbackRequest);
-
-}
 
 // Ask the server to get all the particles
 bool QueryEntities::AskGetAllParticles() {
-    isQuerying = false;
+
      if(!curl) {
          std::cout << "Error while performing curl request : " << curl_easy_strerror(res) << std::endl;
      }
+    callbackParameter->response.clear();
     res = curl_easy_perform(curl);
     if(res != CURLE_OK) {
          std::cout << "Error while performing curl request : " << curl_easy_strerror(res) << std::endl;
     }
 
 
-    bool wasUpdated = false;
-    std::vector<glm::vec3> parsed = callbackParameter.Parse(wasUpdated);
+    bool wasUpdated = callbackParameter->Parse();
 
     if(wasUpdated) {
-         callbackParameter.CallbackFct(parsed);
+        std::cout << "len buffer vector : " << callbackParameter->bufferVector.size() << std::endl;
+        std::cout << "buffervecto[1] : " << callbackParameter->bufferVector[1].x << std::endl;
+         callbackParameter->CallbackFct(callbackParameter->bufferVector);
     }
     return wasUpdated;
 }
 QueryEntities::~QueryEntities() {
+    callbackParameter->response.clear();
+    delete callbackParameter;
+
     curl_easy_cleanup(curl);
     curl_global_cleanup();
+}
+
+QueryEntities::QueryEntities(int nbParticles) : curl(nullptr), callbackParameter(new QueryCallbackParameter(nbParticles)) {
+    curl_global_init(CURL_GLOBAL_ALL);
+    curl = curl_easy_init();
+
+    if(!curl) {
+        std::cout << "Error initializing curl" << std::endl;
+    }
+    isQuerying = false;
+
+    curl_easy_setopt(curl, CURLOPT_URL, "http://api:9000/all/present");
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+
+    // Configuration de la fonction de rappel pour stocker la réponse
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, callbackParameter);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CallbackRequest);
+
 }

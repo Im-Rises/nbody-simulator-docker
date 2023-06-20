@@ -82,13 +82,6 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
               << "OpenCV version: " << getOpenCVVersion() << std::endl
               << "nlhomann/json version: " << getNlohmannJsonVersion() << std::endl;
 
-    // Setup callback function when we get particles positions
-    auto callbackSetParticles = [this](const std::vector<glm::vec3>& particles) {
-        scene->SetParticles(particles);
-        updateScreen();
-    };
-
-    queryEntities.SetCallback(callbackSetParticles);
 }
 
 NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
@@ -99,6 +92,14 @@ NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
 void NBodySimulatorGraphicsLauncher::start(const int particlesCount, const float recordingTime) {
     scene = std::make_unique<Scene>(displayWidth, displayHeight, particlesCount);
     recorder = std::make_unique<Recorder>(displayWidth, displayHeight, FIXED_FRAME_RATE);
+    queryEntities = std::make_unique<QueryEntities>(particlesCount);
+    // Setup callback function when we get particles positions
+    auto callbackSetParticles = [this](const std::vector<glm::vec3>& particles) {
+        scene->SetParticles(particles);
+        updateScreen();
+    };
+
+    queryEntities->SetCallback(callbackSetParticles);
 
     // Timer stop
     float accumulatorStop = 0.0F;
@@ -106,22 +107,8 @@ void NBodySimulatorGraphicsLauncher::start(const int particlesCount, const float
     // Game loop
     while (glfwWindowShouldClose(window) == 0)
     {
-//        auto startMs = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now());
-
         handleInputs();
 
-
-//        updateScreen();
-//
-//        auto endMs = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now());
-//        auto delayMs = FIXED_DELTA_TIME - std::chrono::duration_cast<std::chrono::duration<float>>(endMs - startMs).count();
-//        if (delayMs > 0.0F)
-//        {
-//            std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(delayMs * 1000.0F)));
-//        }
-
-        //        float realDeltaTime = std::chrono::duration_cast<std::chrono::duration<float>>(endMs - startMs).count();
-        //        accumulatorStop += realDeltaTime;
         if(updateGame(FIXED_DELTA_TIME)) {
             accumulatorStop += FIXED_DELTA_TIME;
         }
@@ -132,6 +119,7 @@ void NBodySimulatorGraphicsLauncher::start(const int particlesCount, const float
 
     scene.reset();
     recorder.reset();
+    queryEntities.reset();
 }
 
 void NBodySimulatorGraphicsLauncher::handleInputs() {
@@ -180,7 +168,7 @@ bool NBodySimulatorGraphicsLauncher::updateGame(float deltaTime) {
      * Fetch new particles position
      */
 
-    return queryEntities.AskGetAllParticles();
+    return queryEntities->AskGetAllParticles();
 }
 
 void NBodySimulatorGraphicsLauncher::updateScreen() {

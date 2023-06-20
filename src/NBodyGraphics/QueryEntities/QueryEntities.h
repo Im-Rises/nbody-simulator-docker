@@ -17,11 +17,13 @@ class QueryEntities {
     CURL* curl;
     CURLcode res;
 
-    QueryCallbackParameter callbackParameter;
+    QueryCallbackParameter* callbackParameter;
 
 
 public:
-    QueryEntities();
+    QueryEntities() = delete;
+
+    explicit QueryEntities(int nbParticles);
 
     QueryEntities(const QueryEntities&) = delete;
     auto operator=(const QueryEntities&) -> QueryEntities& = delete;
@@ -30,7 +32,7 @@ public:
 
     ~QueryEntities();
 
-    inline void SetCallback(const QueryCallbackParameter::CallbackQuery& callback) { callbackParameter.SetCallback(callback); }
+    inline void SetCallback(const QueryCallbackParameter::CallbackQuery& callback) { callbackParameter->SetCallback(callback); }
     bool AskGetAllParticles();
 
     static bool isQuerying;
