@@ -20,8 +20,6 @@ The project is running on a complete docker environment.
 > a redis database.
 > A docker is also used to generate the video from the redis database.
 
-## Images
-
 ## Videos
 
 https://github.com/Im-Rises/nbody-simulator-docker/assets/59691442/59ef1c71-e2bb-4bd5-99f8-66eace4280b5
@@ -115,8 +113,6 @@ end
 
 ```mermaid
 graph LR
-    subgraph Host
-    
     A((Start))
     B[NBodyGraphics]
     C[API-Redis]
@@ -135,7 +131,6 @@ graph LR
     H --> | Send updated particles | I
     I --> | Do another cycle | B
     I --> | Save video | J
-    end
 ```
 
 ## Libraries
