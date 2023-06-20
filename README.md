@@ -112,7 +112,7 @@ end
 ## Logic Diagram
 
 ```mermaid
-graph TB
+graph LR
     subgraph Host
     
     A((Start))
