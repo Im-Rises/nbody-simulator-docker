@@ -112,7 +112,7 @@ end
 ## Logic Diagram
 
 ```mermaid
-graph LR
+graph TB
     A((Start))
     B[NBodyGraphics]
     C[API-Redis]
