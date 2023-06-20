@@ -81,7 +81,6 @@ NBodySimulatorGraphicsLauncher::NBodySimulatorGraphicsLauncher() {
               << "GLM version: " << getGLMVersion() << std::endl
               << "OpenCV version: " << getOpenCVVersion() << std::endl
               << "nlhomann/json version: " << getNlohmannJsonVersion() << std::endl;
-
 }
 
 NBodySimulatorGraphicsLauncher::~NBodySimulatorGraphicsLauncher() {
@@ -109,7 +108,8 @@ void NBodySimulatorGraphicsLauncher::start(const int particlesCount, const float
     {
         handleInputs();
 
-        if(updateGame(FIXED_DELTA_TIME)) {
+        if (updateGame(FIXED_DELTA_TIME))
+        {
             accumulatorStop += FIXED_DELTA_TIME;
         }
 
@@ -117,11 +117,13 @@ void NBodySimulatorGraphicsLauncher::start(const int particlesCount, const float
             glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 
-    queryEntities.reset();
+    std::cout << "Stop recording" << std::endl;
     scene.reset();
-    std::cout<< "Stop recording" << std::endl;
+    std::cout << "Scene stopped" << std::endl;
     recorder.reset();
-
+    std::cout << "Recorder stopped" << std::endl;
+    queryEntities.reset();
+    std::cout << "QueryEntities stopped" << std::endl;
 }
 
 void NBodySimulatorGraphicsLauncher::handleInputs() {

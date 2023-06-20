@@ -35,7 +35,6 @@ private:
     std::unique_ptr<Scene> scene;
     std::unique_ptr<Recorder> recorder;
     std::unique_ptr<QueryEntities> queryEntities;
-    //    std::unique_ptr<FfmpegPiper> ffmpegPiper;
 
     struct {
         float x = 0.0F;

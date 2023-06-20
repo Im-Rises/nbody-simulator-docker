@@ -72,7 +72,7 @@ An output video will be genereated in the `./src/NBodyGraphics/output_dir` folde
 
 - OpenGL version: 3.3
 - GLSL version: 330
-- GLFW version: 3.3.8
+- GLFW version: 3.2.1
 - Glad version: 0.1.36
 - GLM version: 0.9.9
 - OpenCV version: 4.7.0-dev
@@ -167,14 +167,14 @@ Axel COURMONT:
 - @Alshkor
 - <https://github.com/Alshkor>
 
-Alexis ROVILLE:
-
-- @Fromiel
-- <https://github.com/Fromiel>
-
 Quentin MOREL:
 
 - @Im-Rises
 - <https://github.com/Im-Rises>
+
+Alexis ROVILLE:
+
+- @Fromiel
+- <https://github.com/Fromiel>
 
 [![GitHub contributors](https://contrib.rocks/image?repo=Im-Rises/nbody-simulator-docker)](https://github.com/Im-Rises/nbody-simulator-docker/graphs/contributors)
