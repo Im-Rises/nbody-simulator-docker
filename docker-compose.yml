@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile
     environment:
     - NB_PARTICULES=1000
-    - TIME_SIMULATION=10.0
+    - TIME_SIMULATION=5.0
     links:
     - api
     network_mode: bridge
@@ -31,6 +31,54 @@ services:
       dockerfile: Dockerfile
     environment:
       FIRSTINDEX: '0'
+      LASTINDEX: '200'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+    - ./src/dependencies/:/nbody/dependencies/
+  particulecalculator_1:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '200'
+      LASTINDEX: '400'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+    - ./src/dependencies/:/nbody/dependencies/
+  particulecalculator_2:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '400'
+      LASTINDEX: '600'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+    - ./src/dependencies/:/nbody/dependencies/
+  particulecalculator_3:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '600'
+      LASTINDEX: '800'
+    links:
+    - api
+    network_mode: bridge
+    volumes:
+    - ./src/dependencies/:/nbody/dependencies/
+  particulecalculator_4:
+    build:
+      context: ./src/NBodyCalculator
+      dockerfile: Dockerfile
+    environment:
+      FIRSTINDEX: '800'
       LASTINDEX: '1000'
     links:
     - api

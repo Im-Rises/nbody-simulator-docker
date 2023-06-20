@@ -43,18 +43,15 @@ bool QueryEntities::AskGetAllParticles() {
     bool wasUpdated = callbackParameter->Parse();
 
     if(wasUpdated) {
-        std::cout << "len buffer vector : " << callbackParameter->bufferVector.size() << std::endl;
-        std::cout << "buffervecto[1] : " << callbackParameter->bufferVector[1].x << std::endl;
          callbackParameter->CallbackFct(callbackParameter->bufferVector);
     }
     return wasUpdated;
 }
 QueryEntities::~QueryEntities() {
-    callbackParameter->response.clear();
-    delete callbackParameter;
-
     curl_easy_cleanup(curl);
     curl_global_cleanup();
+    callbackParameter->response.clear();
+    delete callbackParameter;
 }
 
 QueryEntities::QueryEntities(int nbParticles) : curl(nullptr), callbackParameter(new QueryCallbackParameter(nbParticles)) {

@@ -117,9 +117,11 @@ void NBodySimulatorGraphicsLauncher::start(const int particlesCount, const float
             glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 
-    scene.reset();
-    recorder.reset();
     queryEntities.reset();
+    scene.reset();
+    std::cout<< "Stop recording" << std::endl;
+    recorder.reset();
+
 }
 
 void NBodySimulatorGraphicsLauncher::handleInputs() {
