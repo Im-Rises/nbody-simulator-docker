@@ -12,7 +12,6 @@
 
 
 class QueryEntities {
-
     // Use to initialize and terminate cURLpp
     CURL* curl;
     CURLcode res;
@@ -21,7 +20,9 @@ class QueryEntities {
 
 
 public:
-    QueryEntities();
+    QueryEntities() = delete;
+
+    explicit QueryEntities(int nbParticles);
 
     QueryEntities(const QueryEntities&) = delete;
     auto operator=(const QueryEntities&) -> QueryEntities& = delete;

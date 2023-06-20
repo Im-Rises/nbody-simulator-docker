@@ -1,7 +1,3 @@
-//
-// Created by axelc on 15/06/2023.
-//
-
 #ifndef NBODYGRAPHICS_QUERYCALLBACKPARAMETER_H
 #define NBODYGRAPHICS_QUERYCALLBACKPARAMETER_H
 
@@ -14,6 +10,9 @@
 class QueryCallbackParameter {
 
 public:
+    QueryCallbackParameter() = delete;
+    explicit QueryCallbackParameter(int nbParticles);
+
     typedef std::function<void(std::vector<glm::vec3>)> CallbackQuery;
 
     void SetCallback(const CallbackQuery& callback) { CallbackFct = callback; }
@@ -21,9 +20,9 @@ public:
     CallbackQuery CallbackFct;
 
     std::string response;
+    std::vector<glm::vec3> bufferVector;
 
-    std::vector<glm::vec3> Parse(bool& wasUpdated);
-
+    bool Parse();
 };
 
 

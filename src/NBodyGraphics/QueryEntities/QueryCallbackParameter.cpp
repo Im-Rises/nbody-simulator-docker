@@ -8,35 +8,35 @@
 
 using json = nlohmann::json;
 
-// Used to parse the json string to retrieve the position of the particles
-std::vector<glm::vec3> QueryCallbackParameter::Parse(bool& wasUpdated) {
-    std::vector<glm::vec3> res;
 
-    // parse json string
-    //std::cout << "Length of response : " << response.length() << std::endl;
-//    try {
-//
-//    } catch (json::parse_error& e) {
-//        //std::cout << "Error while parsing json : " << e.what() << std::endl;
-//        return res;
-//    }
-//
+QueryCallbackParameter::QueryCallbackParameter(int nbParticles) {
+    bufferVector.resize(nbParticles);
+}
+
+
+
+// Used to parse the json string to retrieve the position of the particles
+bool QueryCallbackParameter::Parse() {
+    bool wasUpdated = false;
     json j;
+
     j = json::parse(response);
 
     wasUpdated = j["wasUpdated"];
-    if(!wasUpdated) {
-        return res;
+    if (!wasUpdated)
+    {
+        return wasUpdated;
     }
 
-    std::cout << "len particule received : " << j["particules"].size() << std::endl;
-
-    for(const auto& particule : j["particules"]) {
+    for (const auto& particule : j["particules"])
+    {
         // parse json string which represent the particle
-        json particules = json::parse(particule.get<std::string>());
+        json p = json::parse(particule.get<std::string>());
+        int index = p["index"];
+        int index2 = index / 2;
 
         // make a vec3 with the position in the json particle
-        res.emplace_back(particules["position"][0], particules["position"][1], particules["position"][2]);
+        bufferVector[index2] = glm::vec3(p["position"][0], p["position"][1], p["position"][2]);
     }
-    return res;
+    return wasUpdated;
 }

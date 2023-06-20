@@ -21,7 +21,7 @@ public:
 
 private:
     GLFWwindow* window;
-    QueryEntities queryEntities;
+
 
     int windowWidth = 1280;
     int windowHeight = 720;
@@ -34,7 +34,7 @@ private:
 
     std::unique_ptr<Scene> scene;
     std::unique_ptr<Recorder> recorder;
-    //    std::unique_ptr<FfmpegPiper> ffmpegPiper;
+    std::unique_ptr<QueryEntities> queryEntities;
 
     struct {
         float x = 0.0F;

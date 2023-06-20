@@ -7,7 +7,7 @@ Recorder::Recorder(int width, int height, float frameRate) : width(width), heigh
 }
 
 Recorder::~Recorder() {
-    std::cout << "Recorder destructor" << std::endl;
+    std::cout << "Video recorded" << std::endl;
     videoWriter.release();
     delete[] framebuffer;
 }
