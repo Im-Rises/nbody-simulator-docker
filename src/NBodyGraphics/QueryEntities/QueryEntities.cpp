@@ -32,7 +32,7 @@ bool QueryEntities::AskGetAllParticles() {
     {
         std::cout << "Error while performing curl request : " << curl_easy_strerror(res) << std::endl;
     }
-    callbackParameter->response.clear();
+    callbackParameter.response.clear();
     res = curl_easy_perform(curl);
     if (res != CURLE_OK)
     {
@@ -40,11 +40,11 @@ bool QueryEntities::AskGetAllParticles() {
     }
 
 
-    bool wasUpdated = callbackParameter->Parse();
+    bool wasUpdated = callbackParameter.Parse();
 
     if (wasUpdated)
     {
-        callbackParameter->CallbackFct(callbackParameter->bufferVector);
+        callbackParameter.CallbackFct(callbackParameter.bufferVector);
     }
     return wasUpdated;
 }
@@ -52,11 +52,11 @@ bool QueryEntities::AskGetAllParticles() {
 QueryEntities::~QueryEntities() {
     curl_easy_cleanup(curl);
     curl_global_cleanup();
-    callbackParameter->response.clear();
-    delete callbackParameter;
+    callbackParameter.response.clear();
+    //    delete callbackParameter;
 }
 
-QueryEntities::QueryEntities(int nbParticles) : curl(nullptr), callbackParameter(new QueryCallbackParameter(nbParticles)) {
+QueryEntities::QueryEntities(int nbParticles) : curl(nullptr), callbackParameter(nbParticles) {
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();
 
@@ -70,6 +70,6 @@ QueryEntities::QueryEntities(int nbParticles) : curl(nullptr), callbackParameter
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
 
     // Configuration de la fonction de rappel pour stocker la réponse
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, callbackParameter);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &callbackParameter);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CallbackRequest);
 }

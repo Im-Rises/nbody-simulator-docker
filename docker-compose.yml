@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile
     environment:
     - NB_PARTICULES=1000
-    - TIME_SIMULATION=10.0
+    - TIME_SIMULATION=5.0
     links:
     - api
     network_mode: bridge
