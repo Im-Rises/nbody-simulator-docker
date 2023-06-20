@@ -1,7 +1,6 @@
 # My gitignore files/folders
 [tT]rash/
 *.vs/
-out/
 [Ll]ibraries/
 [Dd]ocumentations/
 *.idea/
@@ -88,7 +87,6 @@ cmake-build-*/
 *.iws
 
 # IntelliJ
-out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
