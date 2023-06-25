@@ -22,7 +22,9 @@ The project is running on a complete docker environment.
 
 ## Videos
 
-https://github.com/Im-Rises/nbody-simulator-docker/assets/59691442/59ef1c71-e2bb-4bd5-99f8-66eace4280b5
+[//]: # (https://github.com/Im-Rises/nbody-simulator-docker/assets/59691442/59ef1c71-e2bb-4bd5-99f8-66eace4280b5)
+
+https://github.com/Im-Rises/nbody-simulator-docker/assets/59691442/622717a8-b508-4221-a79e-f00c07475979
 
 Longer video 🚀🚀 [here](https://www.youtube.com/watch?v=OisxyKE_ioU) 🚀🚀
 
